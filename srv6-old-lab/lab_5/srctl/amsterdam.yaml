@@ -1,0 +1,17 @@
+apiVersion: jalapeno.srv6/v1
+kind: PathRequest
+metadata:
+  name: amsterdam-routes
+spec:
+  platform: vpp
+  defaultVrf:  # or defaultTable
+    ipv6:
+      routes:
+        - name: amsterdam-to-rome-v6
+          graph: ipv6_graph
+          pathType: shortest_path
+          metric: least-utilized
+          source: hosts/amsterdam
+          destination: hosts/rome
+          destination_prefix: "fc00:0:107:1::/64"
+          bsid: "101::102"  # Required for VPP, using different BSID for IPv6
