@@ -1,6 +1,6 @@
 # Lab 1 Guide: Deploy XRd Topology and apply SRv6 configurations [20 Min]
 
-The Cisco Live LTRSPG-2212 lab makes heavy use of containerlab to orchestrate our dockerized IOS-XR router known as XRd. If you wish to explore XRd and its uses beyond the scope of this lab the xrdocs team has posted a number of tutorials here: 
+The Cisco Live LTRMSI-3000 lab makes heavy use of containerlab to orchestrate our dockerized IOS-XR router known as XRd. If you wish to explore XRd and its uses beyond the scope of this lab the xrdocs team has posted a number of tutorials here: 
 
 https://xrdocs.io/virtual-routing/tags/#xrd-tutorial-series
 
@@ -16,6 +16,7 @@ In Lab 1 we will user containerlab to launch the XRd topology apply base SRv6 co
     - [Description:](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
+  - [Topology](#topology)
   - [Virtual Machine and XRd Access](#virtual-machine-and-xrd-access)
     - [User Credentials](#user-credentials)
     - [Management Network Topology](#management-network-topology)
@@ -48,9 +49,15 @@ The student upon completion of Lab 1 should have achieved the following objectiv
 * Confirm SRv6 Locators   
 
 
+## Topology 
+
+![Lab Topology](../topo_drawings/overview-topology-large.png)
+
 ## Virtual Machine and XRd Access
 
-Device access for this lab is primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
+
+
+Lab attendees have the choice to directly SSH Device access for this lab is primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
 
 ### User Credentials
 All VMs, routers, etc. use the same user credentials:

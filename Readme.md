@@ -78,10 +78,17 @@ To support this, we are using four virtual machines, each with a specific role. 
 | **Topology Host**     | `dcloud`   | `C1sco12345`   | 
 | **Jalapeno Host**     | `dcloud`   | `C1sco12345`   | 
 
+
+## Jalapeno
+
+Project Jalapeno combines existing open source tools with some new stuff we've developed into a data collection and warehousing infrastructure intended to enable development of SDN or network service applications. Think of it as applying microservices architecture and concepts to SDN: give developers the ability to quickly and easily build microservice control planes on top of a common data collection and warehousing infrastructure. More information on Jalapeno can be found at the Jalapeno Git repository: [LINK](https://github.com/cisco-open/jalapeno/blob/main/README.md)
+
+![jalapeno_architecture](https://github.com/cisco-open/jalapeno/blob/main/docs/img/jalapeno_architecture.png)
+
 ## Navigate through the labs.
 
 The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
 
 ![windows-rdpy](./topo_drawings/windows-rdp.png)
 
-On the Windows virtual machines, please launch firefox and proceed to LAB 1
+On the Windows virtual machine, please launch firefox you shoud arrive on the github page automatically. Please proceed to [LAB 1](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-guide.md)
