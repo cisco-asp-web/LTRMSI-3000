@@ -9,14 +9,14 @@ In this immersive hands-on lab, explore how next-generation AI networking fabric
 * Lab Topology [LINK](#dCloud-lab-Topology)
 * Remote Access [LINK](#remote-access)
 * Project Jalapeno [LINK](#jalapeno)
-* Lab 1 - XRd Topology Setup and SRv6 L3VPN + SRv6 TE Configuration (LINK TO PROVIDE)
+* Lab 1 - XRd Topology Setup and SRv6 L3VPN + SRv6 TE Configuration [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-guide.md)
 * Lab 2 - Kubernetes SRv6 with Cilium (LINK TO PROVIDE)
 * Lab 3 - SONIC DC Fabric Bring Up (LINK TO PROVIDE)
 * Lab 4 - Host Based SRv6 static routing with SONIC (LINK TO PROVIDE)
 
 
 ## Github Repository Overview
-Each of the labs is designed to be completed in the order presented. Lab 1 will launch our XRd topology with baseline configurations. In each subsequent lab (2-5) we'll add SRv6 configurations and make use of our SRv6 network.
+Each of the labs is designed to be completed in the order presented. Lab 1 will launch our XRd topology with baseline configurations. In each subsequent lab (2-5) we'll add SRv6 configurations, make use of our SRv6 network and switch to SONIC to discover new uses cases and way to configure our network
 
 ### Root Directory
 
@@ -44,6 +44,10 @@ We've recently launched a whole series of SRv6 labs on github, many of which are
 https://github.com/segmentrouting/srv6-labs
 
 
+# dCloud Instances 
+
+Each lab instance is running on Cisco dCloud and is reachable via AnyConnect VPN. In the Webex Teams room for the lab we've provided a spreadsheet with a list of dCloud instances and the AnyConnect credentials necessary to access each instance. To find your dCloud instance please reference your student number provided on the handout in class.
+
 
 # dCloud lab Topology
 
@@ -56,71 +60,28 @@ This lab environment provides a hands-on experience with modern, programmable ne
 
 To support this, we are using four virtual machines, each with a specific role. Here’s what each VM is responsible for:
 
-##  ubuntu-clab — The Topology Orchestrator
 
-IP Address: 198.18.128.100
+## 💻 Lab Virtual Machines Summary
 
-This VM is the core of your lab environment. It hosts:
-	•	Containerlab, which is used to define and deploy virtual topologies using SONiC and XRd.
-	•	Edgeshark, which provides traffic capture and visualization inside Containerlab.
-	•	XRd images (Cisco’s virtual routing platform).
-	•	SONiC containers (open-source network OS).
-
-📌 Use Case:
-	•	You will launch and destroy network topologies from this VM.
-	•	All container-based routers and switches (e.g., SONiC, XRd) run here.
-	•	You may also use this VM for container debugging, packet capture, or log collection.
-
-🧰 Key Tools:
-	•	containerlab
-	•	Docker
-	•	Edgeshark
-	•	Topology definition files (*.clab.yaml)
+| VM Name              | IP Address       | Role / Description                                                                                                     | Key Tools / Use Cases                                                                                          |
+|----------------------|------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
+| **Topology Host**    | `198.18.133.100` | Core lab environment host that runs network topologies using SONiC and XRd via Containerlab                           | - `Containerlab` to define and deploy topologies (`*.clab.yaml`)<br>- `Edgeshark` for in-container packet captures |
+| **Jalapeno Host**    | `198.18.128.101` | Hosts **Project Jalapeno**, an SDN controller framework focused on tunnel-based and graph-driven control planes       | - SDN automation & path computation<br>- Real-time topology modeling<br>- Graph database ingestion              |
+| **Windows Management** | `198.18.128.102` | RDP-accessible Windows VM for student interaction with the lab                                                        | - Lab documentation access<br>- VS Code with SSH and extensions:<br> &nbsp;&nbsp;• Start/stop topologies<br> &nbsp;&nbsp;• Capture traffic<br> &nbsp;&nbsp;• Access containers and Linux hosts |
 
 
+## 🔐 Lab VM Credentials
 
-## ubuntu-jalapeno — The SDN Controller Plane
+| VM Name               | Username   | Password       |
+|-----------------------|------------|----------------|
+| **Windows Management**| `admin`    | `C1sco12345`   | 
+| **Topology Host**     | `dcloud`   | `C1sco12345`   | 
+| **Jalapeno Host**     | `dcloud`   | `C1sco12345`   | 
 
-IP Address: 198.18.128.101
+## Navigate through the labs.
 
-This VM runs Project Jalapeno, an SDN automation framework focused on building control planes for tunnel-based networking, such as:
-	•	Data center overlays (VXLAN, EVPN)
-	•	Traffic Engineering controllers
-	•	SD-WAN logic
+The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
 
-Jalapeno introduces a modular and graph-based data modeling platform that can:
-	•	Ingest data from the lab topology (via streaming telemetry or config APIs)
-	•	Build a topology model in a graph database
-	•	Support path computation or automation apps
+![windows-rdpy](./topo_drawings/windows-rdp.png)
 
-📌 Use Case:
-	•	This VM collects state and topology data from your lab network
-	•	It builds a real-time graph model of your infrastructure
-	•	It can drive path computations, config pushes, or analytics workflows
-
-🧰 Key Tools & Components (installed via shell scripts):
-	•	ONOS (for control logic)
-	•	Graph databases (like JanusGraph)
-	•	REST/gRPC APIs
-
-
-
-## Windows-management — The Student Interface
-
-IP Address: 198.18.128.102
-
-This is a Windows-based management VM used by each student to interact with the lab environment.
-
-📌 Use Case:
-	•	Students RDP into this VM as their main entry point.
-	•	They use tools like:
-	•	PuTTY / SSH / VS Code to access devices
-	•	Wireshark GUI for packet captures
-
-
-🧰 Key Tools Available to Students:
-	•	RDP access
-	•	Wireshark GUI
-	•	Web browser (Chrome or Firefox)
-	•	SSH client
-	•	Visual Studio Code (optional: Remote SSH plugin)
+On the Windows virtual machines, please launch firefox and proceed to LAB 1
