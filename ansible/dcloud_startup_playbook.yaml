@@ -30,6 +30,14 @@
       command: ip link set berlin-net up
       ignore_errors: yes
 
+    - name: berlin-net ip address
+      command: ip addr add 198.18.4.3/24 dev berlin-net
+      ignore_errors: yes
+
+    - name: berlin-net masquerade
+      command: iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE 
+      ignore_errors: yes
+
     - name: define virsh domain
       command: virsh define ../lab_1/config/berlin-vm/berlin.xml
       ignore_errors: yes
@@ -38,15 +46,6 @@
       command: virsh start berlin
       ignore_errors: yes
 
-# - name: Disable swap on k8s nodes
-#   hosts: localhost
-#   become: true
-#   tasks:
-
-#     - name: disable swap on k8s nodes
-#       command: swapoff -a
-#       when: ansible_hostname in ['jalapeno', 'rome']
-#       ignore_errors: yes
 
 
 
