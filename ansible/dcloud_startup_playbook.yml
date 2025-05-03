@@ -1,0 +1,41 @@
+- name: Update the Git Repo
+  hosts: localhost
+  become: false
+  tasks:
+
+    - name: git pull to update repo on localhost
+      command: git pull
+      args:
+        chdir: /home/dcloud/LTRMSI-3000
+      ignore_errors: yes
+
+- name: Berlin VM
+  hosts: localhost
+  become: true
+  tasks:
+
+    - name: define virsh network
+      command: virsh net-define ../lab_1/config/berlin-vm/berlin1-network.xml
+      ignore_errors: yes
+
+    - name: start virsh network
+      command: virsh net-start berlin1
+      ignore_errors: yes
+
+    - name: start Berlin VM
+      command: virsh start berlin
+      ignore_errors: yes
+
+# - name: Disable swap on k8s nodes
+#   hosts: localhost
+#   become: true
+#   tasks:
+
+#     - name: disable swap on k8s nodes
+#       command: swapoff -a
+#       when: ansible_hostname in ['jalapeno', 'rome']
+#       ignore_errors: yes
+
+
+
+

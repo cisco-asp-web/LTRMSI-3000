@@ -1,7 +1,7 @@
 [vms]
-xrd ansible_host=198.18.128.100
+topology-host ansible_host=198.18.133.100
 
-jalapeno ansible_host=198.18.128.101
+jalapeno ansible_host=198.18.133.102
 
 amsterdam ansible_host=198.18.128.102
 
