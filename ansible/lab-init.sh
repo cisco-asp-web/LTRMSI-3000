@@ -19,4 +19,5 @@ virsh start berlin
 
 brctl show 
 ifconfig berlin-net
+sudo iptables -t nat --list | grep MASQUERADE
 virsh list --all
