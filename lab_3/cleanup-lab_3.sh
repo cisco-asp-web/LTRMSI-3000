@@ -1,5 +1,5 @@
 #!/bin/sh
 
-sudo clab destroy -t lab_3-topology.clab.yml -c
+sudo clab destroy -t lab_3-topology.clab.yaml -c
 
 

@@ -35,8 +35,8 @@ import yaml
 LOGGER = logging.getLogger()
 
 # Defualt input and output files
-DEFAULT_INPUT = "docker-compose.xr.yml"
-DEFAULT_OUTPUT = "docker-compose.yml"
+DEFAULT_INPUT = "docker-compose.xr.yaml"
+DEFAULT_OUTPUT = "docker-compose.yaml"
 
 # Default docker-compose YAML version if unspecified in the input file.
 DEFAULT_YAML_VERSION = "2.4"

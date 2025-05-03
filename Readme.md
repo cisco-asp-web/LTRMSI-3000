@@ -35,7 +35,7 @@ Within each lab directory you should see several files of importance:
 | File Name                | Description                                                  |
 |:-------------------------|:-------------------------------------------------------------|
 | cleanup-lab_X.sh         | Cleans up the containerlab topology and files                |
-| lab_X-topology.yml       | YAML input file for containerlab to create the topology      |
+| lab_X-topology.yaml       | YAML input file for containerlab to create the topology      |
 | lab_X-guide.md           | User guide for this lab                                      |
 
 
