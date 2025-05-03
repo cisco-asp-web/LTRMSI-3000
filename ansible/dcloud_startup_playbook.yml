@@ -22,6 +22,10 @@
       command: virsh net-start berlin-net
       ignore_errors: yes
 
+    - name: define virsh domain
+      command: virsh define ../lab_1/config/berlin-vm/berlin.xml
+      ignore_errors: yes
+
     - name: start Berlin VM
       command: virsh start berlin
       ignore_errors: yes
