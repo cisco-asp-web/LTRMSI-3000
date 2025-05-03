@@ -46,10 +46,10 @@
     </interface>
     <interface type='network'>
       <mac address="52:54:e2:f2:a2:b2"/>   
-      <source network='berlin1' bridge='berlin1'/>
+      <source network='berlin-net' bridge='berlin-net'/>
       <target dev='vnet1'/>
       <model type='virtio'/>
-      <alias name='net0'/>
+      <alias name='net1'/>
       <address type='pci' domain='0x0000' bus='0x00' slot='0x04' function='0x0'/>
     </interface>
     <serial type='pty'>
