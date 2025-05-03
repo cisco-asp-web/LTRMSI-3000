@@ -15,11 +15,11 @@
   tasks:
 
     - name: define virsh network
-      command: virsh net-define ../lab_1/config/berlin-vm/berlin1-network.xml
+      command: virsh net-define ../lab_1/config/berlin-vm/berlin-net.xml
       ignore_errors: yes
 
     - name: start virsh network
-      command: virsh net-start berlin1
+      command: virsh net-start berlin-net
       ignore_errors: yes
 
     - name: start Berlin VM
