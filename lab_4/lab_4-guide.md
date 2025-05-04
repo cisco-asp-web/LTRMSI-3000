@@ -12,10 +12,8 @@ Enter description
   - [Lab Objectives](#lab-objectives)
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
     - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
-    - [SONiC: a very quick tour](#sonic-a-very-quick-tour)
-  - [Manual configuration of leaf00](#manual-configuration-of-leaf00)
-  - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
-    - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
+    - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
+    - [SRv6 ping test](#srv6-ping-test)
   - [End of lab 4](#end-of-lab-4)
 
 ## Lab Objectives
@@ -141,6 +139,17 @@ The first Ansbible playbook is a simple one; it launches the containerlab SONiC 
 ## Manual configuration of leaf00
 
 ## Fabric config automation with Ansible 
+We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/sonic-playbook.yaml) playbook. This playbook executes a number of tasks including:
+
+* Copy each nodes' config_db.json file to the /etc/sonic/ directory [Example leaf00/config_db.json](sonic-config/leaf00/config_db.json)
+* Load the config to activate the new settings
+* Run SONiC's hostname shell script to apply the new nodes' hostname
+* Copy over and run a loopback shell script that we've created for each node [Example loopback.sh](sonic-config/leaf00/loopback.sh)
+* Save the config
+* Create and activate a loopback interface called **sr0** on each node. This loopback is needed for SONiC SRv6 functionality
+* Use the Ansible built-in command plugin to enter the FRR/BGP container and delete the pre-existing default BGP config
+* Copy and load our fabric FRR/BGP configs to each node [Example frr.conf](sonic-config/leaf00/frr.conf)
+
 
 1. cd into the lab_4/ansible directory and execute the *sonic-playbook.yaml*
     ```
@@ -149,7 +158,146 @@ The first Ansbible playbook is a simple one; it launches the containerlab SONiC 
     ansible-playbook -i hosts sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
     ```
 
+    The sonic playbook produces a lot of console output, by the time it completes we expect to see something like this:
+
+    ```
+    PLAY RECAP *************************************************************************************
+    leaf00   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    leaf01   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    leaf02   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    leaf03   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    spine00  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    spine01  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    spine02  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+    spine03  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+    ``` 
+
 ### Verify SONiC BGP peering
+
+SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example from leaf00:
+
+    ```
+    neighbor Ethernet0 interface remote-as 65000
+    neighbor Ethernet4 interface remote-as 65001
+    neighbor Ethernet8 interface remote-as 65002
+    neighbor Ethernet12 interface remote-as 65003
+    ```
+
+1. ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
+    ```
+    ssh admin@clab-sonic-leaf00
+    ssh admin@clab-sonic-leaf01
+
+    ssh admin@clab-sonic-spine00
+    ssh admin@clab-sonic-spine01
+    etc.
+    ```
+
+    ```
+    vtysh
+    ```
+    ```
+    show bgp summary
+    ```
+    Expected output from leaf00:
+    ```
+    leaf00# show bgp summary 
+
+    IPv6 Unicast Summary:
+    BGP router identifier 10.0.0.200, local AS number 65200 VRF default vrf-id 0
+    BGP table version 58
+    RIB entries 47, using 6016 bytes of memory
+    Peers 4, using 80 KiB of memory
+
+    Neighbor        V         AS   MsgRcvd   MsgSent   TblVer  InQ OutQ  Up/Down State/PfxRcd   PfxSnt Desc
+    Ethernet0       4      65000        54        40       58    0    0 00:14:43           17       28 N/A
+    Ethernet4       4      65001        99        36       58    0    0 00:14:41           17       28 N/A
+    Ethernet8       4      65002        63        36       58    0    0 00:14:41           17       28 N/A
+    Ethernet12      4      65003        80        36       58    0    0 00:14:41           17       28 N/A
+
+    Total number of neighbors 4
+    ```
+
+2. Check SONiC SRv6 configuration
+   ```
+   show run
+   ```
+
+   Example SRv6 config output from leaf00:
+   ```
+   segment-routing
+    srv6
+      static-sids
+      sid fc00:0:1200::/48 locator MAIN behavior uN                       <-- Locator behavior "uN"
+      sid fc00:0:1200:fe00::/64 locator MAIN behavior uDT4 vrf default    <-- static uDT4 function for prefixes in the default table
+      exit
+      !
+    exit
+    !
+    srv6
+      encapsulation
+      source-address fc00:0:1200::1
+      locators
+      locator MAIN
+        prefix fc00:0:1200::/48 block-len 32 node-len 16 func-bits 16
+        behavior usid
+      exit
+      !
+      exit
+      !
+      formats
+      format usid-f3216
+      exit
+      !
+      format uncompressed-f4024
+      exit
+```
+
+3. Check locator/sid-manager status - 'show run' to see the applied SRv6 configuration
+    ```
+    show segment-routing srv6 locator 
+    show segment-routing srv6 manager
+    ```
+
+    Expected output:
+    ```
+    leaf00# show segment-routing srv6 locator 
+    Locator:
+    Name                 ID      Prefix                   Status
+    -------------------- ------- ------------------------ -------
+    MAIN                       1 fc00:0:1200::/48         Up
+
+    leaf00# show segment-routing srv6 manager 
+    Parameters:
+      Encapsulation:
+        Source Address:
+          Configured: fc00:0:1200::1
+    ```
+
+4. Exit the FRR/BGP container and take a look at the linux ipv6 routing table:
+
+    ```
+    exit
+    ip -6 route
+    ```
+
+    Note all the entries with 'proto bgp src', aka routes learned from BGP and installed in the linux routing table
+
+5. Run the ip -6 route command again and grep for the nodes' locator:
+
+    ```
+    ip -6 route | grep seg6local
+    ```
+
+    Example output:
+    ```
+    admin@leaf00:~$ ip -6 route | grep seg6local
+    fc00:0:1200::/48 nhid 63  encap seg6local action End flavors next-csid lblen 32 nflen 16 dev sr0 proto 196 metric 20 pref medium
+
+### Configure "ubuntu host" containers attached to SONiC topology
+
+
+### SRv6 ping test
 
 
 ## End of lab 4
