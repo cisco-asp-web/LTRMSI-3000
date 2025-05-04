@@ -52,12 +52,12 @@ topology:
 
     amsterdam:
       kind: linux
-      image: ubuntu-host:latest
+      image: amsterdam:latest
       mgmt-ipv4: 10.254.254.108
 
     rome:
       kind: linux
-      image: ubuntu-host:latest
+      image: rome:latest
       mgmt-ipv4: 10.254.254.109
 
     berlin-net:
