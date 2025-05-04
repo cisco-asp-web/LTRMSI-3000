@@ -111,9 +111,9 @@ CRDs come in YAML file format and in the next several sections of this lab we'll
 
 For the sake of simplicity in this lab we'll use iBGP peering between our Berlin K8s node and our route reflectors **xrd05** and **xrd06**. 
 
-On Berlin VM change to the lab_4/cilium directory and check out the contents
+On the **Berlin VM** change to the lab_3/cilium directory and check out the contents
    ```
-   cd ~/SRv6_dCloud_Lab/lab_4/cilium/
+   cd ~/LTRMSI-3000/lab_3/cilium/
    ls
    ```
 
@@ -162,9 +162,9 @@ In the next few steps we'll walk through applying the configuration one element 
 
 ![Cilium SRv6 L3VPN](/topo_drawings/cilium-l3vpn-topology.png)
 
-1. On the **Berlin** VM cd into the Lab 4 cilium directory and apply the *Cilium BGP Cluster Config CRD*. BGP Cluster config establishes our Cilium Node's BGP ASN and base BGP peering with the route reflectors **xrd05** and **xrd06**.
+1. On the **Berlin** VM cd into the Lab 3 cilium directory and apply the *Cilium BGP Cluster Config CRD*. BGP Cluster config establishes our Cilium Node's BGP ASN and base BGP peering with the route reflectors **xrd05** and **xrd06**.
    ```
-   cd ~/SRv6_dCloud_Lab/lab_4/cilium/
+   cd ~/LTRMSI-3000/lab_3/cilium/
    kubectl apply -f 01-bgp-cluster.yaml
    ```
 

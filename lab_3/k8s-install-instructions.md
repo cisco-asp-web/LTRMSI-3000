@@ -75,3 +75,11 @@ sudo cp containerd-config.toml /etc/containerd/config.toml
 ```
 
 9.  You may now initialize your k8s cluster with kubeadm init 
+
+## Appendix
+
+Kubeadm Join if we want to add a worker node to Berlin cluster:
+```
+kubeadm join 198.18.4.2:6443 --token cecn5b.n5m612yx1ou17mvz \
+	--discovery-token-ca-cert-hash sha256:2c0445b6f4f80069221f666677d43273719533073bf19207395ccd7123531ff8
+```
