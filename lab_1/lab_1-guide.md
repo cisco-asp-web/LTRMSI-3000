@@ -34,6 +34,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [SRv6](#srv6)
     - [SRv6 Configuration Steps](#srv6-configuration-steps)
       - [Configure SRv6 on xrd01](#configure-srv6-on-xrd01)
+      - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
       - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
   - [End-to-End Connectivity - Edgeshark](#end-to-end-connectivity---edgeshark)
   - [End of Lab 1](#end-of-lab-1)
@@ -578,7 +579,9 @@ SRv6 uSID locator and source address information for nodes in the lab:
     commit
     ```
 
-2. ssh to **xrd07** and apply this config in a single shot:
+#### Configure SRv6 on xrd07
+
+1. ssh to **xrd07** and apply this config in a single shot:
 
     ```
     ssh cisco@clab-clus25-xrd07

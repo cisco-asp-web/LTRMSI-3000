@@ -13,7 +13,6 @@ The routers' VRFs and interfaces have been preconfigured, so we'll focus on the 
   - [Lab Objectives](#lab-objectives)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure VRF](#configure-vrf)
-    - [Add VRF to router interfaces for L3VPN](#add-vrf-to-router-interfaces-for-l3vpn)
     - [Configure BGP L3VPN Peering](#configure-bgp-l3vpn-peering)
   - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
@@ -61,69 +60,9 @@ BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network
   ssh cisco@clus25-xrd07
   ```
 
-  ```yaml
-  conf t
-  vrf carrots
-    address-family ipv4 unicast
-      import route-target
-      9:9
-      export route-target
-      9:9
-    
-    address-family ipv6 unicast
-      import route-target
-      9:9
-      export route-target
-      9:9
 
-    commit
-  ```
-
-  Only on **xrd07**:
-  ```yaml
-  conf t
-  vrf radish
-    address-family ipv4 unicast
-      import route-target
-      10:10
-      export route-target
-      10:10
-    address-family ipv6 unicast
-      import route-target
-      10:10
-      export route-target
-      10:10
-    commit
-  ```
-
-### Add VRF to router interfaces for L3VPN
-For **xrd07** we will add interface *GigabitEthernet0/0/0/3* to VRF *carrots* and interface *loopback100* to VRF *radish*.
-
-![L3VPN VRF Carrots](/topo_drawings/l3vpn-vrf-carrots.png)
-
- 1. Add VRF to interfaces
-
-
-    **xrd07**  
-    ```yaml
-    conf t
-    
-    interface GigabitEthernet0/0/0/3
-      vrf carrots
-      ipv4 address 10.107.2.2 255.255.255.0
-      ipv6 address fc00:0:107:2::2/64
-      no shutdown
-
-    interface Loopback100
-      vrf radish
-      ipv4 address 100.0.7.1 255.255.255.0
-      ipv6 address 2001:db8:100:7::1/64
-    commit
-    ```
-
-
- 2. Add VRF static routes  
-     In addition to configuring *GigabitEthernet0/0/0/3* to be a member of VRF carrots, **xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes. Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
+ 1. Add VRF static routes  
+     **xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
     **xrd07**
     ```yaml
@@ -132,11 +71,8 @@ For **xrd07** we will add interface *GigabitEthernet0/0/0/3* to VRF *carrots* an
     router static
       vrf carrots
         address-family ipv4 unicast
-          40.0.0.0/24 10.107.2.1
-          50.0.0.0/24 10.107.2.1
-        address-family ipv6 unicast
-          fc00:0:40::/64 fc00:0:107:2::1
-          fc00:0:50::/64 fc00:0:107:2::1
+          40.0.0.0/24 10.107.2.2
+          50.0.0.0/24 10.107.2.2
         commit
     ```
 
@@ -147,8 +83,6 @@ For **xrd07** we will add interface *GigabitEthernet0/0/0/3* to VRF *carrots* an
     ping vrf carrots 40.0.0.1
     ping vrf carrots 50.0.0.1
     ping vrf carrots fc00:0:107:2::1
-    ping vrf carrots fc00:0:40::1
-    ping vrf carrots fc00:0:50::1
     ```
 
 ### Configure BGP L3VPN Peering
