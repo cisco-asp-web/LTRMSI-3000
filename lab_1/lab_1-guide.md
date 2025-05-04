@@ -9,7 +9,7 @@ For more information on containerlab see:
 https://containerlab.dev/
 
 ### Description: 
-In Lab 1 we will user containerlab to launch the XRd topology apply base SRv6 configurations and validate things are working. 
+In Lab 1 we will launch the XRd topology apply base SRv6 configurations and validate things are working. 
 
 ## Contents
 - [Lab 1 Guide: Deploy XRd Topology and apply SRv6 configurations \[20 Min\]](#lab-1-guide-deploy-xrd-topology-and-apply-srv6-configurations-20-min)
@@ -21,11 +21,10 @@ In Lab 1 we will user containerlab to launch the XRd topology apply base SRv6 co
     - [User Credentials](#user-credentials)
     - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
-  - [Validate Jalapeno, Berlin, Rome, and Amsterdam VMs](#validate-jalapeno-berlin-rome-and-amsterdam-vms)
+  - [Validate Jalapeno and Berlin VMs, and Rome, and Amsterdam Containers](#validate-jalapeno-and-berlin-vms-and-rome-and-amsterdam-containers)
     - [Jalapeno VM](#jalapeno-vm)
     - [Berlin VM](#berlin-vm)
-    - [Rome VM](#rome-vm)
-    - [Amsterdam VM](#amsterdam-vm)
+    - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -39,7 +38,7 @@ In Lab 1 we will user containerlab to launch the XRd topology apply base SRv6 co
   - [End of Lab 1](#end-of-lab-1)
   
 ## Lab Objectives
-The student upon completion of Lab 1 should have achieved the following objectives:
+We will have achieved the following objectives upon completion of Lab 1:
 
 * Access all devices in the lab
 * Deployed the XRd network topology
@@ -56,8 +55,7 @@ The student upon completion of Lab 1 should have achieved the following objectiv
 ## Virtual Machine and XRd Access
 
 
-
-Lab attendees have the choice to directly SSH Device access for this lab is primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
+Lab attendees will access devices in the lab primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
 
 ### User Credentials
 All VMs, routers, etc. use the same user credentials:
@@ -77,8 +75,8 @@ For full size image see [LINK](/topo_drawings/management-network.png)
     ssh cisco@198.18.133.100
     ```
 
-2. Change to the Git repository *`lab_1`* directory
-    - The lab repository folder is found in the home directory *`~/LTRMSI-3000/lab_1`*
+2. Change to the *lab_1* directory in the Git repository *`~/LTRMSI-3000/lab_1`*
+   
     ```
     cd ~/LTRMSI-3000/lab_1
     ```
@@ -86,38 +84,44 @@ For full size image see [LINK](/topo_drawings/management-network.png)
 3.  Run the *containerlab deploy* command to launch the topology. Running the deploy command from this directory will launch the network into the "beginning of lab 1" configuration state 
    
     ``` 
-    sudo containerlab deploy -t lab_1-topology.yaml
+    sudo containerlab deploy -t lab_1-topology.clab.yaml
     ```
     - Look for the below output from the end of the script confirming XRd instances 1-7 were created
     ```
-    ╭──────────────────┬─────────────────────────────────┬─────────┬────────────────╮
-    │       Name       │            Kind/Image           │  State  │ IPv4/6 Address │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd01│ cisco_xrd                       │ running │ 10.254.254.101 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd02│ cisco_xrd                       │ running │ 10.254.254.102 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd03│ cisco_xrd                       │ running │ 10.254.254.103 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd04│ cisco_xrd                       │ running │ 10.254.254.104 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd05│ cisco_xrd                       │ running │ 10.254.254.105 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd06│ cisco_xrd                       │ running │ 10.254.254.106 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ├──────────────────┼─────────────────────────────────┼─────────┼────────────────┤
-    │ clab-clus25-xrd07│ cisco_xrd                       │ running │ 10.254.254.107 │
-    │                  │ ios-xr/xrd-control-plane:24.3.2 │         │ N/A            │
-    ╰──────────────────┴─────────────────────────────────┴─────────┴────────────────╯
+    ╭───────────────────────┬────────────────────────────────┬─────────┬────────────────╮
+    │          Name         │           Kind/Image           │  State  │ IPv4/6 Address │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-amsterdam │ linux                          │ running │ 10.254.254.108 │
+    │                       │ ubuntu-host:latest             │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-rome      │ linux                          │ running │ 10.254.254.109 │
+    │                       │ ubuntu-host:latest             │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd01     │ cisco_xrd                      │ running │ 10.254.254.101 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd02     │ cisco_xrd                      │ running │ 10.254.254.102 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd03     │ cisco_xrd                      │ running │ 10.254.254.103 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd04     │ cisco_xrd                      │ running │ 10.254.254.104 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd05     │ cisco_xrd                      │ running │ 10.254.254.105 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd06     │ cisco_xrd                      │ running │ 10.254.254.106 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
+    │ clab-clus25-xrd07     │ cisco_xrd                      │ running │ 10.254.254.107 │
+    │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
+    ╰───────────────────────┴────────────────────────────────┴─────────┴────────────────╯
     ```
 
 > [!NOTE]
-> All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.yaml*
+> All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.clab.yaml*
 
 1. Check that the docker containers were created and running
     ```
@@ -139,7 +143,7 @@ For full size image see [LINK](/topo_drawings/management-network.png)
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
-## Validate Jalapeno, Berlin, Rome, and Amsterdam VMs
+## Validate Jalapeno and Berlin VMs, and Rome, and Amsterdam Containers
 
 ### Jalapeno VM
 
@@ -150,6 +154,8 @@ Jalapeno will collect BGP Monitoring Protocol (BMP) and streaming telemetry data
 1. Validate router reachability to Jalapeno VM (no need to check all routers, **xrd05** will be sufficient):
    ```
    ssh cisco@clab-clus25-xrd05
+   ```
+   ```
    ping 198.18.128.101
    ```
    
@@ -169,26 +175,31 @@ Jalapeno will collect BGP Monitoring Protocol (BMP) and streaming telemetry data
 
 ### Berlin VM
 
-In our lab the **Berlin VM** is an Ubuntu Kubernetes node running Cilium and connected to the **xrd02** router. 
+In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
 
 1. SSH to Berlin VM from your laptop.
    ```
-   ssh cisco@198.18.128.104
+   ssh cisco@berlin
+   or
+   ssh cisco@192.168.122.100
    ```
 
 2. Check connectivity from **Berlin** to **xrd02**
     ```
-    cisco@berlin:~$ ping 198.18.4.2
-    PING 198.18.4.2 (198.18.4.2) 56(84) bytes of data.
-    64 bytes from 198.18.4.2: icmp_seq=1 ttl=255 time=1.83 ms
-    64 bytes from 198.18.4.2: icmp_seq=2 ttl=255 time=1.44 ms
+    ping 198.18.4.1 -c 2
+    ```
+    ```
+    cisco@berlin:~$  ping 198.18.4.1 -c 2
+    PING 198.18.4.1 (198.18.4.1) 56(84) bytes of data.
+    64 bytes from 198.18.4.1: icmp_seq=1 ttl=255 time=5.09 ms
+    64 bytes from 198.18.4.1: icmp_seq=2 ttl=255 time=5.18 ms
     ```
 
-### Rome VM
+### Amsterdam and Rome Containers
 
-In our lab the **Rome VM** is an Ubuntu Kubernetes node, and is essentially a customer/user of our network. 
+**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07**. They are used to simulate customer or user endpoints connected to our network. 
 
-1. SSH to Rome VM from your laptop.
+1. cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
    ```
    ssh cisco@198.18.128.103
    ```
@@ -202,48 +213,12 @@ In our lab the **Rome VM** is an Ubuntu Kubernetes node, and is essentially a cu
     64 bytes from 10.107.1.2: icmp_seq=3 ttl=255 time=1.30 ms
     ```
 
-### Amsterdam VM
 
-The **Amsterdam VM** represents a server belonging to a cloud, CDN, or gaming company that serves content to end users, machines (such as the Rome VM), or customer applications over our network. The **Amsterdam VM** comes with VPP pre-installed. VPP (also known as https://fd.io/) is a very flexible and high performance open source software dataplane. 
-
-![VPP Topology](/topo_drawings/vpp-diagram-ams.png)
-
-> [!NOTE]
-> Link *M* between Amsterdam and xrd01 will be provisioned in Lab 3.
-
-1. SSH to Amsterdam Client VM from your laptop.
+3. SSH to Amsterdam Client VM from your laptop.
    Example
    ```
    ssh cisco@198.18.128.102
    ```
-
-2. Use VPP's *vppctl* CLI to validate that the VPP interface facing Ubuntu (host-vpp-in) and the interface facing router xrd01 (GigabitEthernetb/0/0) are `UP` and have their assigned IP addresses. GigabitEthernetb/0/0: `10.101.1.1/24`, and host-vpp-in: `10.101.2.2/24` 
-    
-    ```
-    sudo vppctl show interface address
-    ```
-    ```yaml
-    cisco@amsterdam:~$ sudo vppctl show interface address
-    GigabitEthernetb/0/0 (up):
-    L3 10.101.1.1/24        <-------HERE
-    L3 fc00:0:101:1::1/64
-    host-vpp-in (up):
-    L3 10.101.2.2/24        <-------HERE
-    ```
-3. Check connectivity from Amsterdam to xrd01 - we'll issue a ping from VPP itself:
-    ```
-    sudo vppctl ping 10.101.1.2
-    ```
-
-    ```
-    cisco@amsterdam:~$ sudo vppctl ping 10.101.1.2
-    116 bytes from 10.101.1.2: icmp_seq=1 ttl=255 time=2.7229 ms
-    116 bytes from 10.101.1.2: icmp_seq=2 ttl=255 time=1.1550 ms
-    116 bytes from 10.101.1.2: icmp_seq=3 ttl=255 time=1.1341 ms
-
-    Statistics: 3 sent, 3 received, 0% packet loss
-    cisco@amsterdam:~$ 
-    ```
 
 
 ## Validate ISIS Topology
