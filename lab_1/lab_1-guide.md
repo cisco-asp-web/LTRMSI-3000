@@ -92,10 +92,10 @@ For full size image see [LINK](/topo_drawings/management-network.png)
     │          Name         │           Kind/Image           │  State  │ IPv4/6 Address │
     ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
     │ clab-clus25-amsterdam │ linux                          │ running │ 10.254.254.108 │
-    │                       │ ubuntu-host:latest             │         │ N/A            │
+    │                       │ amsterdam:latest               │         │ N/A            │
     ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
     │ clab-clus25-rome      │ linux                          │ running │ 10.254.254.109 │
-    │                       │ ubuntu-host:latest             │         │ N/A            │
+    │                       │ rome:latest                    │         │ N/A            │
     ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
     │ clab-clus25-xrd01     │ cisco_xrd                      │ running │ 10.254.254.101 │
     │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
