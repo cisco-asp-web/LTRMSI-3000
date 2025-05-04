@@ -1,7 +1,7 @@
-# Lab 4: SRv6 for Kubernetes with Cilium [30 Min]
+# Lab 3: SRv6 for Kubernetes with Cilium [30 Min]
 
 ### Description
-Now that we've established SRv6 L3VPNs across our network, we're going to transition from *router-based services* to *host-based services*. And our first step will be to enable SRv6 L3VPN for Kubernetes. The Berlin VM has had Kubernetes pre-installed and is running the *Cilium CNI* (Container Network Interface). In this lab we'll review some basic Kubernetes commands (kubectl) and then we'll setup Cilium BGP peering with our XRd route reflectors. After that we'll configure Cilium SRv6 SID manager and Locator pool. We'll then add a couple containers to our K8s cluster and join them to the carrots VRF.
+Now that we've established SRv6 L3VPNs across our network, we're going to transition from *router-based services* to *host-based services*. And our first step will be to enable SRv6 L3VPN for Kubernetes. The Berlin VM has had Kubernetes pre-installed and is running the *Cilium CNI* (Container Network Interface). In this lab we'll review some basic Kubernetes commands (kubectl) and then we'll setup Cilium BGP peering with our XRd route reflectors. After that we'll configure Cilium SRv6 SID manager and Locator pool. Finally we'll add a couple containers to our Berlin K8s cluster and join them to the carrots VRF.
 
 > [!NOTE]
 > This portion of the lab makes use of Cilium Enterprise, which is a licensed set of features. The Cilium SRv6 feature set is in Beta is not available in the open source version. If you are interested in SRv6 on Cilium or other Enterprise features, please contact the relevant Cisco Isovalent sales team.  
@@ -13,11 +13,11 @@ https://cilium.io/labs/
 The original version of this lab was developed in partnership with Arkadiusz Kaliwoda, Cisco SE in EMEA SP
 
 ## Contents
-- [Lab 4: SRv6 for Kubernetes with Cilium \[30 Min\]](#lab-4-srv6-for-kubernetes-with-cilium-30-min)
+- [Lab 3: SRv6 for Kubernetes with Cilium \[30 Min\]](#lab-3-srv6-for-kubernetes-with-cilium-30-min)
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
-  - [Verify pre-installed Cilium is running](#verify-pre-installed-cilium-is-running)
+  - [Verify pre-installed Kubernetes and Cilium are running](#verify-pre-installed-kubernetes-and-cilium-are-running)
   - [Setup Cilium BGP Peering](#setup-cilium-bgp-peering)
     - [Cilium BGP CRD](#cilium-bgp-crd)
     - [Establish the Cilium BGP global and peer configurations](#establish-the-cilium-bgp-global-and-peer-configurations)
@@ -33,24 +33,26 @@ The original version of this lab was developed in partnership with Arkadiusz Kal
   - [End of lab 4](#end-of-lab-4)
 
 ## Lab Objectives
-The student upon completion of Lab 3 should have achieved the following objectives:
+We will have achieved the following objectives upon completion of Lab 2:
 
 * Understanding of Cilium networking for Kubernetes
 * Understanding on how to configure BGP in Cilium
-* Understanding on how to configure VRF in Cilium
+* Understanding on how to configure VRFs in Cilium
 * Understanding on how to configure SRv6 in Cilium
 
   
-## Verify pre-installed Cilium is running
+## Verify pre-installed Kubernetes and Cilium are running
 
 Kubernetes and Cilium Enterprise are pre-installed on the **Berlin** VM. All of the following steps are to be performed on the **Berlin** VM unless otherwise specified.
 
-1. SSH into the Berlin VM and cd into the lab_4/cilium directory and check out the contents
+1. From the **topology-host** SSH into the **Berlin VM**, cd into the lab_3/cilium directory and check out the contents
    ```
-   ssh cisco@198.18.128.104
+   ssh cisco@berlin
+   or
+   ssh cisco@192.168.122.100
    ```
    ```
-   cd ~/SRv6_dCloud_Lab/lab_4/cilium/
+   cd ~/LTRMSI-3000/lab_3/cilium/
    ```
 
 2. Run a couple commands to verify the Cilium Installation

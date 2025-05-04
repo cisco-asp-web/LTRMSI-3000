@@ -676,7 +676,5 @@ SRv6 uSID locator and source address information for nodes in the lab:
 ## End-to-End Connectivity - Edgeshark
 
 
-
-
 ### End of Lab 1
 Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
