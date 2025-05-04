@@ -21,7 +21,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [User Credentials](#user-credentials)
     - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
-  - [Validate Jalapeno and Berlin VMs, and Rome, and Amsterdam Containers](#validate-jalapeno-and-berlin-vms-and-rome-and-amsterdam-containers)
+  - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
     - [Jalapeno VM](#jalapeno-vm)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
@@ -143,7 +143,7 @@ For full size image see [LINK](/topo_drawings/management-network.png)
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
-## Validate Jalapeno and Berlin VMs, and Rome, and Amsterdam Containers
+## Validate Attached Linux VMs and Containers
 
 ### Jalapeno VM
 
@@ -197,11 +197,11 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
 ### Amsterdam and Rome Containers
 
-**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07**. They are used to simulate customer or user endpoints connected to our network. 
+**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are containers their network stack is blank
 
 1. cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
    ```
-   ssh cisco@198.18.128.103
+   cd ~/LTRMSI-3000/lab_1/scripts/
    ```
 
 2. Check connectivity from **Rome** to **xrd07**

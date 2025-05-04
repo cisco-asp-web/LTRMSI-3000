@@ -38,5 +38,10 @@ docker exec -it clab-clus25-rome ip route add 10.101.2.0/24 via 10.107.2.1 dev e
 docker exec -it clab-clus25-rome ip addr show eth2
 docker exec -it clab-clus25-rome ip route
 
+# Rome loopback interface
+docker exec -it clab-clus25-rome ip addr add 20.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add 30.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add 40.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add 50.0.0.1/24 dev lo
 
 

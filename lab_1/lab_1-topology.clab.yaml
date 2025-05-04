@@ -54,11 +54,15 @@ topology:
       kind: linux
       image: amsterdam:latest
       mgmt-ipv4: 10.254.254.108
+      binds:
+        - ./config/amsterdam-netplan.yaml:/etc/netplan/netplan.yaml
 
     rome:
       kind: linux
       image: rome:latest
       mgmt-ipv4: 10.254.254.109
+      binds:
+        - ./config/rome-netplan.yaml:/etc/netplan/netplan.yaml
 
     berlin-net:
       kind: bridge
