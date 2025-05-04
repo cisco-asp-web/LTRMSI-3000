@@ -205,6 +205,32 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ./container-ips.sh
    ```
 
+   PArtial output:
+   ```
+   cisco@topology-host:~/LTRMSI-3000/lab_1/scripts$ ./container-ips.sh
+   Setting up Amsterdam eth1 ip addresses and routes
+   Amsterdam eth1
+       inet 10.101.1.2/24 scope global eth1
+       inet6 fc00:0:101:1::2/64 scope global tentative 
+       inet6 fe80::a8c1:abff:fe30:5a20/64 scope link 
+   Setting up Amsterdam eth2 ip addresses and routes
+   Amsterdam eth2
+       inet 10.101.2.2/24 scope global eth2
+       inet6 fc00:0:101:2::2/64 scope global tentative 
+       inet6 fe80::a8c1:abff:fe70:7481/64 scope link 
+   Amsterdam routes
+   default via 10.254.254.1 dev eth0 
+   10.101.1.0/24 dev eth1 proto kernel scope link src 10.101.1.2 
+   10.101.2.0/24 dev eth2 proto kernel scope link src 10.101.2.2 
+   10.107.1.0/24 via 10.101.1.1 dev eth1 
+   10.107.2.0/24 via 10.101.2.1 dev eth2 
+   10.254.254.0/24 dev eth0 proto kernel scope link src 10.254.254.108 
+   20.0.0.0/24 via 10.101.1.1 dev eth1 
+   30.0.0.0/24 via 10.101.1.1 dev eth1 
+   40.0.0.0/24 via 10.101.2.1 dev eth2 
+   50.0.0.0/24 via 10.101.2.1 dev eth2 
+   ```
+
 2. Check connectivity from **Rome** to **xrd07**
     ```
     cisco@rome:~$ ping -c 3 10.107.1.2
