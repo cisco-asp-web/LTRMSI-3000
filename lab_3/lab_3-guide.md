@@ -28,9 +28,11 @@ The original version of this lab was developed in partnership with Arkadiusz Kal
   - [Establish Cilium VRFs and Create Pods](#establish-cilium-vrfs-and-create-pods)
     - [Verify Cilium advertised L3vpn prefixes are reaching remote xrd nodes](#verify-cilium-advertised-l3vpn-prefixes-are-reaching-remote-xrd-nodes)
     - [Run a ping test!](#run-a-ping-test)
+    - [Optional Edgeshark section](#optional-edgeshark-section)
   - [Create a radish VRF and pod](#create-a-radish-vrf-and-pod)
-  - [Lab 4 Appendix](#lab-4-appendix)
-  - [End of lab 4](#end-of-lab-4)
+    - [Optional Edgeshark](#optional-edgeshark)
+  - [Lab 3 Appendix](#lab-3-appendix)
+  - [End of lab 3](#end-of-lab-3)
 
 ## Lab Objectives
 We will have achieved the following objectives upon completion of Lab 2:
@@ -232,7 +234,7 @@ In the next few steps we'll walk through applying the configuration one element 
 
    Example:
    ```
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ cilium bgp peers
+   cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ cilium bgp peers
    Node     Local AS   Peer AS   Peer Address     Session State   Uptime   Family          Received   Advertised
    berlin   65000      65000     fc00:0:5555::1   established     9s       ipv6/unicast    5          0    
                                                                            ipv4/mpls_vpn   5          0    
@@ -274,7 +276,7 @@ Here is a portion of the prefix advertisement CRD with notes:
    cilium bgp peers
    ```
    ```diff
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ cilium bgp peers
+   cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ cilium bgp peers
    Node     Local AS   Peer AS   Peer Address     Session State   Uptime   Family          Received   Advertised
    +berlin   65000      65000     fc00:0:5555::1   established     11m48s   ipv6/unicast    6          1
                                                                             ipv4/mpls_vpn   5          0
@@ -290,7 +292,7 @@ Here is a portion of the prefix advertisement CRD with notes:
 
    Example output:
    ```
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ cilium bgp routes -h
+   cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ cilium bgp routes -h
    Lists BGP routes from all nodes in the cluster - requires cilium >= v1.14.6
 
    Usage:
@@ -304,7 +306,7 @@ Here is a portion of the prefix advertisement CRD with notes:
 
    Example output, as you can see we're currently only advertising the global table pod CIDR:
    ```
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ cilium bgp routes advertised ipv6 unicast
+   cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ cilium bgp routes advertised ipv6 unicast
    Node     VRouter   Peer             Prefix             NextHop          Age   Attrs
    berlin   65000     fc00:0:5555::1   2001:db8:42::/64   fc00:0:8888::1   18s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [2001:db8:42::/64]}}]   
             65000     fc00:0:6666::1   2001:db8:42::/64   fc00:0:8888::1   18s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [2001:db8:42::/64]}}] 
@@ -596,7 +598,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
 
 1. On the xrd VM ssh to **xrd01** and run some BGP verification commands.
    ```
-   ssh cisco@clab-cleu25-xrd01
+   ssh cisco@clab-clus25-xrd01
    ```
    ```
    show bgp vpnv4 unicast
@@ -626,7 +628,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
           T:1(Sid structure):
    ```
 
-2. Back on the Berlin VM, verify SRv6 Egress Policies. This command will give you a rough equivalent to the SRv6 L3VPN FIB table
+2. Back on the **Berlin** VM, verify SRv6 Egress Policies. This command will give you a rough equivalent to the SRv6 L3VPN FIB table
    ```
    kubectl get IsovalentSRv6EgressPolicy -o yaml
    ```
@@ -668,22 +670,22 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
     kubectl exec -it -n veggies carrots0 -- sh
     ```
     ```
-    ping 10.101.3.1 -i .4 
+    ping 10.107.2.2 -i .5
     ```
+    
+    or
+    ```
+    kubectl exec -it -n veggies carrots0 -- ping 10.107.2.2 -i .5
+    ```
+
+### Optional Edgeshark section
 
 4. Optional: return to the XRd VM and run a tcpdump to capture Cilium's SRv6 encapsulation of outbound packets:
 
     ```
-    sudo ip netns exec clab-cleu25-xrd02 tcpdump -lni Gi0-0-0-3
+    sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-3
     ```
 
-    Example output:
-    ```yaml
-    08:25.416 IP6 fc00:0:8888:0:250:56ff:fe3f:ffff > fc00:0:1111:e008::: IP 10.200.0.242 > 10.101.3.1: ICMP echo request, id 14, seq 0, length 64
-    08:25.419 IP6 fc00:0:1111::1 > fc00:0:a0ba:ec7::: IP 10.101.3.1 > 10.200.0.242: ICMP echo reply, id 14, seq 0, length 64
-    08:26.416 IP6 fc00:0:8888:0:250:56ff:fe3f:ffff > fc00:0:1111:e008::: IP 10.200.0.242 > 10.101.3.1: ICMP echo request, id 14, seq 1, length 64
-    08:26.419 IP6 fc00:0:1111::1 > fc00:0:a0ba:ec7::: IP 10.101.3.1 > 10.200.0.242: ICMP echo reply, id 14, seq 1, length 64
-    ```
 
 ## Create a radish VRF and pod
 In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface to it. Then we redistributed VRF radish's *connected* routes. Now we'll create a radish VRF and pod in Cilium.
@@ -696,7 +698,6 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
   
    Expected output:
    ```
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$    kubectl apply -f 08-vrf-radish.yaml
    isovalentbgpvrfconfig.isovalent.com/radish-config created
    isovalentbgpadvertisement.isovalent.com/radish-adverts created
    isovalentvrf.isovalent.com/radish created
@@ -727,25 +728,15 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 
     Expected output:
     ```
-    cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ kubectl exec -it -n veggies radish0 -- /bin/sh
+    cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ kubectl exec -it -n veggies radish0 -- /bin/sh
     / # ping 100.0.7.1
     PING 100.0.7.1 (100.0.7.1): 56 data bytes
     64 bytes from 100.0.7.1: seq=0 ttl=253 time=4.373 ms
     64 bytes from 100.0.7.1: seq=1 ttl=253 time=3.924 ms
-    64 bytes from 100.0.7.1: seq=2 ttl=253 time=4.759 ms
-    64 bytes from 100.0.7.1: seq=3 ttl=253 time=4.295 ms
-    ```
-3. Return to the XRd VM and run a tcpdump to capture Cilium's SRv6 encapsulation of outbound packets:
-
-    ```
-    sudo ip netns exec clab-cleu25-xrd02 tcpdump -lni Gi0-0-0-3
     ```
 
-    Example output:
-    ```yaml
-    16:08:24.320379 IP6 fc00:0:8888:0:250:56ff:fe3f:ffff > fc00:0:7777:e004::: IP 10.200.0.133 > 100.0.7.1: ICMP echo request, id 15, seq 0, length 64
-    16:08:24.720482 IP6 fc00:0:8888:0:250:56ff:fe3f:ffff > fc00:0:7777:e004::: IP 10.200.0.133 > 100.0.7.1: ICMP echo request, id 15, seq 1, length 64
-    ```
+### Optional Edgeshark
+
 4. Next, to demonstrate the flexibility of Cilium's SRv6 implementation, we'll switch the carrots1 pod from the carrots VRF to the radish VRF and run a ping again:
 
    ```
@@ -759,13 +750,13 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 
    Expected output:
    ```diff
-   cisco@berlin:~/SRv6_dCloud_Lab/lab_4/cilium$ kubectl describe pod -n veggies carrots1
+   cisco@berlin:~/LTRMSI-3000lab_3/cilium$ kubectl describe pod -n veggies carrots1
    +   Name:             carrots1
    Namespace:        veggies
    Priority:         0
    Service Account:  default
-   Node:             berlin/198.18.4.104
-   Start Time:       Wed, 22 Jan 2025 02:19:34 -0500
+   Node:             berlin/198.18.4.2
+   Start Time:       Sun, 04 May 2025 12:25:34 -0700
    Labels:           app=alpine-ping
    +                 vrf=radish                            # carrots1 is now in the radish VRF
    Annotations:      <none>
@@ -779,9 +770,9 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 > [!NOTE]
 > In a future version of this lab we hope to add support for Cilium SRv6-TE. 
 
-## Lab 4 Appendix
-We have provided some additional cilium and kubernetes commands in an appendix: [Lab 4 Appendix](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_4/lab_4-appendix.md)
+## Lab 3 Appendix
+We have provided some additional cilium and kubernetes commands in an appendix: [Lab 3 Appendix](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-appendix.md)
 
-## End of lab 4
-Please proceed to [Lab 5](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/lab_4-guide.md)
+## End of lab 3
+Please proceed to [Lab 4](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/lab_4-guide.md)
 
