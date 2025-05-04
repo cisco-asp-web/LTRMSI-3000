@@ -61,13 +61,16 @@ docker exec -it clab-clus25-rome ip addr show lo | grep inet
 # ping validation
 echo "Amsterdam eth1 ping test to xrd01"
 docker exec -it clab-clus25-amsterdam ping -c 3 10.101.1.1
+docker exec -it clab-clus25-amsterdam ping -c 3 fc00:0:101:1::1
 
 echo "Amsterdam eth2 ping test to xrd01"
 docker exec -it clab-clus25-amsterdam ping -c 3 10.101.2.1
+docker exec -it clab-clus25-amsterdam ping -c 3 fc00:0:101:2::1
 
 echo "Rome eth1 ping test to xrd07"
 docker exec -it clab-clus25-rome ping -c 3 10.107.1.1
+docker exec -it clab-clus25-rome ping -c 3 fc00:0:107:1::1
 
 echo "Rome eth2 ping test to xrd07"
 docker exec -it clab-clus25-rome ping -c 3 10.107.2.1
-
+docker exec -it clab-clus25-rome ping -c 3 fc00:0:107:2::1
