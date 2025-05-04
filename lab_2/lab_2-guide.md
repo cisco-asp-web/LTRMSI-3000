@@ -652,4 +652,4 @@ p netns exec clab-cleu25-xrd06 tcpdump -lni Gi0-0-0-1
     ```
 
 ### End of Lab 2
-Please proceed to [Lab 4](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_3/lab_3-guide.md)
+Please proceed to [Lab 4](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
