@@ -12,6 +12,12 @@ Enter description
   - [Lab Objectives](#lab-objectives)
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
     - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
+    - [SONiC: a very quick tour](#sonic-a-very-quick-tour)
+  - [Manual configuration of leaf00](#manual-configuration-of-leaf00)
+      - [Should we bother, or do all automated config?](#should-we-bother-or-do-all-automated-config)
+  - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
+    - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
+    - [SONiC SRv6 configuration](#sonic-srv6-configuration)
     - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
     - [SRv6 ping test](#srv6-ping-test)
   - [End of lab 4](#end-of-lab-4)
@@ -44,9 +50,10 @@ The first Ansbible playbook is a simple one; it launches the containerlab SONiC 
    ```
    PLAY RECAP ****************************************************************************
    localhost   : ok=4  changed=3  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0   
-
+   ```
 
 ### SONiC: a very quick tour
+
 1. ssh to leaf00 in our topology (note: password is 'admin')
     ```
     ssh admin@clab-sonic-leaf00
@@ -138,6 +145,10 @@ The first Ansbible playbook is a simple one; it launches the containerlab SONiC 
 
 ## Manual configuration of leaf00
 
+#### Should we bother, or do all automated config?
+
+
+
 ## Fabric config automation with Ansible 
 We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/sonic-playbook.yaml) playbook. This playbook executes a number of tasks including:
 
@@ -217,8 +228,10 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
 
     Total number of neighbors 4
     ```
+    
+### SONiC SRv6 configuration
 
-2. Check SONiC SRv6 configuration
+1. Check SONiC SRv6 configuration
    ```
    show run
    ```
@@ -253,7 +266,7 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
       exit
 ```
 
-3. Check locator/sid-manager status - 'show run' to see the applied SRv6 configuration
+2. Check locator/sid-manager status - 'show run' to see the applied SRv6 configuration
     ```
     show segment-routing srv6 locator 
     show segment-routing srv6 manager
@@ -274,7 +287,7 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
           Configured: fc00:0:1200::1
     ```
 
-4. Exit the FRR/BGP container and take a look at the linux ipv6 routing table:
+3. Exit the FRR/BGP container and take a look at the linux ipv6 routing table:
 
     ```
     exit
@@ -283,7 +296,7 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
 
     Note all the entries with 'proto bgp src', aka routes learned from BGP and installed in the linux routing table
 
-5. Run the ip -6 route command again and grep for the nodes' locator:
+4. Run the ip -6 route command again and grep for the nodes' locator:
 
     ```
     ip -6 route | grep seg6local
