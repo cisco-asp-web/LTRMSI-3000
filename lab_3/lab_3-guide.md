@@ -35,7 +35,7 @@ The original version of this lab was developed in partnership with Arkadiusz Kal
   - [End of lab 3](#end-of-lab-3)
 
 ## Lab Objectives
-We will have achieved the following objectives upon completion of Lab 2:
+We will have achieved the following objectives upon completion of Lab 3:
 
 * Understanding of Cilium networking for Kubernetes
 * Understanding on how to configure BGP in Cilium
