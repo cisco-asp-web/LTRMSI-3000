@@ -35,8 +35,11 @@ The first Ansbible playbook is a simple one; it launches the containerlab SONiC 
 
 1. cd into the lab_4 directory and run the *deploy-playbook*
 
-    ```
-    cd ~/LTRMSI-3000/lab_4/ 
+   ```
+   cd ~/LTRMSI-3000/lab_4/ 
+
+   ansible-playbook -i ansible/hosts ansible/deploy-playbook.yaml -e "ansible_user=cisco ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123" -vv
+   ```
 
 
 
