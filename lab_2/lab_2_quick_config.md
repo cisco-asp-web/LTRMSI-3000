@@ -4,36 +4,13 @@
 - [xrd05](#xrd05)
 - [xrd06](#xrd06)
 - [xrd07](#xrd07)
-- [Back to Lab 3 Guide](#back-to-lab-3-guide)
+  - [Example VRF and interface config:](#example-vrf-and-interface-config)
+- [Back to Lab 2 Guide](#back-to-lab-2-guide)
 
 ## xrd01
 ```
 conf t
 
-vrf carrots
- address-family ipv4 unicast
-  import route-target
-   9:9
-  !
-  export route-target
-   9:9
-  !
- !
- address-family ipv6 unicast
-  import route-target
-   9:9
-  !
-  export route-target
-   9:9
-  !
- !
-!
-interface GigabitEthernet0/0/0/3
- vrf carrots
- ipv4 address 10.101.3.2 255.255.255.0
- ipv6 address fc00:0:101:3::2/64
- no shutdown
-!
 router bgp 65000
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
@@ -152,53 +129,6 @@ commit
 ```
 conf t
 
-vrf carrots
- address-family ipv4 unicast
-  import route-target
-   9:9
-  !
-  export route-target
-   9:9
-  !
- !
- address-family ipv6 unicast
-  import route-target
-   9:9
-  !
-  export route-target
-   9:9
-  !
- !
-! 
-vrf radish
- address-family ipv4 unicast
-  import route-target
-   10:10
-  !
-  export route-target
-   10:10
-  !
- !
- address-family ipv6 unicast
-  import route-target
-   10:10
-  !
-  export route-target
-   10:10
-  !
- !
-!
-interface Loopback100
- vrf radish
- ipv4 address 100.0.7.1 255.255.255.0
- ipv6 address 2001:db8:100:7::1/64
-!
-interface GigabitEthernet0/0/0/3
- vrf carrots
- ipv4 address 10.107.2.2 255.255.255.0
- ipv6 address fc00:0:107:2::2/64
- no shutdown
-!
 router static
  vrf carrots
   address-family ipv4 unicast
@@ -298,5 +228,57 @@ router bgp 65000
 commit
 
 ```
- ## Back to Lab 3 Guide
-[Lab 3 Guide](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_3/lab_3-guide.md#validate-srv6-l3vpn)
+
+### Example VRF and interface config:
+```
+vrf carrots
+ address-family ipv4 unicast
+  import route-target
+   9:9
+  !
+  export route-target
+   9:9
+  !
+ !
+ address-family ipv6 unicast
+  import route-target
+   9:9
+  !
+  export route-target
+   9:9
+  !
+ !
+! 
+vrf radish
+ address-family ipv4 unicast
+  import route-target
+   10:10
+  !
+  export route-target
+   10:10
+  !
+ !
+ address-family ipv6 unicast
+  import route-target
+   10:10
+  !
+  export route-target
+   10:10
+  !
+ !
+!
+interface Loopback100
+ vrf radish
+ ipv4 address 100.0.7.1 255.255.255.0
+ ipv6 address 2001:db8:100:7::1/64
+!
+interface GigabitEthernet0/0/0/3
+ vrf carrots
+ ipv4 address 10.107.2.2 255.255.255.0
+ ipv6 address fc00:0:107:2::2/64
+ no shutdown
+!
+```
+
+## Back to Lab 2 Guide
+[Lab 2 Guide](lab_2-guide.md#validate-srv6-l3vpn)

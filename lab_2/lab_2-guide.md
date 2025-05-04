@@ -4,7 +4,7 @@
 In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
 
 
-The routers' VRFs and interfaces have been preconfigured, so we'll focus on the SRv6 BGP configuration. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
+The VRF instances and their interfaces have been preconfigured, so we'll focus on the SRv6 BGP configuration. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
 
 ## Contents
 - [Lab 3: Configure SRv6 L3VPN and SRv6-TE \[30 Min\]](#lab-3-configure-srv6-l3vpn-and-srv6-te-30-min)
@@ -12,8 +12,8 @@ The routers' VRFs and interfaces have been preconfigured, so we'll focus on the 
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
-    - [Configure VRF](#configure-vrf)
-    - [Configure BGP L3VPN Peering](#configure-bgp-l3vpn-peering)
+    - [Add VRF static routes for Rome](#add-vrf-static-routes-for-rome)
+    - [Configure BGP L3VPN](#configure-bgp-l3vpn)
   - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
@@ -24,7 +24,7 @@ The routers' VRFs and interfaces have been preconfigured, so we'll focus on the 
     - [End of Lab 2](#end-of-lab-2)
 
 ## Lab Objectives
-The student upon completion of Lab 3 should have achieved the following objectives:
+We will have achieved the following objectives upon completion of Lab 2:
 
 * Understanding of SRv6 L3VPN
 * Configuration of SRv6 L3VPN in XR
@@ -47,22 +47,20 @@ For more details on SRv6 network programming Endpoint Behavior functionality ple
 
 BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it to IPv6 peering over an SRv6 network. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
 
+The *carrots* and *radish* VRFs are setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
 
-  ### Configure VRF
-  Time to configure our VRFs for IPv4 and IPv6 VPN. The *carrots* VRF will be setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header). The *radish* VRF will be setup on **xrd07** and will be used in Lab 4.
 
-  We've preconfigured the carrots VRF on **xrd01**, so only need to configure VRFs on **xrd07**; :
+### Add VRF static routes for Rome
+**xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
-> the below commands are also available in the *`quick config doc`* [HERE](/lab_2/lab_2_quick_config.md)  
+> All of the below commands are also available in the *`quick config doc`* [HERE](/lab_2/lab_2_quick_config.md) 
 
-  ```
-  ssh cisco@clus25-xrd07
-  ```
-
-
- 1. Add VRF static routes  
-     **xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
+1. xrd07 vrf static route configuration
+   
+    ```
+    ssh cisco@clab-clus25-xrd07
+    ```
 
     **xrd07**
     ```yaml
@@ -73,20 +71,23 @@ BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network
         address-family ipv4 unicast
           40.0.0.0/24 10.107.2.2
           50.0.0.0/24 10.107.2.2
+        address-family ipv6 unicast
+          fc00:0:40::/64 fc00:0:107:2::2
+          fc00:0:50::/64 fc00:0:107:2::2
         commit
     ```
 
-1. Verify **Rome** VRF prefix reachability  
+2. Verify **Rome** VRF prefix reachability  
     Ping check from xrd07 gi 0/0/0/3 to Rome VM via 2nd NIC:  
     ```
     ping vrf carrots 10.107.2.1
     ping vrf carrots 40.0.0.1
     ping vrf carrots 50.0.0.1
-    ping vrf carrots fc00:0:107:2::1
+    ping vrf carrots fc00:0:107:2::2
     ```
 
-### Configure BGP L3VPN Peering
-1. Enable BGP L3VPN
+### Configure BGP L3VPN 
+1. Enable BGP L3VPN on **xrd07**
     The next step is to add the L3VPN configuration into BGP. The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. Again, we have preconfigured **xrd01** so you only need to configure **xrd07**
 
     **xrd07**
@@ -142,7 +143,9 @@ BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network
       commit
       ```
 
-3. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
+3. Apply SRv6 L3VPN configuration to **xrd01**
+
+4. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
 
    BGP Route Reflectors **xrd05**  
     ```yaml
@@ -159,7 +162,7 @@ BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network
 
 ## Validate SRv6 L3VPN
 
-Validation command output examples can be found at this [LINK](https://github.com/jalapeno/SRv6_dCloud_Lab/blob/main/lab_3/validation-cmd-output.md)
+Validation command output examples can be found at this [LINK](/lab_2/validation-cmd-output.md)
 
 > [!NOTE]
 > **xrd01** and **xrd07** are configured to use dynamic RD allocation, so the L3VPN RD+prefix combination shown in the lab guide may differ from the one you see in your environment. For example, **xrd07** might advertise the 40.0.0.0/24 prefix with rd 10.0.0.7:0 or it might be rd 10.0.0.7:1
@@ -504,12 +507,10 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 ## Insert EdgeShark stuff here 
 
-1. Start a new SSH session to the XRD VM and run a tcpdump in the **xrd01's** outbound interface to **xrd02** (Gi0-0-0-1):
-    ```
-    sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-1
+
     ```
 
-2. Lets now tie the SRv6 TE policy configured to what we expect to see in the tcpdump. What your looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
+1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
 
    ```
       segment-list xrd2347
@@ -525,32 +526,20 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefor for effiecency it drops the penultimate hop off the SID stack.
 
-3. From an SSH session to the Amsterdam VM ping the bulk transport destination IPv4 and IPv6 addresses.
+1. Run a ping from the Amsterdam container to the bulk transport destination IPv4 and IPv6 addresses on Rome.
     ```
-    ping 40.0.0.1 -i 1
+    docker exec -it clab-clus25-amsterdam ping 40.0.0.1 -i .5
     ```
 
-   ```yaml
-   cisco@xrd:~$ sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-1
-   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
-   23:30:36.415073 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e006::: IP 10.101.3.1 > 40.0.0.1: ICMP echo request, id 1, seq 47, length 64
-   23:30:36.815397 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e006::: IP 10.101.3.1 > 40.0.0.1: ICMP echo request, id 1, seq 48, length 64
-   23:30:37.216952 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e006::: IP 10.101.3.1 > 40.0.0.1: ICMP echo request, id 1, seq 49, length 64
-   ```
+    Reference tcpdump:
+    ```
+    sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+    ```
 
-   Now lets try the IPv6 bulk transport destination
-   ```
-   ping fc00:0:40::1 -i 1
-   ```
-   ```yaml
-   cisco@xrd:~$ sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-1
-   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
-   13:04:46.481863 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e009::: IP6 fc00:0:101:3:250:56ff:fe97:22cc > fc00:0:40::1: ICMP6, echo request, seq 2, length 64
-   13:04:47.483568 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e009::: IP6 fc00:0:101:3:250:56ff:fe97:22cc > fc00:0:40::1: ICMP6, echo request, seq 3, length 64
-   13:04:48.484592 IP6 fc00:0:1111::1 > fc00:0:2222:3333:7777:e009::: IP6 fc00:0:101:3:250:56ff:fe97:22cc > fc00:0:40::1: ICMP6, echo request, seq 4, length 64
-   ```
+    Now lets try the IPv6 bulk transport destination
+    ```
+    docker exec -it clab-clus25-amsterdam ping fc00:0:40::1 -i .5
+    ```
 
 
 
@@ -562,7 +551,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
-    ping 50.0.0.1 -i 1
+    docker exec -it clab-clus25-amsterdam ping 50.0.0.1 -i .5
     ```
 
     What your looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE low latency policy configured was:
@@ -578,15 +567,12 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
    
 
-    Now lets try the same ping test using the IPv6 address:
+    Optional: run the same ping test using the IPv6 address:
     
     ```
-    ping fc00:0:50::1 -i 1
+    docker exec -it clab-clus25-amsterdam ping fc00:0:50::1 -i .5
     ```
 
-
-p netns exec clab-cleu25-xrd06 tcpdump -lni Gi0-0-0-1
-    ```
 
 ### End of Lab 2
-Please proceed to [Lab 4](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
+Please proceed to [Lab 3](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)

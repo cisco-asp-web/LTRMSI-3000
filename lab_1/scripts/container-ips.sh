@@ -40,8 +40,7 @@ echo "Setting up Rome eth2 ip addresses and routes"
 docker exec -it clab-clus25-rome ip addr add 10.107.2.2/24 dev eth2
 docker exec -it clab-clus25-rome ip addr add fc00:0:107:2::2/64 dev eth2
 docker exec -it clab-clus25-rome ip route add 10.101.2.0/24 via 10.107.2.1 dev eth2
-docker exec -it clab-clus25-rome ip -6 route add fc00:0000:40::/64 via fc00:0:107:2::1 dev eth2
-docker exec -it clab-clus25-rome ip -6 route add fc00:0000:50::/64 via fc00:0:107:2::1 dev eth2
+docker exec -it clab-clus25-rome ip -6 route add fc00:0000:101:2::/64 via fc00:0:107:2::1 dev eth2
 echo "Rome eth2: "
 docker exec -it clab-clus25-rome ip addr show eth2 | grep inet
 
@@ -51,9 +50,13 @@ docker exec -it clab-clus25-rome ip route
 # Rome loopback interface
 echo "Setting up Rome loopback ip addresses"
 docker exec -it clab-clus25-rome ip addr add 20.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add fc00:0:20::1/64 dev lo
 docker exec -it clab-clus25-rome ip addr add 30.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add fc00:0:30::1/64 dev lo
 docker exec -it clab-clus25-rome ip addr add 40.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add fc00:0:40::1/64 dev lo
 docker exec -it clab-clus25-rome ip addr add 50.0.0.1/24 dev lo
+docker exec -it clab-clus25-rome ip addr add fc00:0:50::1/64 dev lo
 
 echo "Rome loopback: "
 docker exec -it clab-clus25-rome ip addr show lo | grep inet
