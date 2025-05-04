@@ -25,6 +25,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [Jalapeno VM](#jalapeno-vm)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
+  - [The script's ping tests should look something like this](#the-scripts-ping-tests-should-look-something-like-this)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -230,7 +231,25 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    40.0.0.0/24 via 10.101.2.1 dev eth2 
    50.0.0.0/24 via 10.101.2.1 dev eth2 
    ```
+   
+   ## The script's ping tests should look something like this
+   ```
+   Rome eth1 ping test to xrd07
+   PING 10.107.1.1 (10.107.1.1) 56(84) bytes of data.
+   64 bytes from 10.107.1.1: icmp_seq=1 ttl=255 time=1.25 ms
+   64 bytes from 10.107.1.1: icmp_seq=2 ttl=255 time=1.06 ms
 
+   --- 10.107.1.1 ping statistics ---
+   2 packets transmitted, 2 received, 0% packet loss, time 301ms
+   rtt min/avg/max/mdev = 1.055/1.152/1.250/0.097 ms
+   PING fc00:0:107:1::1(fc00:0:107:1::1) 56 data bytes
+   64 bytes from fc00:0:107:1::1: icmp_seq=1 ttl=64 time=1.06 ms
+   64 bytes from fc00:0:107:1::1: icmp_seq=2 ttl=64 time=1.24 ms
+
+   --- fc00:0:107:1::1 ping statistics ---
+   2 packets transmitted, 2 received, 0% packet loss, time 300ms
+   rtt min/avg/max/mdev = 1.063/1.152/1.242/0.089 ms
+   ```
 
 
 ## Validate ISIS Topology
