@@ -264,7 +264,7 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
       !
       format uncompressed-f4024
       exit
-```
+    ```
 
 2. Check locator/sid-manager status - 'show run' to see the applied SRv6 configuration
     ```
