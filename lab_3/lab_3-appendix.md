@@ -61,5 +61,5 @@ https://docs.cilium.io/en/stable/network/bgp-control-plane/bgp-control-plane-v2/
 Cilium debug reference:
 https://docs.cilium.io/en/stable/cmdref/cilium-dbg/
 
-## Back to Lab 4 Guide
-[Lab 4 Guide](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_4/lab_4-guide.md)
+## Back to Lab 3 Guide
+[Lab 3 Guide](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
