@@ -407,8 +407,6 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
    ```
    
-   Example output again now with TE policy applied on **xrd01**:
-
    
    Example output, note the additional uDT VRF carrots and SRv6-TE **uB6 Insert.Red** SIDs added to the list:
    ```yaml
@@ -507,8 +505,6 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 ## Insert EdgeShark stuff here 
 
-
-    ```
 
 1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
 
