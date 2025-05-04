@@ -81,41 +81,41 @@ topology:
 
   links:
 
-    - endpoints: ["l00:eth1", "s00:eth1"]
-    - endpoints: ["l00:eth2", "s01:eth1"]
-    - endpoints: ["l00:eth3", "s02:eth1"]
-    - endpoints: ["l00:eth4", "s03:eth1"]
+    - endpoints: ["leaf00:eth1", "spine00:eth1"]
+    - endpoints: ["leaf00:eth2", "spine01:eth1"]
+    - endpoints: ["leaf00:eth3", "spine02:eth1"]
+    - endpoints: ["leaf00:eth4", "spine03:eth1"]
 
-    - endpoints: ["l01:eth1", "s00:eth2"]
-    - endpoints: ["l01:eth2", "s01:eth2"]
-    - endpoints: ["l01:eth3", "s02:eth2"]
-    - endpoints: ["l01:eth4", "s03:eth2"]
+    - endpoints: ["leaf01:eth1", "spine00:eth2"]
+    - endpoints: ["leaf01:eth2", "spine01:eth2"]
+    - endpoints: ["leaf01:eth3", "spine02:eth2"]
+    - endpoints: ["leaf01:eth4", "spine03:eth2"]
 
-    - endpoints: ["l02:eth1", "s00:eth3"]
-    - endpoints: ["l02:eth2", "s01:eth3"]
-    - endpoints: ["l02:eth3", "s02:eth3"]
-    - endpoints: ["l02:eth4", "s03:eth3"]
+    - endpoints: ["leaf02:eth1", "spine00:eth3"]
+    - endpoints: ["leaf02:eth2", "spine01:eth3"]
+    - endpoints: ["leaf02:eth3", "spine02:eth3"]
+    - endpoints: ["leaf02:eth4", "spine03:eth3"]
 
-    - endpoints: ["l03:eth1", "s00:eth4"]
-    - endpoints: ["l03:eth2", "s01:eth4"]
-    - endpoints: ["l03:eth3", "s02:eth4"]
-    - endpoints: ["l03:eth4", "s03:eth4"]
+    - endpoints: ["leaf03:eth1", "spine00:eth4"]
+    - endpoints: ["leaf03:eth2", "spine01:eth4"]
+    - endpoints: ["leaf03:eth3", "spine02:eth4"]
+    - endpoints: ["leaf03:eth4", "spine03:eth4"]
 
-    - endpoints: ["l00:eth5", "host00:eth1"]
-    - endpoints: ["l00:eth6", "host00:eth2"]
-    - endpoints: ["l00:eth7", "leaf00-bridge:leaf00-eth7"]
+    - endpoints: ["leaf00:eth5", "host00:eth1"]
+    - endpoints: ["leaf00:eth6", "host00:eth2"]
+    - endpoints: ["leaf00:eth7", "leaf00-bridge:leaf00-eth7"]
  
 
-    - endpoints: ["l01:eth5", "host08:eth1"]
-    - endpoints: ["l01:eth6", "host08:eth2"]
-    - endpoints: ["l01:eth7", "leaf01-bridge:leaf01-eth7"]
+    - endpoints: ["leaf01:eth5", "host08:eth1"]
+    - endpoints: ["leaf01:eth6", "host08:eth2"]
+    - endpoints: ["leaf01:eth7", "leaf01-bridge:leaf01-eth7"]
 
-    - endpoints: ["l02:eth5", "host16:eth1"]  
-    - endpoints: ["l02:eth6", "host16:eth2"]
-    - endpoints: ["l02:eth7", "leaf02-bridge:leaf02-eth7"]
+    - endpoints: ["leaf02:eth5", "host16:eth1"]  
+    - endpoints: ["leaf02:eth6", "host16:eth2"]
+    - endpoints: ["leaf02:eth7", "leaf02-bridge:leaf02-eth7"]
 
-    - endpoints: ["l03:eth5", "host24:eth1"]
-    - endpoints: ["l03:eth6", "host24:eth2"]
-    - endpoints: ["l03:eth7", "leaf03-bridge:leaf03-eth7"]
+    - endpoints: ["leaf03:eth5", "host24:eth1"]
+    - endpoints: ["leaf03:eth6", "host24:eth2"]
+    - endpoints: ["leaf03:eth7", "leaf03-bridge:leaf03-eth7"]
 
 
