@@ -25,7 +25,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [Jalapeno VM](#jalapeno-vm)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
-  - [The script's ping tests should look something like this](#the-scripts-ping-tests-should-look-something-like-this)
+      - [The script's ping tests should look something like this](#the-scripts-ping-tests-should-look-something-like-this)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -232,7 +232,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    50.0.0.0/24 via 10.101.2.1 dev eth2 
    ```
    
-   ## The script's ping tests should look something like this
+   #### The script's ping tests should look something like this
    ```
    Rome eth1 ping test to xrd07
    PING 10.107.1.1 (10.107.1.1) 56(84) bytes of data.
@@ -582,6 +582,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
     ```
     ssh cisco@clab-clus25-xrd07
+    ```
     ```
     conf t
 
