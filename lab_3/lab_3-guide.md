@@ -774,5 +774,5 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 We have provided some additional cilium and kubernetes commands in an appendix: [Lab 3 Appendix](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-appendix.md)
 
 ## End of lab 3
-Please proceed to [Lab 4](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/lab_4-guide.md)
+Please proceed to [Lab 4](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/lab_4-guide.md#lab-4-srv6-on-sonic-30-min)
 
