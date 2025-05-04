@@ -197,11 +197,12 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
 ### Amsterdam and Rome Containers
 
-**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are containers their network stack is blank
+**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are containers their network stack is blank except for the managment interface. So we'll run a script to add ip addresses to the containers' eth1 and eth2 interfaces and a set of routes.
 
 1. cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
    ```
    cd ~/LTRMSI-3000/lab_1/scripts/
+   ./container-ips.sh
    ```
 
 2. Check connectivity from **Rome** to **xrd07**
