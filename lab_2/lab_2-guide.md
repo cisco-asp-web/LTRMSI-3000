@@ -1,7 +1,10 @@
 # Lab 3: Configure SRv6 L3VPN and SRv6-TE [30 Min]
 
 ### Description
-In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and will have endpoints on **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. In order to extend L3VPN *`carrots`* to the Amsterdam and Rome VM we will be adding VRF *`carrots`* to interfaces on **xrd01** and **xrd07** that connect to seconrday NICs on the Amsterdam and Rome. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
+In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
+
+
+The routers' VRFs and interfaces have been preconfigured, so we'll focus on the SRv6 BGP configuration. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
 
 ## Contents
 - [Lab 3: Configure SRv6 L3VPN and SRv6-TE \[30 Min\]](#lab-3-configure-srv6-l3vpn-and-srv6-te-30-min)
