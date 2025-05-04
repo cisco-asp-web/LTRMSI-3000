@@ -205,7 +205,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ./container-ips.sh
    ```
 
-   PArtial output:
+   Partial output:
    ```
    cisco@topology-host:~/LTRMSI-3000/lab_1/scripts$ ./container-ips.sh
    Setting up Amsterdam eth1 ip addresses and routes
@@ -231,21 +231,6 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    50.0.0.0/24 via 10.101.2.1 dev eth2 
    ```
 
-2. Check connectivity from **Rome** to **xrd07**
-    ```
-    cisco@rome:~$ ping -c 3 10.107.1.2
-    PING 10.107.1.2 (10.107.1.2) 56(84) bytes of data.
-    64 bytes from 10.107.1.2: icmp_seq=1 ttl=255 time=2.70 ms
-    64 bytes from 10.107.1.2: icmp_seq=2 ttl=255 time=1.38 ms
-    64 bytes from 10.107.1.2: icmp_seq=3 ttl=255 time=1.30 ms
-    ```
-
-
-3. SSH to Amsterdam Client VM from your laptop.
-   Example
-   ```
-   ssh cisco@198.18.128.102
-   ```
 
 
 ## Validate ISIS Topology
@@ -257,6 +242,10 @@ Our topology is running ISIS as its underlying IGP with basic settings pre-confi
 For full size image see [LINK](/topo_drawings/isis-topology-large.png)
 
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
+
+    ```
+    ssh cisco@clab-clus25-xrd03
+    ```
 
     ```
     show isis topology
