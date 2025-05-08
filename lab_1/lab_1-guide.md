@@ -22,10 +22,9 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
-    - [Jalapeno VM](#jalapeno-vm)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
-      - [The script's ping tests should look something like this](#the-scripts-ping-tests-should-look-something-like-this)
+      - [The script's ping tests should look something like this:](#the-scripts-ping-tests-should-look-something-like-this)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -88,6 +87,7 @@ For full size image see [LINK](/topo_drawings/management-network.png)
     ``` 
     sudo containerlab deploy -t lab_1-topology.clab.yaml
     ```
+
     - Look for the below output from the end of the script confirming XRd instances 1-7 were created
     ```
     ╭───────────────────────┬────────────────────────────────┬─────────┬────────────────╮
@@ -125,7 +125,7 @@ For full size image see [LINK](/topo_drawings/management-network.png)
 > [!NOTE]
 > All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.clab.yaml*
 
-1. Check that the docker containers were created and running
+4. Check that the docker containers were created and running
     ```
     docker ps
     ```
@@ -147,54 +147,30 @@ For full size image see [LINK](/topo_drawings/management-network.png)
 
 ## Validate Attached Linux VMs and Containers
 
-### Jalapeno VM
-
-The *Jalapeno* VM has Kubernetes pre-installed and running and will be used in lab exercise 5.
-
-Jalapeno will collect BGP Monitoring Protocol (BMP) and streaming telemetry data from the routers, and will serve as a data repository for the SDN clients we'll have running later in the lab.
-
-1. Validate router reachability to Jalapeno VM (no need to check all routers, **xrd05** will be sufficient):
-   ```
-   ssh cisco@clab-clus25-xrd05
-   ```
-   ```
-   ping 198.18.128.101
-   ```
-   
-   ```
-   cisco@xrd:~$ ssh cisco@clab-clus25-xrd05
-   Warning: Permanently added 'xrd05,10.254.254.105' (ECDSA) to the list of known hosts.
-   Password:
-   Last login: Sun Jan 29 22:44:15 2023 from 10.254.254.1
-
-   RP/0/RP0/CPU0:xrd05#ping 198.18.128.101
-   Mon Jan 30 23:22:17.371 UTC
-   Type escape sequence to abort.
-   Sending 5, 100-byte ICMP Echos to 198.18.128.101 timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/8/39 ms
-   ```
-
 ### Berlin VM
 
 In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
 
-1. SSH to Berlin VM from your laptop.
+1. SSH to Berlin VM from the topology-host VM
    ```
    ssh cisco@berlin
    or
    ssh cisco@192.168.122.100
    ```
 
-2. Check connectivity from **Berlin** to **xrd02**
+2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
-    ping 198.18.4.1 -c 2
+    fc00:0:8888::1 -c 2
     ```
     ```
-    cisco@berlin:~$  ping 198.18.4.1 -c 2
-    PING 198.18.4.1 (198.18.4.1) 56(84) bytes of data.
-    64 bytes from 198.18.4.1: icmp_seq=1 ttl=255 time=5.09 ms
-    64 bytes from 198.18.4.1: icmp_seq=2 ttl=255 time=5.18 ms
+    cisco@berlin:~$ ping fc00:0:8888::1 -c 2
+    PING fc00:0:8888::1 (fc00:0:8888::1) 56 data bytes
+    64 bytes from fc00:0:8888::1: icmp_seq=1 ttl=64 time=1.28 ms
+    64 bytes from fc00:0:8888::1: icmp_seq=2 ttl=64 time=1.20 ms
+
+    --- fc00:0:8888::1 ping statistics ---
+    2 packets transmitted, 2 received, 0% packet loss, time 1001ms
+    rtt min/avg/max/mdev = 1.203/1.242/1.282/0.039 ms
     ```
 
 ### Amsterdam and Rome Containers
@@ -233,7 +209,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    50.0.0.0/24 via 10.101.2.1 dev eth2 
    ```
    
-   #### The script's ping tests should look something like this
+   #### The script's ping tests should look something like this:
    ```
    Rome eth1 ping test to xrd07
    PING 10.107.1.1 (10.107.1.1) 56(84) bytes of data.
