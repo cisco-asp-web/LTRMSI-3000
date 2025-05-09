@@ -1,4 +1,4 @@
-# Lab 4: SRv6 on SONiC [30 Min]
+# Lab 4: SRv6 on SONiC [20 Min]
 
 ### Description
 Enter description
@@ -6,7 +6,7 @@ Enter description
 
 
 ## Contents
-- [Lab 4: SRv6 on SONiC \[30 Min\]](#lab-4-srv6-on-sonic-30-min)
+- [Lab 4: SRv6 on SONiC \[20 Min\]](#lab-4-srv6-on-sonic-20-min)
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)

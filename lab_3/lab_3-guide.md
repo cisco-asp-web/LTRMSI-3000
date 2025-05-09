@@ -30,6 +30,7 @@ https://cilium.io/labs/
     - [Optional Edgeshark section](#optional-edgeshark-section)
   - [Create a radish VRF and pod](#create-a-radish-vrf-and-pod)
     - [Optional Edgeshark](#optional-edgeshark)
+    - [Optional: Move a Carrots pod into the Radish VRF](#optional-move-a-carrots-pod-into-the-radish-vrf)
   - [Lab 3 Appendix](#lab-3-appendix)
   - [End of lab 3](#end-of-lab-3)
 
@@ -418,7 +419,7 @@ Cilium also supports /64 locators, but for simplicity and consistency with our *
    cilium bgp routes advertised ipv6 unicast
    ```
 
-   Example output, Cilium is now advertising the node's Locator...but only to one neighbor (see note below):
+   Example output, Cilium is now advertising the node's Locator:
    ```yaml
    Node   VRouter   Peer             Prefix             NextHop          Age          Attrs
    berlin 65000     fc00:0:5555::1   2001:db8:42::/64   fc00:0:8888::2   104h21m6s    [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::2, NLRIs: [2001:db8:42::/64]}}]   
@@ -517,7 +518,7 @@ spec:
       - "sleep 60m"
 ```
 
-You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*. We didn't do this to be overly complext, but rather to illustrate the fact that the namespace and VRF are independent of each other. We could have pods from multiple namespaces in the same VRF and vice versa.
+You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*. We didn't do this to be overly complex, but rather to illustrate the fact that the namespace and VRF are independent of each other. We could have pods from multiple namespaces in the same VRF and vice versa.
 
 1. Add VRF, namespace, and pods:
    [07-vrf-carrots.yaml](cilium/07-vrf-carrots.yaml)
@@ -735,13 +736,15 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 
 ### Optional Edgeshark
 
-4. Next, to demonstrate the flexibility of Cilium's SRv6 implementation, we'll switch the carrots1 pod from the carrots VRF to the radish VRF and run a ping again:
+### Optional: Move a Carrots pod into the Radish VRF
+To demonstrate the flexibility of Cilium's SRv6 implementation, we'll switch the carrots1 pod from the carrots VRF to the radish VRF and run a ping again:
 
+1. Apply the CRD
    ```
    kubectl apply -f 09-carrot-to-radish.yaml
    ```
 
-5. Verify carrots1 is now in the radish VRF:
+2. Verify carrots1 is now in the radish VRF:
    ```
    kubectl describe pod -n veggies carrots1 | more
    ```
