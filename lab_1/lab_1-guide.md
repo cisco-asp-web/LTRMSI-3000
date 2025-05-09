@@ -468,7 +468,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
 #### Configure SRv6 on xrd07
 
-1. ssh to **xrd07** and apply this config in a single shot:
+1. ssh to **xrd07** and apply the below config in a single shot:
 
     ```
     ssh cisco@clab-clus25-xrd07

@@ -1,4 +1,4 @@
-# Lab 3: Configure SRv6 L3VPN and SRv6-TE [30 Min]
+# Lab 2: Configure SRv6 L3VPN and SRv6-TE [20 Min]
 
 ### Description
 In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
@@ -7,7 +7,7 @@ In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 t
 The VRF instances and their interfaces have been preconfigured, so we'll focus on the SRv6 BGP configuration. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
 
 ## Contents
-- [Lab 3: Configure SRv6 L3VPN and SRv6-TE \[30 Min\]](#lab-3-configure-srv6-l3vpn-and-srv6-te-30-min)
+- [Lab 2: Configure SRv6 L3VPN and SRv6-TE \[20 Min\]](#lab-2-configure-srv6-l3vpn-and-srv6-te-20-min)
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
@@ -26,13 +26,11 @@ The VRF instances and their interfaces have been preconfigured, so we'll focus o
 ## Lab Objectives
 We will have achieved the following objectives upon completion of Lab 2:
 
-* Understanding of SRv6 L3VPN
-* Configuration of SRv6 L3VPN in XR
-* Configuration of SRv6 TE policy
-* Demonstartion of SRv6 TE traffic steering
+* Configuration of SRv6 L3VPN
+* Configuration of SRv6 TE policy and traffic steering
 
 ## Configure SRv6 L3VPN
-The SRv6-based IPv4/IPv6 L3VPN featureset enables operation of IPv4/IPv6 L3VPN over a SRv6 data plane. Traditionally L3VPN has been operated over MPLS or SR-MPLS based systems. SRv6 L3VPN uses the locator/function aspect of SRv6 Segment IDs (SIDs) instead of PE + VPN labels. 
+The SRv6-based IPv4/IPv6 L3VPN featureset enables operation of IPv4/IPv6 L3VPN over a SRv6 data plane. Traditionally L3VPN has been operated over MPLS or SR-MPLS. SRv6 L3VPN uses the locator/function aspect of SRv6 Segment IDs (SIDs) instead of PE + VPN labels. 
 
 Example: 
 
@@ -45,7 +43,7 @@ In this lab a BGP L3VPN SID will be allocated in per-VRF mode and provides End.D
 
 For more details on SRv6 network programming Endpoint Behavior functionality please see RFC 8986 [LINK](https://datatracker.ietf.org/doc/html/rfc8986#name-enddt6-decapsulation-and-sp)
 
-BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it to IPv6 peering over an SRv6 network. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
+BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it MP-BGP peers. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
 
 The *carrots* and *radish* VRFs are setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
 
@@ -143,11 +141,9 @@ The *carrots* and *radish* VRFs are setup on the two edge routers in our SP netw
       commit
       ```
 
-3. Apply SRv6 L3VPN configuration to **xrd01**
+3. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
 
-4. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
-
-   BGP Route Reflectors **xrd05**  
+   BGP Route Reflector **xrd05**  
     ```yaml
     conf t
     router bgp 65000
