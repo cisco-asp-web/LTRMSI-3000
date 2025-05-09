@@ -43,8 +43,7 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 * Access all devices in the lab
 * Deployed the XRd network topology
-* Familiarity with the lab topology
-* Familiarity with containerlab
+* Basic familiarity with containerlab
 * Confirm IPv4 and IPv6 connectivity
 * Confirm SRv6 Locators   
 
@@ -56,7 +55,9 @@ We will have achieved the following objectives upon completion of Lab 1:
 ## Virtual Machine and XRd Access
 
 
-Lab attendees will access devices in the lab primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
+Lab attendees will access devices in the lab primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. 
+
+The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
 
 ### User Credentials
 All VMs, routers, etc. use the same user credentials:
@@ -289,27 +290,15 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
    
 2. Run the `add-latency.sh` script:
    ```
-   ~/SRv6_dCloud_Lab/util/add-latency.sh
+   ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
-   The script output should look something like this:
+   Example partial output:
    ```
     Latencies added. The following output applies in both directions, Ex: xrd01 -> xrd02 and xrd02 -> xrd01
     xrd01 link latency: 
     qdisc netem 800a: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 10.0ms
     qdisc netem 800b: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 5.0ms
-    xrd02 link latency: 
-    qdisc netem 800c: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 30.0ms
-    qdisc netem 800d: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 20.0ms
-    xrd03 link latency: 
-    qdisc netem 800e: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 40.0ms
-    xrd04 link latency: 
-    qdisc netem 8010: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 30.0ms
-    qdisc netem 800f: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 30.0ms
-    xrd05 link latency: 
-    qdisc netem 8011: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 5.0ms
-    xrd06 link latency: 
-    qdisc netem 8012: dev Gi0-0-0-0 root refcnt 13 limit 1000 delay 30.0ms
    ```
 
 3. Now test for latency a second time:
@@ -359,23 +348,7 @@ For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
     Processed 2 prefixes, 4 paths
     ```
 
-3. Verify that router **xrd07** is advertising the attached network ```fc00:0:107:1::/64```   
-    ```
-    show bgp ipv6 unicast advertised summary
-    ```
-    ```
-    RP/0/RP0/CPU0:xrd07#show bgp ipv6 unicast advertised summary
-    Tue Jan 10 21:46:43.311 UTC
-    Network            Next Hop        From            Advertised to
-    fc00:0:107:1::/64  fc00:0:7777::1  Local           fc00:0:5555::1
-                                       Local           fc00:0:6666::1
-    fc00:0:7777::1/128 fc00:0:7777::1  Local           fc00:0:5555::1
-                                       Local           fc00:0:6666::1
-
-    Processed 2 prefixes, 4 paths
-    ```
-
-4. Verify that router **xrd01** has received route ```fc00:0:107:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
+3. Verify that router **xrd01** has received route ```fc00:0:107:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
     ```
     show bgp ipv6 unicast fc00:0:107:1::/64
     ```
@@ -405,7 +378,7 @@ For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
         Originator: 10.0.0.7, Cluster list: 10.0.0.6                          <------ route reflector xrd06
     ```
 
-5. Verify that router xrd07 has received route ```fc00:0:101:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
+4. Verify that router xrd07 has received route ```fc00:0:101:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
     ```
     show bgp ipv6 unicast fc00:0:101:1::/64
     ```
@@ -435,7 +408,7 @@ For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
         Originator: 10.0.0.1, Cluster list: 10.0.0.6                          <------ route reflector xrd06
     ```
 
-6. Verify the route-reflectors (**xrd05** and **xrd06**) have received BGP-LS NLRIs from **xrd01** and **xrd07**:
+5. Verify the route-reflectors (**xrd05** and **xrd06**) have received BGP-LS NLRIs from **xrd01** and **xrd07**:
     ```
     show bgp link-state link-state summary
     ```
