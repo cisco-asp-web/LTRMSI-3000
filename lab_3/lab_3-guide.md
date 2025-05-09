@@ -10,7 +10,6 @@ Isovalent has also published a number of labs covering a wide range of Cilium, H
 
 https://cilium.io/labs/
 
-The original version of this lab was developed in partnership with Arkadiusz Kaliwoda, Cisco SE in EMEA SP
 
 ## Contents
 - [Lab 3: SRv6 for Kubernetes with Cilium \[30 Min\]](#lab-3-srv6-for-kubernetes-with-cilium-30-min)
@@ -421,14 +420,13 @@ Cilium also supports /64 locators, but for simplicity and consistency with our *
 
    Example output, Cilium is now advertising the node's Locator...but only to one neighbor (see note below):
    ```yaml
-   Node     VRouter   Peer             Prefix             NextHop          Age     Attrs
-   berlin   65000     fc00:0:5555::1   2001:db8:42::/64   fc00:0:8888::1   2m52s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [2001:db8:42::/64]}}]   
-            65000     fc00:0:6666::1   2001:db8:42::/64   fc00:0:8888::1   2m52s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [2001:db8:42::/64]}}]   
-     --->   65000     fc00:0:6666::1   fc00:0:a01f::/48   fc00:0:8888::1   6s      [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [fc00:0:a01f::/48]}}] 
+   Node   VRouter   Peer             Prefix             NextHop          Age          Attrs
+   berlin 65000     fc00:0:5555::1   2001:db8:42::/64   fc00:0:8888::2   104h21m6s    [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::2, NLRIs: [2001:db8:42::/64]}}]   
+          65000     fc00:0:6666::1   2001:db8:42::/64   fc00:0:8888::2   104h21m6s    [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::2, NLRIs: [2001:db8:42::/64]}}]   
+          65000     fc00:0:5555::1   fc00:0:a08c::/48   fc00:0:8888::2   104h20m12s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::2, NLRIs: [fc00:0:a08c::/48]}}]   
+          65000     fc00:0:6666::1   fc00:0:a08c::/48   fc00:0:8888::2   104h20m12s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::2, NLRIs: [fc00:0:a08c::/48]}}] 
    ```
 
-> [!IMPORTANT]
-> The Cilium image we are currently using has a bug where the SRv6 locator is only advertised to one neighbor. A fix is being incorporated in the 1.18 release.
 
 3. Now that we've created locator pool, let's validate it:
    ```
