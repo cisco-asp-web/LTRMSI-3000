@@ -162,11 +162,11 @@ We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/so
 * Copy and load our fabric FRR/BGP configs to each node [Example frr.conf](sonic-config/leaf00/frr.conf)
 
 
-1. cd into the lab_4/ansible directory and execute the *sonic-playbook.yaml*
+1. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
     ```
-    cd ~/LTRMSI-3000/lab_4/ansible
+    cd ~/LTRMSI-3000/lab_4/
 
-    ansible-playbook -i hosts sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
+    ansible-playbook -i ansible/hosts ansible/sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
     ```
 
     The sonic playbook produces a lot of console output, by the time it completes we expect to see something like this:
