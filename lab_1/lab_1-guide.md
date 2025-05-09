@@ -410,11 +410,8 @@ SRv6 uSID locator and source address information for nodes in the lab:
     
 ### SRv6 Configuration Steps 
 
-   - reference the above table
-   - the source address should match the router's loopback0 ipv6 address
-   - locator should match the first 48-bits of the router's loopback0
-   - to keep things simple we're using the same locator name, 'MyLocator', on all nodes in the network.
-   - we've preconfigured SRv6 on **xrd02** thru **xrd06**, so you'll only need to configure **xrd01** and **xrd07**
+> [!NOTE]
+> We've preconfigured SRv6 on **xrd02** thru **xrd06**, so you'll only need to configure **xrd01** and **xrd07**
 
 #### Configure SRv6 on xrd01
 1. SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
