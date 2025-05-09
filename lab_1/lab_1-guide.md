@@ -24,13 +24,10 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
-      - [The script's ping tests should look something like this:](#the-scripts-ping-tests-should-look-something-like-this)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
   - [Configure and Validate SRv6](#configure-and-validate-srv6)
-    - [Segment Routing Background](#segment-routing-background)
-    - [SRv6](#srv6)
     - [SRv6 Configuration Steps](#srv6-configuration-steps)
       - [Configure SRv6 on xrd01](#configure-srv6-on-xrd01)
       - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
@@ -184,50 +181,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ./container-ips.sh
    ```
 
-   Partial output:
-   ```
-   cisco@topology-host:~/LTRMSI-3000/lab_1/scripts$ ./container-ips.sh
-   Setting up Amsterdam eth1 ip addresses and routes
-   Amsterdam eth1
-       inet 10.101.1.2/24 scope global eth1
-       inet6 fc00:0:101:1::2/64 scope global tentative 
-       inet6 fe80::a8c1:abff:fe30:5a20/64 scope link 
-   Setting up Amsterdam eth2 ip addresses and routes
-   Amsterdam eth2
-       inet 10.101.2.2/24 scope global eth2
-       inet6 fc00:0:101:2::2/64 scope global tentative 
-       inet6 fe80::a8c1:abff:fe70:7481/64 scope link 
-   Amsterdam routes
-   default via 10.254.254.1 dev eth0 
-   10.101.1.0/24 dev eth1 proto kernel scope link src 10.101.1.2 
-   10.101.2.0/24 dev eth2 proto kernel scope link src 10.101.2.2 
-   10.107.1.0/24 via 10.101.1.1 dev eth1 
-   10.107.2.0/24 via 10.101.2.1 dev eth2 
-   10.254.254.0/24 dev eth0 proto kernel scope link src 10.254.254.108 
-   20.0.0.0/24 via 10.101.1.1 dev eth1 
-   30.0.0.0/24 via 10.101.1.1 dev eth1 
-   40.0.0.0/24 via 10.101.2.1 dev eth2 
-   50.0.0.0/24 via 10.101.2.1 dev eth2 
-   ```
-   
-   #### The script's ping tests should look something like this:
-   ```
-   Rome eth1 ping test to xrd07
-   PING 10.107.1.1 (10.107.1.1) 56(84) bytes of data.
-   64 bytes from 10.107.1.1: icmp_seq=1 ttl=255 time=1.25 ms
-   64 bytes from 10.107.1.1: icmp_seq=2 ttl=255 time=1.06 ms
-
-   --- 10.107.1.1 ping statistics ---
-   2 packets transmitted, 2 received, 0% packet loss, time 301ms
-   rtt min/avg/max/mdev = 1.055/1.152/1.250/0.097 ms
-   PING fc00:0:107:1::1(fc00:0:107:1::1) 56 data bytes
-   64 bytes from fc00:0:107:1::1: icmp_seq=1 ttl=64 time=1.06 ms
-   64 bytes from fc00:0:107:1::1: icmp_seq=2 ttl=64 time=1.24 ms
-
-   --- fc00:0:107:1::1 ping statistics ---
-   2 packets transmitted, 2 received, 0% packet loss, time 300ms
-   rtt min/avg/max/mdev = 1.063/1.152/1.242/0.089 ms
-   ```
+   The script should output results of applying IP addresses, routes, and successful ping tests
 
 
 ## Validate ISIS Topology
@@ -241,7 +195,7 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
 
     ```
-    ssh cisco@clab-clus25-xrd03
+    ssh cisco@clab-clus25-xrd01
     ```
 
     ```
@@ -250,21 +204,24 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
     show isis database
     ```
     ```
-    RP/0/RP0/CPU0:xrd03#show isis topology
+    RP/0/RP0/CPU0:xrd01#show isis topology 
+    Fri May  9 03:11:23.663 UTC
 
     IS-IS 100 paths to IPv4 Unicast (Level-1) routers
     System Id          Metric    Next-Hop           Interface       SNPA          
-    xrd03              --      
+    xrd01              --      
 
     IS-IS 100 paths to IPv4 Unicast (Level-2) routers
     System Id          Metric    Next-Hop           Interface       SNPA          
-    xrd01              2         xrd02              Gi0/0/0/0       *PtoP*        
-    xrd02              1         xrd02              Gi0/0/0/0       *PtoP*        
-    xrd03              --      
-    xrd04              1         xrd04              Gi0/0/0/1       *PtoP*        
-    xrd05              2         xrd04              Gi0/0/0/1       *PtoP*        
-    xrd06              2         xrd02              Gi0/0/0/0       *PtoP*        
-    xrd07              2         xrd04              Gi0/0/0/1       *PtoP* 
+    xrd01              --      
+    xrd02              1         xrd02              Gi0/0/0/1       *PtoP*        
+    xrd03              2         xrd02              Gi0/0/0/1       *PtoP*        
+    xrd04              2         xrd05              Gi0/0/0/2       *PtoP*        
+    xrd05              1         xrd05              Gi0/0/0/2       *PtoP*        
+    xrd06              2         xrd05              Gi0/0/0/2       *PtoP*        
+    xrd06              2         xrd02              Gi0/0/0/1       *PtoP*        
+    xrd07              3         xrd05              Gi0/0/0/2       *PtoP*        
+    xrd07              3         xrd02              Gi0/0/0/1       *PtoP* 
     ```
 
 2. On **xrd01** validate end-to-end ISIS reachability by pinging **xrd07**:
@@ -278,9 +235,8 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
 > [!NOTE]
 > Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
 
-1. Test latency from **xrd01** to **xrd02**:
+1. Optional: ping from **xrd01** to **xrd02** to see latency prior to applying the *add-latency.sh* script
    
-   Ping from router **xrd01** to **xrd02** and note latency time.
    ```
    RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
    Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
@@ -301,8 +257,7 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
     qdisc netem 800b: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 5.0ms
    ```
 
-3. Now test for latency a second time:
-   Ping from router **xrd01** to **xrd02** and note latency time.
+3. Ping from router **xrd01** to **xrd02** and note the latency time.
    ```
    RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
    Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
@@ -427,23 +382,9 @@ For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
 
 ## Configure and Validate SRv6
 
-### Segment Routing Background
-
-Segment Routing (SR) is a source-based routing architecture. A node chooses a path and steers a packet through the network via that path by inserting an ordered list of segments, instructing how subsequent nodes in the path that receive the packet should process it. This simplifies operations and reduces resource requirements in the network by removing network state from intermediary nodes as path information is encoded via the label stack or SRv6 SID(s) at the ingress node. Also, because the shortest-path segment includes all Equal-Cost Multi-Path (ECMP) paths to the related node, SR supports the ECMP nature of IP by design. 
-
-For more information on SR and SRv6 the segment-routing.net site has a number of tutorials and links to other resources: 
-
-[segment-routing.net](https://www.segment-routing.net/)  
-  
-
-### SRv6
-Segment Routing over IPv6 (SRv6) extends Segment Routing support via the IPv6 data plane.
-
 SRv6 introduces the Network Programming framework that enables a network operator or an application to specify a packet processing program by encoding a sequence of instructions in the IPv6 packet header. Each instruction is implemented on one or several nodes in the network and identified by an SRv6 Segment Identifier (SID) in the packet. 
 
-In SRv6, the IPv6 destination address represents a set of one or more instructions. SRv6 uses a new type of IPv6 Routing Extension Header, called the Segment Routing Header (SRH), in order to encode an ordered list of instructions. The active segment is indicated by the destination address of the packet, and the next segment is indicated by a pointer in the SRH.
-
-In our lab we will use SRv6 "micro segment" (SRv6 uSID or just "uSID" for short) instead of the full SRH. SRv6 uSID is a straightforward extension of the SRv6 Network Programming model.
+In SRv6, the IPv6 destination address represents a set of one or more instructions. In our lab we will use SRv6 "micro segment" (SRv6 uSID or just "uSID" for short) instead of the full SRH. SRv6 uSID is a straightforward extension of the SRv6 Network Programming model.
 
 With SRv6 uSID:
 
