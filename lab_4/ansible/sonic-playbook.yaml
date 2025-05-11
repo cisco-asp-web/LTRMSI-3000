@@ -72,3 +72,16 @@
       command: vtysh -f /etc/sonic/frr/bgpd.conf
       ignore_errors: yes
       register: frr_load_result
+
+- name: validate SONiC local srv6 SIDs
+  hosts: sonic
+  become: true
+  tasks:
+
+    - name: check srv6 SIDs
+      command: ip -6 route | grep -e seg6local -e fe00::/64
+      register: srv6_sid_result
+
+    - name: print srv6 SIDs
+      debug:
+        var: srv6_sid_result.stdout

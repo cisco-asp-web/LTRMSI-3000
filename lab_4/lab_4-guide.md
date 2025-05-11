@@ -87,7 +87,7 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
     admin@sonic:~$
     ```
 
-2. List the SONiC docker containers
+2. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
     ```
     docker ps
     ```
@@ -164,9 +164,9 @@ We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/so
 
 1. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
     ```
-    cd ~/LTRMSI-3000/lab_4/
+    cd ~/LTRMSI-3000/lab_4/ansible
 
-    ansible-playbook -i ansible/hosts ansible/sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
+    ansible-playbook -i hosts sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
     ```
 
     The sonic playbook produces a lot of console output, by the time it completes we expect to see something like this:
@@ -309,6 +309,9 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
 
 ### Configure "ubuntu host" containers attached to SONiC topology
 
+The *host-routes.sh* shell script located in the lab_4/ansible/scripts directory will add ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux route entries include SRv6 encapsulation instructions per the Linux kernel SRv6 implementation. For more info: https://segment-routing.org/
+
+1. Run the *host-routes.sh* script
 
 ### SRv6 ping test
 
