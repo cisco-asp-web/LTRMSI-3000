@@ -34,7 +34,7 @@ We will have achieved the following objectives upon completion of Lab 4:
 Given its origins in the Hyperscale world, SONiC has been designed from the ground up as an automation friendly NOS. So in this lab we'll make heavy use of task automation with Ansible.
 
 ### Ansible "deploy-playbook"
-The first Ansbible playbook is a simple one; it launches the containerlab SONiC topology, and it runs a couple scripts to establish linux test bridges and to reset stored SSH keys.
+The first Ansible playbook is a simple one; it launches the containerlab SONiC topology, and it runs a couple scripts to establish linux test bridges and to reset stored SSH keys.
 
 [deploy-playbook](ansible/deploy-playbook.yaml)
 
@@ -296,7 +296,7 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
 
     Note all the entries with 'proto bgp src', aka routes learned from BGP and installed in the linux routing table
 
-4. Run the ip -6 route command again and grep for the nodes' locator:
+4. Run the ip -6 route command again and grep for the node's locator:
 
     ```
     ip -6 route | grep seg6local

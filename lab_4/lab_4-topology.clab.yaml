@@ -1,85 +1,121 @@
-# Containerlab topology file for Cisco Live US 2025 Lab 1
-
-name: clus25
+name: sonic
 
 mgmt:
-  network: mgt-network
-  ipv4-subnet: 10.254.254.0/24
+  network: mgt-net
+  ipv4-subnet: 172.20.6.0/24
   
 topology:
   nodes:
-    xrd01:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd01.cfg
-      mgmt-ipv4: 10.254.254.101
-      
-    xrd02:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd02.cfg
-      mgmt-ipv4: 10.254.254.102
 
-    xrd03:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd03.cfg
-      mgmt-ipv4: 10.254.254.103
-
-    xrd04:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd04.cfg
-      mgmt-ipv4: 10.254.254.104
-
-    xrd05:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd05.cfg
-      mgmt-ipv4: 10.254.254.105
-
-    xrd06:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd06.cfg
-      mgmt-ipv4: 10.254.254.106
-
-    xrd07:
-      kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
-      startup-config: config/xrd07.cfg
-      mgmt-ipv4: 10.254.254.107
-
-    amsterdam:
+    leaf00:
       kind: linux
-      image: amsterdam:latest
-      mgmt-ipv4: 10.254.254.108
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.128
 
-    rome:
+    leaf01:
       kind: linux
-      image: rome:latest
-      mgmt-ipv4: 10.254.254.109
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.129
 
-    berlin-net:
+    leaf02:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.130
+
+    leaf03:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.131
+
+    spine00:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.192
+
+    spine01:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.193
+
+    spine02:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.194
+
+    spine03:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.195
+
+    host00:
+      kind: linux
+      image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.224
+
+    host08:
+      kind: linux
+      image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.225
+
+    host16:
+      kind: linux
+      image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.226
+
+    host24:
+      kind: linux
+      image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.227
+
+    leaf00-bridge:
+      kind: bridge
+
+    leaf01-bridge:
+      kind: bridge
+
+    leaf02-bridge:
+      kind: bridge
+
+    leaf03-bridge:
       kind: bridge
 
   links:
 
-    # Link between XR Routers
-    - endpoints: ["xrd01:Gi0-0-0-0", "amsterdam:eth1"]
-    - endpoints: ["xrd01:Gi0-0-0-1", "xrd02:Gi0-0-0-0"]      
-    - endpoints: ["xrd01:Gi0-0-0-2", "xrd05:Gi0-0-0-0"]
-    - endpoints: ["xrd01:Gi0-0-0-3", "amsterdam:eth2"]
-    - endpoints: ["xrd02:Gi0-0-0-1", "xrd03:Gi0-0-0-0"]
-    - endpoints: ["xrd02:Gi0-0-0-2", "xrd06:Gi0-0-0-1"]
-    - endpoints: ["xrd02:Gi0-0-0-3", "berlin-net:xrd02-Gi0-0-0-3"]
-    - endpoints: ["xrd05:Gi0-0-0-1", "xrd04:Gi0-0-0-2"]
-    - endpoints: ["xrd05:Gi0-0-0-2", "xrd06:Gi0-0-0-2"]
-    - endpoints: ["xrd03:Gi0-0-0-1", "xrd04:Gi0-0-0-0"]
-    - endpoints: ["xrd04:Gi0-0-0-1", "xrd07:Gi0-0-0-1"]
-    - endpoints: ["xrd06:Gi0-0-0-0", "xrd07:Gi0-0-0-2"]
-    - endpoints: ["xrd07:Gi0-0-0-0", "rome:eth1"]
-    - endpoints: ["xrd07:Gi0-0-0-3", "rome:eth2"]
+    - endpoints: ["leaf00:eth1", "spine00:eth1"]
+    - endpoints: ["leaf00:eth2", "spine01:eth1"]
+    - endpoints: ["leaf00:eth3", "spine02:eth1"]
+    - endpoints: ["leaf00:eth4", "spine03:eth1"]
 
+    - endpoints: ["leaf01:eth1", "spine00:eth2"]
+    - endpoints: ["leaf01:eth2", "spine01:eth2"]
+    - endpoints: ["leaf01:eth3", "spine02:eth2"]
+    - endpoints: ["leaf01:eth4", "spine03:eth2"]
+
+    - endpoints: ["leaf02:eth1", "spine00:eth3"]
+    - endpoints: ["leaf02:eth2", "spine01:eth3"]
+    - endpoints: ["leaf02:eth3", "spine02:eth3"]
+    - endpoints: ["leaf02:eth4", "spine03:eth3"]
+
+    - endpoints: ["leaf03:eth1", "spine00:eth4"]
+    - endpoints: ["leaf03:eth2", "spine01:eth4"]
+    - endpoints: ["leaf03:eth3", "spine02:eth4"]
+    - endpoints: ["leaf03:eth4", "spine03:eth4"]
+
+    - endpoints: ["leaf00:eth5", "host00:eth1"]
+    - endpoints: ["leaf00:eth6", "host00:eth2"]
+    - endpoints: ["leaf00:eth7", "leaf00-bridge:leaf00-eth7"]
+ 
+
+    - endpoints: ["leaf01:eth5", "host08:eth1"]
+    - endpoints: ["leaf01:eth6", "host08:eth2"]
+    - endpoints: ["leaf01:eth7", "leaf01-bridge:leaf01-eth7"]
+
+    - endpoints: ["leaf02:eth5", "host16:eth1"]  
+    - endpoints: ["leaf02:eth6", "host16:eth2"]
+    - endpoints: ["leaf02:eth7", "leaf02-bridge:leaf02-eth7"]
+
+    - endpoints: ["leaf03:eth5", "host24:eth1"]
+    - endpoints: ["leaf03:eth6", "host24:eth2"]
+    - endpoints: ["leaf03:eth7", "leaf03-bridge:leaf03-eth7"]
 
 
