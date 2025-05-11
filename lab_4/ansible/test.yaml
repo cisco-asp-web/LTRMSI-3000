@@ -4,7 +4,7 @@
   tasks:
 
     - name: check srv6 SIDs
-      command: "ip -6 route | grep -e seg6 -e fe00"
+      command: "ip -6 route show | grep -e seg6 -e fe00"
       register: srv6_sid_result
 
     - name: print srv6 SIDs
