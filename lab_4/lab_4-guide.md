@@ -19,7 +19,7 @@ Enter description
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
     - [SONiC SRv6 configuration](#sonic-srv6-configuration)
     - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
-    - [SRv6 ping test](#srv6-ping-test)
+    - [Ping test](#ping-test)
   - [End of lab 4](#end-of-lab-4)
 
 ## Lab Objectives
@@ -307,13 +307,51 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
     admin@leaf00:~$ ip -6 route | grep seg6local
     fc00:0:1200::/48 nhid 63  encap seg6local action End flavors next-csid lblen 32 nflen 16 dev sr0 proto 196 metric 20 pref medium
 
+### Configure SONiC SRv6 Static Routes
+
+Its early days in the development of SONiC's SRv6 feature set. Currently SONiC supports SRv6 encapsulation for L3VPN routes, but not for regular ipv4 or ipv6 default table routes. 
+
+For reference, IOS-XR supports this capability [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb)
+
+Example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
+
+In the meantime SONiC does support configuration of static routes with SRv6 encapsulations. The thought here is that early SRv6 uses in the data center would be built around deterministic load-balancing of large flows, and would be highly controller/SDN driven. In such an architecture having an SDN system push a big list of statics to a set of leaf nodes is entirely reasonable.
+
+1. Configure a SRv6 static route on SONiC **leaf00**
+  ```
+  ssh admin@clab-sonic-leaf00
+  ```
+  ```
+  vtysh
+  conf t
+  ```
+
+  Route to ipv4 prefix on *leaf03*
+  ```
+  ip route 200.24.100.0/24 Ethernet0 segments fc00:0:1002:1203:fe00::
+  ```
+
+2. Configure a SRv6 static return route on SONiC **leaf03**
+  ```
+  ssh admin@clab-sonic-leaf03
+  ```
+  ```
+  vtysh
+  conf t
+  ```
+
+  Route to ipv4 prefix on *leaf00*
+  ```
+  ip route 200.0.100.0/24 Ethernet0 segments fc00:0:1002:1200:fe00::
+  ```
+
 ### Configure "ubuntu host" containers attached to SONiC topology
 
-The *host-routes.sh* shell script located in the lab_4/ansible/scripts directory will add ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux route entries include SRv6 encapsulation instructions per the Linux kernel SRv6 implementation. For more info: https://segment-routing.org/
+The *host-routes.sh* shell script located in the lab_4/ansible/scripts directory will add ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
 
 1. Run the *host-routes.sh* script
 
-### SRv6 ping test
+### Ping test
 
 
 ## End of lab 4
