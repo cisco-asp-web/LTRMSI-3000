@@ -322,9 +322,14 @@ Everything is done using the docker exec command to run network config commands 
 
 Our topology is running ISIS as its underlying IGP with basic settings pre-configured at startup in lab 1.
 
-![ISIS Topology](/topo_drawings/isis-topology-medium.png)
+![ISIS Topology](../topo_drawings/isis-topology-medium.png)
 
-For full size image see [LINK](/topo_drawings/isis-topology-large.png)
+For full size image see [LINK](../topo_drawings/isis-topology-large.png)
+
+To SSH into a router, you can use the containerlab visual code extension
+
+![ssh into xrd](../topo_drawings/lab1-ssh-xrd01.png)
+
 
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
 
@@ -367,7 +372,7 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
 ### Add Synthetic Latency to the Links
 
 > [!NOTE]
-> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
+> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' (traffic control) command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
 
 1. Optional: ping from **xrd01** to **xrd02** to see latency prior to applying the *add-latency.sh* script
    
@@ -399,6 +404,20 @@ For full size image see [LINK](/topo_drawings/isis-topology-large.png)
    Success rate is 100 percent (5/5), round-trip min/avg/max = 12/12/16 ms
    ```
    
+
+Script explanation : 
+
+```
+sudo ip netns exec clab-clus25-xrd01 tc qdisc add dev Gi0-0-0-1 root netem delay 10000
+```
+
+- ip netns exec: runs a command inside the network namespace of the XRd container
+- tc qdisc add ... netem delay <value>:
+  - Adds a traffic control rule on the given interface
+  - netem is used to emulate network conditions (in this case, delay)
+  - Delay is in microseconds (e.g., 10000 = 10ms)
+
+
 ## Validate BGP Peering
 
 In the topology we are running a single ASN 65000 with BGP running on **xrd01**, **xrd05**, **xrd06**, **xrd07**.  Routers **xrd05** and **xrd06** are functioning as route reflectors and **xrd01** and **xrd07** are clients. 
