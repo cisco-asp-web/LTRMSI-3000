@@ -75,8 +75,8 @@ To support this, we are using four virtual machines, each with a specific role. 
 | VM Name               | Username   | Password       |
 |-----------------------|------------|----------------|
 | **Windows Management**| `admin`    | `C1sco12345`   | 
-| **Topology Host**     | `dcloud`   | `C1sco12345`   | 
-| **Jalapeno Host**     | `dcloud`   | `C1sco12345`   | 
+| **Topology Host**     | `cisco`    | `C1sco12345`   | 
+| **Jalapeno Host**     | `cisco`    | `C1sco12345`   | 
 
 
 ## Jalapeno
