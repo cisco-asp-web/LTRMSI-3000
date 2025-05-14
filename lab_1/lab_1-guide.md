@@ -298,10 +298,14 @@ Visual representation:
 
 ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
+You can now exit the Berlin container and return to the SSH session on the topology host (still in visual code)
 
 ### Amsterdam and Rome Containers
 
-**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are containers their network stack is blank except for the managment interface. So we'll run a script to add ip addresses to the containers' eth1 and eth2 interfaces and a set of routes.
+**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are standard containers their network stack is blank except for the managment interface. So we'll run a script to add ip addresses to the containers' eth1 and eth2 interfaces and a set of routes.
+
+Everything is done using the docker exec command to run network config commands inside each container.
+
 
 1. cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
    ```
@@ -310,6 +314,8 @@ Visual representation:
    ```
 
    The script should output results of applying IP addresses, routes, and successful ping tests
+
+![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
 
 
 ## Validate ISIS Topology
