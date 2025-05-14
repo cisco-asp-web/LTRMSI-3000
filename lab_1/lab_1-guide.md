@@ -17,7 +17,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Topology](#topology)
-  - [Virtual Machine and XRd Access](#virtual-machine-and-xrd-access)
+  - [Accessing the routers](#accessing-the-routers)
     - [User Credentials](#user-credentials)
     - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
@@ -49,12 +49,49 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 ![Lab Topology](../topo_drawings/overview-topology-large.png)
 
-## Virtual Machine and XRd Access
+## Accessing the routers
+
+Lab attendees can interact with the routers in multiple ways. They may choose to use the **topology host** directly to:
+
+- Launch topologies  
+- SSH into routers  
+- Perform additional configuration tasks
+
+However, it is **recommended** to use **Visual Studio Code** on the provided **Windows virtual machine** for a more streamlined experience.
+
+This environment comes pre-configured with useful extensions such as:
+
+- **Remote-SSH**
+- **Containerlab**
+
+These tools allow attendees to:
+
+- Start and manage topologies  
+- SSH into routers  
+- Access containers  
+- Capture traffic easily using **Edgeshark**
+
+This setup simplifies lab operations and significantly enhances usability.
+
+RDP to the Windows Virtual machine from the lab attendee laptop:
+
+The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
+
+![windows-rdp](.././topo_drawings/windows-rdp.png)
 
 
-Lab attendees will access devices in the lab primarly through SSH. All of the VMs are accessible upon connecting through Cisco AnyConnect VPN to the dCloud environment. Please see the management topology network diagram below. 
+Launch Visual Code:
 
-The Topology-Host VM acts as a jumpbox, thus accessing the routers will involve first SSH'ing into the **Topology-Host VM** and then initiating a separate SSH session to the routers. The **Topology-Host VM** is configured for DNS resolution for each router name to save time.
+![launch visual code](../topo_drawings/lab1-visual-code-launch.png)
+
+visual code will connect to the topology host and lab attendees should enter the "cisco123" password 
+
+![connect using visual code](../topo_drawings/lab1-visual-code-connect.png)
+
+you are now connected to the topology host and can start topologies and inspect traffic.
+
+![connected visual code](../topo_drawings/lab1-visual-code-connected.png)
+
 
 ### User Credentials
 All VMs, routers, etc. use the same user credentials:
