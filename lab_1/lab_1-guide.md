@@ -203,11 +203,11 @@ Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for ins
 > All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.clab.yaml*
 If the terminal is not visible in VScode, please launch a new terminal using the terminal / New terminal tabs. that way, you will be directly connected to the topology host using SSH.
 
-![connected visual code](../topo_drawings/lab1-visual-code-terminal.png)
+![terminal visual code](../topo_drawings/lab1-visual-code-terminal.png)
 
 You can also run ssh commands on the topology host using the terminal tab on visual code:
 
-![connected visual code](../topo_drawings/lab1-visual-code-ssh-verification.png)
+![ssh verification](../topo_drawings/lab1-visual-code-ssh-verification.png)
 
 
 
@@ -294,7 +294,9 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
     rtt min/avg/max/mdev = 1.203/1.242/1.282/0.039 ms
     ```
 
+Visual representation:
 
+![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
 
 ### Amsterdam and Rome Containers
