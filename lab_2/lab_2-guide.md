@@ -110,9 +110,10 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ```
 
 4. Enable SRv6 for VRF carrots and redistribute connected/static
+   
     Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
-   On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. For **xrd07** we will add *`redistribute connected`* to VRF *radish* and both *`redistribute connected`* and *`redistribute static`* for VRF *carrots*.
+    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute connected`* to VRF *radish* and both *`redistribute connected`* and *`redistribute static`* for VRF *carrots*.
 
     **xrd07**  
     ```yaml
@@ -179,11 +180,13 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
         locator MyLocator
         alloc mode per-vrf
       redistribute connected
+    commit
     ```
 
-2. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
-
-   BGP Route Reflector **xrd05**  
+2. Configure Route Reflector **xrd05**  
+   
+    The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
+   
     ```
     ssh cisco@clab-clus25-xrd05
     ```
@@ -278,7 +281,7 @@ In our lab we will configure **xrd07** as the egress PE router with the ODN meth
 
 The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and SRv6 ODN steering policies that match routes with the respective color and apply the appropriate SID stack on outbound traffic.
 
-1. Prior to configuring SRV6-TE policy lets get a baseline look at our vpvn4 route as viewed from **xrd01**
+1. Prior to configuring SRv6-TE policy lets get a baseline look at our vpvn4 route as viewed from **xrd01**
    Run the following command:
    ```
    show bgp vpnv4 uni vrf carrots 40.0.0.0/24
@@ -298,14 +301,14 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
      Not advertised to any peer
      Local
        fc00:0:7777::1 (metric 3) from fc00:0:5555::1 (10.0.0.7)
-         Received Label 0xe0060
+   +     Received Label 0xe0060
          Origin incomplete, metric 0, localpref 100, valid, internal, best, group-best, import-candidate, imported
          Received Path ID 0, Local Path ID 1, version 63
    +     Extended community: RT:9:9
          Originator: 10.0.0.7, Cluster list: 10.0.0.5
          PSID-Type:L3, SubTLV Count:1
           SubTLV:
-           T:1(Sid information), Sid:fc00:0:7777::(Transposed), Behavior:63, SS-TLV Count:1
+   +       T:1(Sid information), Sid:fc00:0:7777::(Transposed), Behavior:63, SS-TLV Count:1
                SubSubTLV:
              T:1(Sid structure):
          Source AFI: VPNv4 Unicast, Source VRF: default, Source Route Distinguisher: 10.0.0.7:1
@@ -313,6 +316,9 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
       
 2. On **xrd07** advertise Rome's "40" and "50" prefixes with their respective color extended communities:
    **xrd07**
+   ```
+   ssh cisco@clab-clus25-xrd07
+   ``` 
    ```yaml
    conf t
    extcommunity-set opaque bulk-transfer
