@@ -59,7 +59,7 @@ show run interface GigabitEthernet 0/0/0/3
 We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
-> All of the below commands are also available in the *`quick config doc`* [HERE](/lab_2/lab_2_quick_config.md) 
+> All of the below commands are also available in the *`quick config doc`* [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
 
    
 1. xrd07 vrf static route configuration
