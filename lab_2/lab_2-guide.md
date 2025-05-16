@@ -84,7 +84,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ```
 
 2. Verify **Rome** VRF prefix reachability  
-    Ping check from xrd07 gi 0/0/0/3 to Rome VM via 2nd NIC:  
+    Ping check from xrd07 gi 0/0/0/3 to Rome's 2nd NIC:  
     ```
     ping vrf carrots 10.107.2.1
     ping vrf carrots 40.0.0.1
@@ -93,7 +93,8 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ```
 
 3. Enable BGP L3VPN on **xrd07**
-    The next step is to add the L3VPN configuration into BGP. The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
+   
+     The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
 
     **xrd07**
     ```yaml
