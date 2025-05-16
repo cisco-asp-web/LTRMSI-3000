@@ -11,7 +11,7 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
-    - [Add VRF static routes for Rome](#add-vrf-static-routes-for-rome)
+    - [Configure SRv6 L3VPN on xrd07 and xrd01](#configure-srv6-l3vpn-on-xrd07-and-xrd01)
     - [Configure BGP L3VPN](#configure-bgp-l3vpn)
   - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
@@ -54,8 +54,9 @@ show run vrf
 show run interface GigabitEthernet 0/0/0/3
 ```
 
-### Add VRF static routes for Rome
-**xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
+### Configure SRv6 L3VPN on xrd07 and xrd01
+
+We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
 > All of the below commands are also available in the *`quick config doc`* [HERE](/lab_2/lab_2_quick_config.md) 
