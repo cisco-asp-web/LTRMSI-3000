@@ -1,9 +1,11 @@
 # Lab 4: SRv6 on SONiC [20 Min]
 
 ### Description
-Enter description
- 
+From the SONiC homepage: https://sonicfoundation.dev/
 
+Software for Open Networking in the Cloud (SONiC) is an open source network operating system (NOS) based on Linux that runs on switches from multiple vendors and ASICs. SONiC offers a full suite of network functionality, like BGP and RDMA, that has been production-hardened in the data centers of some of the largest cloud service providers. It offers teams the flexibility to create the network solutions they need while leveraging the collective strength of a large ecosystem and community.
+ 
+In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Linux and FRR CLIs, and we'll use Ansible scripts to configure interfaces, BGP, and finally SRv6.
 
 ## Contents
 - [Lab 4: SRv6 on SONiC \[20 Min\]](#lab-4-srv6-on-sonic-20-min)
@@ -12,7 +14,7 @@ Enter description
   - [Lab Objectives](#lab-objectives)
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
     - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
-    - [SONiC: a very quick tour](#sonic-a-very-quick-tour)
+    - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
   - [Manual configuration of leaf00](#manual-configuration-of-leaf00)
       - [Should we bother, or do all automated config?](#should-we-bother-or-do-all-automated-config)
   - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
@@ -52,13 +54,14 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
    localhost   : ok=4  changed=3  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0   
    ```
 
-### SONiC: a very quick tour
+### SONiC: A Very Quick Tour
 
-1. ssh to leaf00 in our topology (note: password is `*admin*`)
+> [!Note]
+> A SONiC device can be thought of as a Debian Linux node running a Dockerized router application suite. As such, much of our interaction with SONiC will be in Linux. When we ssh to the node we'll find ourselves in bash
+
+1. ssh to leaf00 in our topology (note: password is *`admin`*)
     ```
     ssh admin@clab-sonic-leaf00
-    
-    admin
     ```
 
     Expected output:
@@ -87,7 +90,7 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
     admin@sonic:~$
     ```
 
-2. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
+1. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
     ```
     docker ps
     ```
@@ -109,6 +112,8 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
     5459d7bc624a   docker-eventd:latest                 "/usr/local/bin/supe…"   6 minutes ago   Up 6 minutes             eventd
     bab374f5a2b5   docker-database:latest               "/usr/local/bin/dock…"   6 minutes ago   Up 6 minutes             database
     ```
+
+In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux bash:
 
 3. Try some SONiC CLI commands:
     ```
