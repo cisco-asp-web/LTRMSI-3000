@@ -42,7 +42,7 @@ We will have achieved the following objectives upon completion of Lab 1:
 * Deployed the XRd network topology
 * Basic familiarity with containerlab
 * Confirm IPv4 and IPv6 connectivity
-* Confirm SRv6 Locators   
+* Familiarity with base SRv6 configuration 
 
 
 ## Topology 
@@ -51,7 +51,7 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 ## Accessing the routers
 
-Lab attendees can interact with the routers in multiple ways. They may choose to use the **topology host** directly to:
+Lab attendees can interact with the routers in multiple ways. They may choose to use the **topology host** VM as a jumpbox to:
 
 - Launch topologies  
 - SSH into routers  
@@ -272,7 +272,7 @@ cisco@topology-host:~/LTRMSI-3000$ sudo containerlab inspect --all
 
 In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
 
-1. SSH to Berlin VM from the topology-host VM (using the visual code terminal output)
+1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
    ```
    ssh cisco@berlin
    or
@@ -298,7 +298,7 @@ Visual representation:
 
 ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-You can now exit the Berlin container and return to the SSH session on the topology host (still in visual code)
+You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
 
 ### Amsterdam and Rome Containers
 
@@ -405,7 +405,7 @@ To SSH into a router, you can use the containerlab visual code extension
    ```
    
 
-Script explanation : 
+Script explanation - the script runs a *tc qdisc* command for each link in the topology. Example: 
 
 ```
 sudo ip netns exec clab-clus25-xrd01 tc qdisc add dev Gi0-0-0-1 root netem delay 10000
@@ -433,9 +433,9 @@ For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
     ```
     RP/0/RP0/CPU0:xrd01#show ip bgp neighbors brief
 
-    Neighbor        Spk    AS Description                          Up/Down  NBRState
-    10.0.0.5          0 65000 iBGP to xrd05 RR                     00:18:07 Established 
-    10.0.0.6          0 65000 iBGP to xrd06 RR                     00:18:24 Established 
+    Neighbor                Spk    AS Description                        Up/Down  NBRState
+    10.0.0.5                0 65000 iBGP to xrd05 RR                     00:18:07 Established 
+    10.0.0.6                0 65000 iBGP to xrd06 RR                     00:18:24 Established 
     fc00:0000:5555::1       0 65000 iBGPv6 to xrd05 RR                   00:22:02 Established 
     fc00:0000:6666::1       0 65000 iBGPv6 to xrd06 RR                   00:21:16 Established 
     ``` 
