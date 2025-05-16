@@ -3,8 +3,7 @@
 ### Description
 In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
 
-
-The VRF instances and their interfaces have been preconfigured, so we'll focus on the SRv6 BGP configuration. Once the L3VPN is established and you run test traffic between Amsterdam and Rome we will then setup SRv6-TE traffic steering from Amsterdam to specific Rome prefixes.
+Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix A will take a differnt path than traffic to Rome prefix B.
 
 ## Contents
 - [Lab 2: Configure SRv6 L3VPN and SRv6-TE \[20 Min\]](#lab-2-configure-srv6-l3vpn-and-srv6-te-20-min)
@@ -26,8 +25,8 @@ The VRF instances and their interfaces have been preconfigured, so we'll focus o
 ## Lab Objectives
 We will have achieved the following objectives upon completion of Lab 2:
 
-* Configuration of SRv6 L3VPN
-* Configuration of SRv6 TE policy and traffic steering
+* Configure and validate SRv6 L3VPN
+* Configuration and testing of SRv6 TE policy and traffic steering
 
 ## Configure SRv6 L3VPN
 The SRv6-based IPv4/IPv6 L3VPN featureset enables operation of IPv4/IPv6 L3VPN over a SRv6 data plane. Traditionally L3VPN has been operated over MPLS or SR-MPLS. SRv6 L3VPN uses the locator/function aspect of SRv6 Segment IDs (SIDs) instead of PE + VPN labels. 
@@ -47,6 +46,13 @@ BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network
 
 The *carrots* and *radish* VRFs are setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
 
+The VRF instances and their interfaces have been preconfigured, allowing us to focus on the SRv6 BGP configuration. 
+
+Optional: if you wish to see the existing VRF configurations run these commands on either *xrd01* or *xrd07*:
+```
+show run vrf
+show run interface GigabitEthernet 0/0/0/3
+```
 
 ### Add VRF static routes for Rome
 **xrd07** will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
