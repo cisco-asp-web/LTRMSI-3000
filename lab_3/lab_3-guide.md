@@ -129,7 +129,7 @@ On the **Berlin VM** change to the lab_3/cilium directory and check out the cont
    * [02-bgp-peer.yaml](cilium/02-bgp-peer.yaml) - Cilium BGP peer address families and route policies
    * [03-bgp-node-override.yaml](cilium/03-bgp-node-override.yaml) - Cilium BGP node override; we use this to specify the BGP source address
    * [04-bgp-advert.yaml](cilium/04-bgp-advert.yaml) - Cilium BGP prefix advertisement(s), including SRv6 locator prefix(s)
-   * [05-bgp-vrf.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/cilium/05-bgp-vrf.yaml) - Cilium BGP VRF configuration
+   * [05-bgp-vrf.yaml](cilium/05-bgp-vrf.yaml) - Cilium BGP VRF configuration
    * [06-srv6-locator-pool.yaml](cilium/06-srv6-locator-pool.yaml) - Cilium SRv6 SID manager and Locator pool configuration
    * [07-vrf-carrots.yaml](cilium/07-vrf-carrots.yaml) - Cilium VRF 'carrots' configuration and pods
 
@@ -186,7 +186,7 @@ In the next few steps we'll walk through applying the configuration one element 
          safi: unicast
          advertisements:
            matchLabels:
-             advertise: "bgpv6unicast"   # advertise ipv6 prefixes found in the bgpv6unicast advertisement CR
+             advertise: "bgpv6unicast"   # advertise ipv6 prefixes found in the bgpv6unicast advertisement CRD
        - afi: ipv4
          safi: mpls_vpn  # a bit of a misnomer, but we're advertising SRv6 L3VPN, or the equivalent of vpnv4 unicast in XR
    ```
@@ -254,7 +254,7 @@ In the next few steps we'll walk through applying the configuration one element 
    
 ### Cilium BGP prefix advertisement
 
-We have not added IPv6 prefix advertisesments yet, hence a zero value in the Advertised output above. Also, **xrd05** and **xrd06**'s peering sessions with Cilium inherited the vpnv4 address family configuration during Lab 3 so we don't need to update their configs. 
+We have not added IPv6 prefix advertisements yet, hence a zero value in the *Advertised* output above. Also, **xrd05** and **xrd06**'s peering sessions with Cilium inherited the vpnv4 address family configuration during Lab 3 so we don't need to update their configs. 
 
 Here is a portion of the prefix advertisement CRD with notes:
    ```yaml
@@ -317,11 +317,14 @@ Here is a portion of the prefix advertisement CRD with notes:
             65000     fc00:0:6666::1   2001:db8:42::/64   fc00:0:8888::1   18s   [{Origin: i} {AsPath: } {LocalPref: 100} {MpReach(ipv6-unicast): {Nexthop: fc00:0:8888::1, NLRIs: [2001:db8:42::/64]}}] 
    ```
 > [!NOTE]
-> The adverstised IPv6 network prefix is the assigned IPv6 used by Cilium on **Berlin**. In addtion the NextHop address listed in the above command lists the IPv6 interface address on the **Berlin** that connects to **xrd02** in the topology. You can see this detail if you run the command *ifconfig cilium_host* and *ifconfig ens192* respectively.
+> The advertised IPv6 network prefix is the assigned IPv6 used by Cilium on **Berlin**. In addtion the *NextHop* address listed in the above command lists the IPv6 interface address on **Berlin** that connects to **xrd02** in the topology. You can see this detail if you run the command *ip addr show dev cilium_host* and *ip addr show dev ens4* respectively.
 
-5. Validate that we see the route *2001:db8:42::/64* received on the XR routers. Lets log into **xrd01** and validate we have received the router for **Berlin** in the IPv6 bgp unicast table.
+1. Validate that we see the route *2001:db8:42::/64* received on the XR routers. Lets log into **xrd01** and validate we have received the router for **Berlin** in the IPv6 bgp unicast table.
    
-   On **xrd01** run the below command:
+   On **xrd01** run the below command
+   ```
+   ssh cisco@clab-clus25-xrd01
+   ```
    ```
    show bgp ipv6 unicast 2001:db8:42::/64
    ```

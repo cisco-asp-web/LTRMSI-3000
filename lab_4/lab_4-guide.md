@@ -31,7 +31,7 @@ We will have achieved the following objectives upon completion of Lab 4:
 
 
 ## Deploy containerlab SONiC topology
-Given its origins in the Hyperscale world, SONiC has been designed from the ground up as an automation friendly NOS. So in this lab we'll make heavy use of task automation with Ansible.
+Given its origins in the Hyperscale world, SONiC has been designed from the ground up as an automation friendly NOS. So in this lab we'll make heavy use of task automation with *Ansible*.
 
 ### Ansible "deploy-playbook"
 The first Ansible playbook is a simple one; it launches the containerlab SONiC topology, and it runs a couple scripts to establish linux test bridges and to reset stored SSH keys.
@@ -54,7 +54,7 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
 
 ### SONiC: a very quick tour
 
-1. ssh to leaf00 in our topology (note: password is 'admin')
+1. ssh to leaf00 in our topology (note: password is `*admin*`)
     ```
     ssh admin@clab-sonic-leaf00
     
