@@ -315,6 +315,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    ```
       
 2. On **xrd07** advertise Rome's "40" and "50" prefixes with their respective color extended communities:
+   
    **xrd07**
    ```
    ssh cisco@clab-clus25-xrd07
@@ -356,7 +357,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    ```
 
 3. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
+   
    **xrd01**
+   ```
+   ssh cisco@clab-clus25-xrd01
+   ``` 
    ```
    show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
    show bgp vpnv4 uni vrf carrots 50.0.0.0/24
@@ -447,9 +452,9 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 6. Validate **xrd01's** SRv6-TE SID policy is enabled and up:
    ```
-   show segment-routing srv6 sid
-   show segment-routing traffic-eng policy
-   show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
+    show segment-routing srv6 sid
+    show segment-routing traffic-eng policy
+    show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
    ```
    
    
