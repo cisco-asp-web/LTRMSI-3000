@@ -47,7 +47,7 @@ We will have achieved the following objectives upon completion of Lab 3:
 
 Kubernetes and Cilium Enterprise are pre-installed on the **Berlin** VM. All of the following steps are to be performed on the **Berlin** VM unless otherwise specified.
 
-1. From the **topology-host** SSH into the **Berlin VM**, cd into the lab_3/cilium directory and check out the contents:
+1. From the **topology-host** SSH into the **Berlin VM** and cd into the lab_3/cilium directory
    ```
    ssh cisco@berlin
    or
@@ -57,7 +57,7 @@ Kubernetes and Cilium Enterprise are pre-installed on the **Berlin** VM. All of 
    cd ~/LTRMSI-3000/lab_3/cilium/
    ```
 
-   We also recommend doing a *`git pull`* to ensure Berlin is fully updated
+   We recommend doing a *`git pull`* to ensure Berlin is fully updated
    ```
    git pull
    ```
@@ -97,7 +97,7 @@ Kubernetes and Cilium Enterprise are pre-installed on the **Berlin** VM. All of 
    cilium   1         1         1       1            1           kubernetes.io/os=linux   94m
    ```
 > [!NOTE]
-> A Kubernetes DaemonSet is a feature that ensures a pod runs on all or some nodes in a Kubernetes cluster. DaemonSets are used to deploy background services, such as monitoring agents, network agents (such as Cilium/eBPF), log collectors, and storage volumes.
+> A Kubernetes DaemonSet is a feature that ensures a pod runs on all or some nodes in a Kubernetes cluster. DaemonSets are used to deploy background services, such as monitoring agents, network agents (*such as Cilium/eBPF*), log collectors, and storage volumes.
 
 Now we're ready!
 
@@ -108,7 +108,7 @@ Per: https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-
 
 *A custom resource is an extension of the Kubernetes API that is not necessarily available in a default Kubernetes installation. It represents a customization of a particular Kubernetes installation. However, many core Kubernetes functions are now built using custom resources, making Kubernetes more modular.*
 
-Said another way, CRDs enable us to add, update, or delete Kubernetes cluster elements and their configurations. The add/update/delete action might apply to the cluster as a whole, a node in the cluster, an aspect of cluster networking or the CNI (aka, the work we'll do in this lab), or any given element or set of elements within the cluster including pods, services, daemonsets, etc.
+Said another way, CRDs enable us to add, update, or delete Kubernetes cluster elements and their configurations. The add/update/delete action might apply to the cluster as a whole, a node in the cluster, an aspect of cluster networking or the CNI (*aka, the work we'll do in this lab*), or any given element or set of elements within the cluster including pods, services, daemonsets, etc.
 
 A CRD applied to a single element in the K8s cluster would be analogous to configuring BGP on a router. A CRD applied to multiple elements or cluster-wide would be analogous to adding BGP route-reflection to a network as a whole. 
 
@@ -129,7 +129,7 @@ On the **Berlin VM** change to the lab_3/cilium directory and check out the cont
    * [02-bgp-peer.yaml](cilium/02-bgp-peer.yaml) - Cilium BGP peer address families and route policies
    * [03-bgp-node-override.yaml](cilium/03-bgp-node-override.yaml) - Cilium BGP node override; we use this to specify the BGP source address
    * [04-bgp-advert.yaml](cilium/04-bgp-advert.yaml) - Cilium BGP prefix advertisement(s), including SRv6 locator prefix(s)
-   * [05-bgp-vrf.yaml](cilium/05-bgp-vrf.yaml) - Cilium BGP VRF configuration(s
+   * [05-bgp-vrf.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/cilium/05-bgp-vrf.yaml) - Cilium BGP VRF configuration
    * [06-srv6-locator-pool.yaml](cilium/06-srv6-locator-pool.yaml) - Cilium SRv6 SID manager and Locator pool configuration
    * [07-vrf-carrots.yaml](cilium/07-vrf-carrots.yaml) - Cilium VRF 'carrots' configuration and pods
 
