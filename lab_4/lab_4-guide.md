@@ -3,7 +3,7 @@
 ### Description
 From the SONiC homepage: https://sonicfoundation.dev/
 
-Software for Open Networking in the Cloud (SONiC) is an open source network operating system (NOS) based on Linux that runs on switches from multiple vendors and ASICs. SONiC offers a full suite of network functionality, like BGP and RDMA, that has been production-hardened in the data centers of some of the largest cloud service providers. It offers teams the flexibility to create the network solutions they need while leveraging the collective strength of a large ecosystem and community.
+*Software for Open Networking in the Cloud (SONiC) is an open source network operating system (NOS) based on Linux that runs on switches from multiple vendors and ASICs. SONiC offers a full suite of network functionality, like BGP and RDMA, that has been production-hardened in the data centers of some of the largest cloud service providers. It offers teams the flexibility to create the network solutions they need while leveraging the collective strength of a large ecosystem and community.*
  
 In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Linux and FRR CLIs, and we'll use Ansible scripts to configure interfaces, BGP, and finally SRv6.
 
@@ -15,6 +15,7 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
     - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
     - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
+      - [SONiC Docker Containers](#sonic-docker-containers)
   - [Manual configuration of leaf00](#manual-configuration-of-leaf00)
       - [Should we bother, or do all automated config?](#should-we-bother-or-do-all-automated-config)
   - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
@@ -56,8 +57,10 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
 
 ### SONiC: A Very Quick Tour
 
-> [!Note]
-> A SONiC device can be thought of as a Debian Linux node running a Dockerized router application suite. As such, much of our interaction with SONiC will be in Linux. When we ssh to the node we'll find ourselves in bash
+SONiC is Linux plus a microservices-style architecture comprised of various modules running as Docker containers. These containers comprise what can be thought of as a highly modular *router application suite*. The containers interact and communicate with each other through the Switch State Service (swss) container. The infrastructure also relies on the use of a redis-database engine: a key-value database to provide a language independent interface, a method for data persistence, replication and multi-process communication among all SONiC subsystems.
+
+For a deep dive on SONiC architecture and containers please see: https://sonicfoundation.dev/deep-dive-into-sonic-architecture-design/
+
 
 1. ssh to leaf00 in our topology (note: password is *`admin`*)
     ```
@@ -89,8 +92,24 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
     Last login: Sun May  4 20:51:27 2025
     admin@sonic:~$
     ```
+#### SONiC Docker Containers
 
-1. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
+| Docker Container Name| Description                                                      |
+|:---------------------|:-----------------------------------------------------------------|
+| BGP                  | Runs FRR [Free Range Routing](https://frrouting.org/) |
+| Database             | Hosts the redis-database engine|
+| DHCP_Relay           | DHCP-Relay agent |
+| LLDP                 | Hosts LLDP. Includes 3 process *llpd*, *LLDP-syncd*, *LLDPmgr* |
+| MGMT-Framework       | North Bound Interfaces (NBIs) for  managing configuration and status|
+| PMON                 | Runs *sensord* daemon used to log and alert sensor data |
+| RADV                 | Hosts *radv* daemon and handles IPv6 router solicitations / router advertisements |
+| SNMP                 | Hosts SNMP feature. *SNMPD* and *SNMP-Agent* |
+| SWSS                 | Collection of tools to allow communication among all SONiC modules |
+| SYNCD                | synchronization of the switch's network state with the switch's actual hardware/ASIC |
+| TeamD                | Runs open-source implementation of LAG protocol |
+| Telemetry            | Contains implementation for the sonic system telemetry service |
+
+2. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
     ```
     docker ps
     ```
@@ -113,9 +132,9 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
     bab374f5a2b5   docker-database:latest               "/usr/local/bin/dock…"   6 minutes ago   Up 6 minutes             database
     ```
 
-In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux bash:
+In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux:
 
-3. Try some SONiC CLI commands:
+1. Try some SONiC CLI commands:
     ```
     show ?
     show interface status
@@ -124,7 +143,13 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux 
     show version
     ```
 
-4. Access the FRR/BGP container via *vtysh*
+If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
+
+SONiC leverages the FRR [Free Range Routing](https://frrouting.org/) open source routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
+
+The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
+
+2. Access **leaf00's** FRR/BGP container via *vtysh*
     ```
     vtysh
     ```
@@ -140,7 +165,7 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux 
     sonic# 
     ```
 
-5. FRR looks a whole lot like classic IOS:
+2. FRR looks a whole lot like classic IOS:
     ```
     show run
     show interface brief
