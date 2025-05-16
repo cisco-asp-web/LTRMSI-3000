@@ -11,9 +11,9 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
-    - [Configure SRv6 L3VPN on xrd07 and xrd01](#configure-srv6-l3vpn-on-xrd07-and-xrd01)
-    - [Configure BGP L3VPN](#configure-bgp-l3vpn)
-  - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
+    - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
+    - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
+    - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
   - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
@@ -54,13 +54,14 @@ show run vrf
 show run interface GigabitEthernet 0/0/0/3
 ```
 
-### Configure SRv6 L3VPN on xrd07 and xrd01
+### Configure SRv6 L3VPN on xrd07
 
 We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
 > All of the below commands are also available in the *`quick config doc`* [HERE](/lab_2/lab_2_quick_config.md) 
 
+   
 1. xrd07 vrf static route configuration
    
     ```
@@ -91,9 +92,8 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ping vrf carrots fc00:0:107:2::2
     ```
 
-### Configure BGP L3VPN 
-1. Enable BGP L3VPN on **xrd07**
-    The next step is to add the L3VPN configuration into BGP. The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. Again, we have preconfigured **xrd01** so you only need to configure **xrd07**
+3. Enable BGP L3VPN on **xrd07**
+    The next step is to add the L3VPN configuration into BGP. The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
 
     **xrd07**
     ```yaml
@@ -108,8 +108,8 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
       commit
     ```
 
-2. Enable SRv6 for VRF carrots and redistribute connected/static
-    Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in an earlier lab.
+4. Enable SRv6 for VRF carrots and redistribute connected/static
+    Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. For **xrd07** we will add *`redistribute connected`* to VRF *radish* and both *`redistribute connected`* and *`redistribute static`* for VRF *carrots*.
 
@@ -147,10 +147,45 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
           redistribute connected
       commit
       ```
+### Configure SRv6 L3VPN on xrd01 and RR xrd05
 
-3. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
+1. ssh to **xrd01** and apply the configuration in a single step:
+    ```
+    ssh cisco@clab-clus25-xrd01
+    ```
+
+    ```yaml
+    conf t
+
+    router bgp 65000
+    neighbor-group xrd-ipv6-peer
+      address-family vpnv4 unicast
+      next-hop-self
+      
+      address-family vpnv6 unicast
+      next-hop-self
+      
+    vrf carrots
+      rd auto
+      address-family ipv4 unicast
+      segment-routing srv6
+        locator MyLocator
+        alloc mode per-vrf
+      redistribute connected
+      
+      address-family ipv6 unicast
+      segment-routing srv6
+        locator MyLocator
+        alloc mode per-vrf
+      redistribute connected
+    ```
+
+2. The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
 
    BGP Route Reflector **xrd05**  
+    ```
+    ssh cisco@clab-clus25-xrd05
+    ```
     ```yaml
     conf t
     router bgp 65000
@@ -163,7 +198,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     commit
     ```
 
-## Validate SRv6 L3VPN
+### Validate SRv6 L3VPN
 
 Validation command output examples can be found at this [LINK](/lab_2/validation-cmd-output.md)
 
