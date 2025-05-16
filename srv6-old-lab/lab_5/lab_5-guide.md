@@ -74,7 +74,7 @@ Here is an example of the BMP configuration on **xrd05** and **xrd06**:
 2. Lets validate the BMP session on **xrd05** and **xrd06** are established and client monitoring:
 
       ```
-      ssh cisco@clab-cleu25-xrd06
+      ssh cisco@clab-clus25-xrd06
       ```
 
       ```

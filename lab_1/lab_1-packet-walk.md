@@ -1,22 +1,22 @@
 
 
-# Lab 2: SRv6 uSID Packet Walk [5 Min]
+# Lab 1: SRv6 uSID Packet Walk [5 Min]
 
 ### Description: 
-This is a supplemental lab guide used to deconstruct the forwarding process of traffic through the SRv6 lab topology in this lab. In Lab 2 we are setting up the SRv6 underlay and enabling SRv6 encapsulation of IPv4 traffic in the global forwarding table or default VRF. This is distinct from Lab 3 where we will add the virtualization concept of L3VPN + SRv6.
+This is a supplemental lab guide used to deconstruct the forwarding process of traffic through the SRv6 lab topology in this lab. In Lab 1 we established the SRv6 underlay and enabled SRv6 encapsulation of IPv4 traffic in the global forwarding table or default VRF. This is distinct from Lab 2 where we will add the virtualization concept of L3VPN + SRv6.
 
 ## Contents
-- [Lab 2: SRv6 uSID Packet Walk \[5 Min\]](#lab-2-srv6-usid-packet-walk-5-min)
+- [Lab 1: SRv6 uSID Packet Walk \[5 Min\]](#lab-1-srv6-usid-packet-walk-5-min)
     - [Description:](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Packet Walk Results for traffic from Amsterdam to Rome over SRv6](#packet-walk-results-for-traffic-from-amsterdam-to-rome-over-srv6)
     - [SRv6 Encapsulation and BGP](#srv6-encapsulation-and-bgp)
-  - [Proceed to Lab 3](#proceed-to-lab-3)
+  - [Proceed to Lab 2](#proceed-to-lab-2)
   
 
 ## Lab Objectives
-The student upon completion of Lab 2 should have achieved the following objectives:
+The student upon completion of Lab 1 should have achieved the following objectives:
 
 * Understand how standard IPv4 or IPv6 packets are encapsulated with SRv6 headers
 * Understand the forwarding behavior of SRv6 enabled routers
@@ -35,20 +35,20 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
 
 ![Router 1 Topology](/topo_drawings/packet-walk-r1.png)
 
-1. First SSH to the Amsterdam VM then start a ping to the Rome VM
+1. Run *docker exec* to start a ping from Amsterdam to Rome
    ```
-   ssh cisco@198.18.128.102
-   ping 20.0.0.1 -i 1
+   docker exec -it clab-clus25-amsterdam ping 20.0.0.1 -i .5
    ```
 
-2. Then on the XRD host VM run tcpdump to capture SRv6 encapsulated traffic egressing **xrd01**. We don't know which interface the traffic will be hashed through so we may need to run tcpdump on both interfaces. Note, the tcpdump output may not show until you stop it with crtl-z.
-   ```sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-1
-   sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-2
+2. Then on the topology-host VM run tcpdump to capture SRv6 encapsulated traffic egressing **xrd01**. We don't know which interface the traffic will be hashed through so we may need to run tcpdump on both interfaces. Note, the tcpdump output may not show until you stop it with crtl-z.
+   ```
+   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
    ```
 
    Example output:
    ```
-   cisco@xrd:~/SRv6_dCloud_Lab/lab_2$ sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-1
+   cisco@xrd:~/LTRMSI-3000/lab_2$ sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
    tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
    listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
    01:54:41.418301 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 11, length
@@ -59,10 +59,10 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
 
 3. To see the encapsulated traffic further in the network you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
    ```
-   sudo ip netns exec clab-cleu25-xrd02 tcpdump -lni Gi0-0-0-1
-   sudo ip netns exec clab-cleu25-xrd05 tcpdump -lni Gi0-0-0-1
-   sudo ip netns exec clab-cleu25-xrd03 tcpdump -lni Gi0-0-0-1
-   sudo ip netns exec clab-cleu25-xrd04 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd05 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd03 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd04 tcpdump -lni Gi0-0-0-1
    etc.
    ```
 
@@ -147,5 +147,5 @@ In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We
    + 3     Y   GigabitEthernet0/0/0/2    fe80::42:c0ff:fea8:d003 <--- ECMP Next-hop
    ```
 
-## Proceed to Lab 3
-Please proceed to [Lab 3](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_3/lab_3-guide.md)
+## Proceed to Lab 2
+Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)

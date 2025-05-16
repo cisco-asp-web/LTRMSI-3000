@@ -248,7 +248,7 @@ sudo tcpdump -lni ens192
 ping 10.101.2.1 -I 20.0.0.1 -i .3
 ```
 > [!NOTE]
-> As of CLEU25 there is occasionally an issue where IPv6 neighbor instances timeout between Rome Linux and the XRd MACVLAN attachment on *`xrd07`*. So if your ping doesn't work try ssh'ing into *`xrd07`* and ping *`Rome`*. A successful ping should 'wake up' the IPv6 neighborship.
+> As of clus25 there is occasionally an issue where IPv6 neighbor instances timeout between Rome Linux and the XRd MACVLAN attachment on *`xrd07`*. So if your ping doesn't work try ssh'ing into *`xrd07`* and ping *`Rome`*. A successful ping should 'wake up' the IPv6 neighborship.
 
 On *`xrd07`*:  
 ```

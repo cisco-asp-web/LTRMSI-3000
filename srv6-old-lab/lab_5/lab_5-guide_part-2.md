@@ -187,15 +187,15 @@ For the next section we will run the **srctl** *Low Latency* service on Rome to 
 
    Optional: run tcpdump on the XRD VM to see the traffic flow and SRv6 uSID in action. 
    ```
-   sudo ip netns exec clab-cleu25-xrd07 tcpdump -lni Gi0-0-0-0
+   sudo ip netns exec clab-clus25-xrd07 tcpdump -lni Gi0-0-0-0
    ```
    ```
-   sudo ip netns exec clab-cleu25-xrd06 tcpdump -lni Gi0-0-0-0
+   sudo ip netns exec clab-clus25-xrd06 tcpdump -lni Gi0-0-0-0
    ```
 
    We expect the ping to work, and tcpdump output should look something like this:
    ```yaml
-   cisco@xrd:~$ sudo ip netns exec clab-cleu25-xrd06 tcpdump -lni Gi0-0-0-0
+   cisco@xrd:~$ sudo ip netns exec clab-clus25-xrd06 tcpdump -lni Gi0-0-0-0
    tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
    listening on Gi0-0-0-0, link-type EN10MB (Ethernet), capture size 262144 bytes
    22:23:10.294176 IP6 fc00:0:107:1::1 > fc00:0:6666:5555:1111::: srcrt (len=2, type=4, segleft=0[|srcrt]
@@ -410,15 +410,15 @@ Many segment routing and other SDN solutions focus on the *low latency path* as 
 
    Optional: run tcpdump on the XRD VM to see the traffic flow and SRv6 uSID in action. 
    ```
-   sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-0
+   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-0
    ```
    ```
-   sudo ip netns exec clab-cleu25-xrd03 tcpdump -lni Gi0-0-0-0
+   sudo ip netns exec clab-clus25-xrd03 tcpdump -lni Gi0-0-0-0
    ```
 
    We expect the ping to work, and because the outbound traffic is taking the least utilized path, and the return traffic is taking the low latency path we expect the above tcpdump output to only show the outbound SRv6 encapsulated ping requests:
    ```yaml
-   cisco@xrd:~$ sudo ip netns exec clab-cleu25-xrd03 tcpdump -lni Gi0-0-0-0
+   cisco@xrd:~$ sudo ip netns exec clab-clus25-xrd03 tcpdump -lni Gi0-0-0-0
    tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
    listening on Gi0-0-0-0, link-type EN10MB (Ethernet), capture size 262144 bytes
    22:49:37.171693 IP6 fc00:0:101:1::1 > fc00:0:3333:4444:7777::: IP6 fc00:0:101:2::1 > fc00:0:107:1::1: ICMP6, echo request, seq 34, length 64
@@ -523,16 +523,16 @@ For our lab we've specified that Berlin-to-Rome traffic should avoid France (FRA
 
 5. Optional: run tcpdump on the XRD VM to see the traffic flow and SRv6 uSID in action. 
    ```
-   sudo ip netns exec clab-cleu25-xrd02 tcpdump -lni Gi0-0-0-3
+   sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-3
    ```
    ```
-   sudo ip netns exec clab-cleu25-xrd03 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd03 tcpdump -lni Gi0-0-0-1
    ```
 
    This tcpdump shows the outer SRv6 encapsulation and the *data-sovereignty* uSID combination *fc00:0:2222:3333:4444:7777::*.
 
    ```yaml
-   cisco@xrd:~$ sudo ip netns exec clab-cleu25-xrd02 tcpdump -lni Gi0-0-0-3
+   cisco@xrd:~$ sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-3
    tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
    listening on Gi0-0-0-3, link-type EN10MB (Ethernet), capture size 262144 bytes
    18:58:38.173922 IP6 fc00:0:8888:0:250:56ff:fe3f:ffff > fc00:0:2222:3333:4444:7777::: srcrt (len=2, type=4, segleft=0[|srcrt]
@@ -649,7 +649,7 @@ For full size image see [LINK](/topo_drawings/low-latency-alternate-path.png)
 5. Lets check that the newly programmed route is working. Go to **XRD** VM and run tcpdump command
 
    ```
-   sudo ip netns exec clab-cleu25-xrd07 tcpdump -lni Gi0-0-0-0
+   sudo ip netns exec clab-clus25-xrd07 tcpdump -lni Gi0-0-0-0
    ```
 
 6. Switch back to the **Rome** VM and ping the IPv6 address on Amsterdam *fc00:0:101:2::1*
