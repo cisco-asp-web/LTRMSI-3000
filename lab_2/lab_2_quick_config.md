@@ -4,7 +4,7 @@
 - [xrd05](#xrd05)
 - [xrd06](#xrd06)
 - [xrd07](#xrd07)
-  - [Example VRF and interface config:](#example-vrf-and-interface-config)
+- [Example VRF and interface config:](#example-vrf-and-interface-config)
 - [Back to Lab 2 Guide](#back-to-lab-2-guide)
 
 ## xrd01
@@ -229,7 +229,7 @@ commit
 
 ```
 
-### Example VRF and interface config:
+## Example VRF and interface config:
 ```
 vrf carrots
  address-family ipv4 unicast
@@ -281,4 +281,4 @@ interface GigabitEthernet0/0/0/3
 ```
 
 ## Back to Lab 2 Guide
-[Lab 2 Guide](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md#validate-srv6-l3vpn)
+[Back to lab 2 guide](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md#validate-srv6-l3vpn)
