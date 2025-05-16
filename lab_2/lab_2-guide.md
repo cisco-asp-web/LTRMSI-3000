@@ -570,9 +570,9 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    2222:3333:7777
    ```
 > [!IMPORTANT]
-> Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefor for effiecency it drops the penultimate hop off the SID stack.
+> Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-1. Run a ping from the Amsterdam container to the bulk transport destination IPv4 and IPv6 addresses on Rome.
+1. On the *topology-host* run a ping from the Amsterdam container to the bulk transport destination IPv4 and IPv6 addresses on Rome.
     ```
     docker exec -it clab-clus25-amsterdam ping 40.0.0.1 -i .5
     ```
@@ -592,7 +592,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 #### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
 1.  Start a new tcpdump session on **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
     ```
-    sudo ip netns exec clab-cleu25-xrd01 tcpdump -lni Gi0-0-0-2
+    sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
     ```
 
 2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
@@ -600,18 +600,16 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
     docker exec -it clab-clus25-amsterdam ping 50.0.0.1 -i .5
     ```
 
-    What your looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE low latency policy configured was:
+    Note the explicit segment-list we configured for our low latency policy:
 
     ```
-    segment-list xrd2347
+    segment-list xrd567
        srv6
          index 10 sid fc00:0:5555::
          index 20 sid fc00:0:6666::
     ```
 
-    Normally we might expect the tcpudmp output to show *5555:6666:7777* in the packet header, however, when the XRd headend router performs its SRv6-TE policy calculation it recognizes that **xrd05's** best path to **xrd07** is through **xrd06**, so it doesn't need to include the *6666* in the SID stack.
-
-   
+    Normally we might expect the tcpudmp output to show *5555:6666:7777* in the packet header, however, when the XRd headend router performs its SRv6-TE policy calculation it recognized that **xrd05's** best path to **xrd07** is through **xrd06**, so it doesn't need to include the *6666* in the SID stack.
 
     Optional: run the same ping test using the IPv6 address:
     
