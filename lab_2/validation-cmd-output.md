@@ -198,7 +198,7 @@ Sending 5, 100-byte ICMP Echos to fc00:0:50::1, timeout is 2 seconds:
 Success rate is 100 percent (5/5), round-trip min/avg/max = 3/3/5 ms
 ```
 
-[back to lab 3 guide](https://github.com/jalapeno/SRv6_dCloud_Lab/blob/main/lab_3/lab_3-guide.md#validate-srv6-l3vpn)
+[back to lab 2 guide](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md#validate-srv6-l3vpn)
  
 
 
