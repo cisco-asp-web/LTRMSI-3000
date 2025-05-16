@@ -281,4 +281,4 @@ interface GigabitEthernet0/0/0/3
 ```
 
 ## Back to Lab 2 Guide
-[Lab 2 Guide](lab_2-guide.md#validate-srv6-l3vpn)
+[Lab 2 Guide](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md#validate-srv6-l3vpn)
