@@ -18,10 +18,6 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
     - [SONiC Docker Containers](#sonic-docker-containers)
   - [SONiC Configuration Files](#sonic-configuration-files)
     - [config load, config reload, config save](#config-load-config-reload-config-save)
-      - [config load](#config-load)
-      - [config reload](#config-reload)
-      - [config save](#config-save)
-      - [Edit Configuration Through CLI](#edit-configuration-through-cli)
     - [Configure leaf00 from SONiC CLI](#configure-leaf00-from-sonic-cli)
   - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
@@ -181,7 +177,7 @@ Configuration state in SONiC is saved in two separate files. The first is the **
 
 ### config load, config reload, config save
 
-#### config load
+**config load**
 
 The command *config load* is used to load a configuration following the JSON schema. This command loads the configuration from the input file, which defaults to */etc/sonic/config_db.json*, unless specified otherwise.The configuration present in the input file overwrites the already running configuration. This command does not flush the config DB before loading the new configuration, rather it performs a *diff* on the existing and applies the new. 
 
@@ -196,7 +192,7 @@ Load config from the file /etc/sonic/config_db.json? [y/N]: y
 Running command: /usr/local/bin/sonic-cfggen -j /etc/sonic/config_db.json --write-to-db
 ```
 
-#### config reload
+**config reload**
 
 This command is used to clear current configuration and import new configurationn from the input file or from */etc/sonic/config_db.json*. This command shall stop all services before clearing the configuration and it then restarts those services.
 
@@ -207,7 +203,7 @@ The command *config reload* restarts various services/containers running in the 
 config reload [-y|--yes] [-l|--load-sysinfo] [<filename>] [-n|--no-service-restart] [-f|--force]
 ```
 
-#### config save
+**config save**
 
 The command *config save* is used to save the redis CONFIG_DB into the user-specified filename or into the default /etc/sonic/config_db.json. This is analogous to the Cisco IOS command *copy run start*. 
 
@@ -228,7 +224,7 @@ admin@sonic::~$ sudo config save -y
 admin@sonic::~$ sudo config save -y /etc/sonic/config2.json
 ```
 
-#### Edit Configuration Through CLI
+***Edit Configuration Through CLI**
 
 The SONiC CLI can also be used to apply non-control plane configurations. From the Linux shell enter *config* and the command syntax needed. 
 ```
