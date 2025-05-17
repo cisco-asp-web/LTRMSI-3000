@@ -73,6 +73,10 @@
       ignore_errors: yes
       register: frr_load_result
 
+    - name: sonic config load just to make sure
+      command: "sudo config load -y"
+      ignore_errors: yes
+
 - name: validate SONiC local srv6 SIDs
   hosts: sonic
   become: true

@@ -365,6 +365,8 @@ SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example fro
     
 ### SONiC SRv6 configuration
 
+Keep your *vtysh* session open on any router and:
+
 1. Check SONiC SRv6 configuration
    ```
    show run
