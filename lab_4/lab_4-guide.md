@@ -14,10 +14,15 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [Lab Objectives](#lab-objectives)
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
     - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
-    - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
-      - [SONiC Docker Containers](#sonic-docker-containers)
-  - [Manual configuration of leaf00](#manual-configuration-of-leaf00)
-      - [Should we bother, or do all automated config?](#should-we-bother-or-do-all-automated-config)
+  - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
+    - [SONiC Docker Containers](#sonic-docker-containers)
+  - [SONiC Configuration Files](#sonic-configuration-files)
+    - [config load, config reload, config save](#config-load-config-reload-config-save)
+      - [config load](#config-load)
+      - [config reload](#config-reload)
+      - [config save](#config-save)
+      - [Edit Configuration Through CLI](#edit-configuration-through-cli)
+    - [Configure leaf00 from SONiC CLI](#configure-leaf00-from-sonic-cli)
   - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
     - [SONiC SRv6 configuration](#sonic-srv6-configuration)
@@ -55,9 +60,9 @@ The first Ansible playbook is a simple one; it launches the containerlab SONiC t
    localhost   : ok=4  changed=3  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0   
    ```
 
-### SONiC: A Very Quick Tour
+## SONiC: A Very Quick Tour
 
-SONiC is Linux plus a microservices-style architecture comprised of various modules running as Docker containers. These containers comprise what can be thought of as a highly modular *router application suite*. The containers interact and communicate with each other through the Switch State Service (swss) container. The infrastructure also relies on the use of a redis-database engine: a key-value database to provide a language independent interface, a method for data persistence, replication and multi-process communication among all SONiC subsystems.
+SONiC is Linux plus a microservices-style architecture comprised of various modules running as Docker containers. These containers comprise what can be thought of as a highly modular *router application suite*. The containers interact and communicate with each other through the Switch State Service (*`swss`*) container. The infrastructure also relies on the use of a *redis-database* engine: a key-value database to provide a language independent interface, a method for data persistence, replication and multi-process communication among all SONiC subsystems.
 
 For a deep dive on SONiC architecture and containers please see: https://sonicfoundation.dev/deep-dive-into-sonic-architecture-design/
 
@@ -92,22 +97,21 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
     Last login: Sun May  4 20:51:27 2025
     admin@sonic:~$
     ```
-#### SONiC Docker Containers
+### SONiC Docker Containers
 
 | Docker Container Name| Description                                                      |
 |:---------------------|:-----------------------------------------------------------------|
 | BGP                  | Runs FRR [Free Range Routing](https://frrouting.org/) |
 | Database             | Hosts the redis-database engine|
-| DHCP_Relay           | DHCP-Relay agent |
 | LLDP                 | Hosts LLDP. Includes 3 process *llpd*, *LLDP-syncd*, *LLDPmgr* |
 | MGMT-Framework       | North Bound Interfaces (NBIs) for  managing configuration and status|
 | PMON                 | Runs *sensord* daemon used to log and alert sensor data |
 | RADV                 | Hosts *radv* daemon and handles IPv6 router solicitations / router advertisements |
 | SNMP                 | Hosts SNMP feature. *SNMPD* and *SNMP-Agent* |
 | SWSS                 | Collection of tools to allow communication among all SONiC modules |
-| SYNCD                | synchronization of the switch's network state with the switch's actual hardware/ASIC |
+| SYNCD                | Synchronization of the switch's network state with the switch's actual hardware/ASIC |
 | TeamD                | Runs open-source implementation of LAG protocol |
-| Telemetry            | Contains implementation for the sonic system telemetry service |
+| GNMI                 | SONiC gnmi/telemetry service |
 
 2. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
     ```
@@ -134,7 +138,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 
 In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux:
 
-1. Try some SONiC CLI commands:
+3. Try some SONiC CLI commands:
     ```
     show ?
     show interface status
@@ -172,14 +176,101 @@ The *docker ps* output above included a container named **bgp**. In reality this
     exit
     ```
 
+## SONiC Configuration Files
+Configuration state in SONiC is saved in two separate files. The first is the **/etc/sonic/config_db.json** file, which contains global configuration attributes such as hostname, interfaces, IP addresses, etc. The second is the FRR control plane configuration at **/etc/sonic/frr/bgpd.conf**.
 
-## Manual configuration of leaf00
+### config load, config reload, config save
 
-#### Should we bother, or do all automated config?
+#### config load
 
+The command *config load* is used to load a configuration following the JSON schema. This command loads the configuration from the input file, which defaults to */etc/sonic/config_db.json*, unless specified otherwise.The configuration present in the input file overwrites the already running configuration. This command does not flush the config DB before loading the new configuration, rather it performs a *diff* on the existing and applies the new. 
 
+- Usage:
+```
+config load [-y|--yes] [<filename>]
+```
+- Example:
+```
+admin@sonic::~$ sudo config load
+Load config from the file /etc/sonic/config_db.json? [y/N]: y
+Running command: /usr/local/bin/sonic-cfggen -j /etc/sonic/config_db.json --write-to-db
+```
+
+#### config reload
+
+This command is used to clear current configuration and import new configurationn from the input file or from */etc/sonic/config_db.json*. This command shall stop all services before clearing the configuration and it then restarts those services.
+
+The command *config reload* restarts various services/containers running in the device and it takes some time to complete the command.
+
+- Usage:
+```
+config reload [-y|--yes] [-l|--load-sysinfo] [<filename>] [-n|--no-service-restart] [-f|--force]
+```
+
+#### config save
+
+The command *config save* is used to save the redis CONFIG_DB into the user-specified filename or into the default /etc/sonic/config_db.json. This is analogous to the Cisco IOS command *copy run start*. 
+
+Saved files can be transferred to remote machines for debugging. If users wants to load the configuration from this new file at any point of time, they can use the *config load* command and provide this newly generated file as input. 
+
+- Usage:
+```
+config save [-y|--yes] [<filename>]
+```
+- Example (Save configuration to /etc/sonic/config_db.json):
+
+```
+admin@sonic::~$ sudo config save -y
+```
+
+- Example (Save configuration to a specified file):
+```
+admin@sonic::~$ sudo config save -y /etc/sonic/config2.json
+```
+
+#### Edit Configuration Through CLI
+
+The SONiC CLI can also be used to apply non-control plane configurations. From the Linux shell enter *config* and the command syntax needed. 
+```
+admin@sonic::~$ config -?
+Usage: config [OPTIONS] COMMAND [ARGS]...
+
+  SONiC command line - 'config' command
+```
+
+### Configure leaf00 from SONiC CLI
+
+In the next sections we'll use Ansible to apply configurations to most of the fabric, but we wanted to demonstrate SONiC CLI by partially configuring **leaf00**
+
+1. ssh to leaf00 (password is `admin`)
+    ```
+    ssh admin@clab-sonic-leaf00
+    ```
+
+2. Configure hostname and *Loopback0* IPv4 and IPv6 addresses
+   ```
+   sudo config hostname leaf00
+   sudo config interface ip add Loopback0 10.0.0.200/32
+   sudo config interface ip add Loopback0 fc00:0:1200::1/128
+   ```
+
+Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we only need to configure IPs for the host-facing interface Ethernet16.
+
+3. Configure interface Ethernet16 IPv4 and IPv6
+   ```
+   sudo config interface ip add Ethernet16 200.0.100.1/24
+   sudo config interface ip add Ethernet16 2001:db8:1000:1::1/64
+   ```
+
+4. Save configuration
+   ```
+   sudo config save
+   ```
+   
+5. Exit the sonic node and ssh back in to see the hostname change in effect
 
 ## Fabric config automation with Ansible 
+
 We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/sonic-playbook.yaml) playbook. This playbook executes a number of tasks including:
 
 * Copy each nodes' config_db.json file to the /etc/sonic/ directory [Example leaf00/config_db.json](sonic-config/leaf00/config_db.json)
