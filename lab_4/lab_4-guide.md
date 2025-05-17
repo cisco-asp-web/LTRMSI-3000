@@ -19,7 +19,7 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [SONiC Configuration Files](#sonic-configuration-files)
     - [config load, config reload, config save](#config-load-config-reload-config-save)
     - [Configure leaf00 from SONiC CLI](#configure-leaf00-from-sonic-cli)
-  - [Fabric config automation with Ansible](#fabric-config-automation-with-ansible)
+  - [Fabric Config Automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
     - [SONiC SRv6 configuration](#sonic-srv6-configuration)
     - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
@@ -224,11 +224,11 @@ admin@sonic::~$ sudo config save -y
 admin@sonic::~$ sudo config save -y /etc/sonic/config2.json
 ```
 
-***Edit Configuration Through CLI**
+**Edit Configuration Through CLI**
 
 The SONiC CLI can also be used to apply non-control plane configurations. From the Linux shell enter *config* and the command syntax needed. 
 ```
-admin@sonic::~$ config -?
+admin@sonic::~$ config ?
 Usage: config [OPTIONS] COMMAND [ARGS]...
 
   SONiC command line - 'config' command
@@ -265,13 +265,30 @@ Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we 
    
 5. Exit the sonic node and ssh back in to see the hostname change in effect
 
-## Fabric config automation with Ansible 
+6. Do a quick verification of interface IP:
+   ```
+   show ip int
+   ```
 
-We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/sonic-playbook.yaml) playbook. This playbook executes a number of tasks including:
+   Example output:
+   ```
+   admin@leaf00:~$ show ip int
+   Interface    Master    IPv4 address/mask    Admin/Oper    BGP Neighbor    Neighbor IP
+   -----------  --------  -------------------  ------------  --------------  -------------
+   Ethernet16             200.0.100.1/24       up/up         N/A             N/A
+   Loopback0              10.0.0.200/32        up/up         N/A             N/A
+   docker0                240.127.1.1/24       up/down       N/A             N/A
+   eth0                   10.0.0.15/24         up/up         N/A             N/A
+   lo                     127.0.0.1/16         up/up         N/A             N/A
+   ```
 
-* Copy each nodes' config_db.json file to the /etc/sonic/ directory [Example leaf00/config_db.json](sonic-config/leaf00/config_db.json)
+## Fabric Config Automation with Ansible 
+
+We'll run our fabric config automation with the [sonic-playbook.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/ansible/sonic-playbook.yaml). This playbook executes a number of tasks including:
+
+* Copy each node's *config_db.json* file to the */etc/sonic/* directory [Example leaf00/config_db.json](sonic-config/leaf00/config_db.json)
 * Load the config to activate the new settings
-* Run SONiC's hostname shell script to apply the new nodes' hostname
+* Run SONiC's hostname shell script to apply the node's hostname
 * Copy over and run a loopback shell script that we've created for each node [Example loopback.sh](sonic-config/leaf00/loopback.sh)
 * Save the config
 * Create and activate a loopback interface called **sr0** on each node. This loopback is needed for SONiC SRv6 functionality
@@ -304,12 +321,12 @@ We'll run our fabric config automation with the [sonic-playbook.yaml](ansible/so
 
 SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example from leaf00:
 
-    ```
-    neighbor Ethernet0 interface remote-as 65000
-    neighbor Ethernet4 interface remote-as 65001
-    neighbor Ethernet8 interface remote-as 65002
-    neighbor Ethernet12 interface remote-as 65003
-    ```
+   ```
+   neighbor Ethernet0 interface remote-as 65000
+   neighbor Ethernet4 interface remote-as 65001
+   neighbor Ethernet8 interface remote-as 65002
+   neighbor Ethernet12 interface remote-as 65003
+   ```
 
 1. ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
     ```
