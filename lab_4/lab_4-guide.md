@@ -23,7 +23,6 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
     - [SONiC SRv6 configuration](#sonic-srv6-configuration)
     - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
-    - [Ping test](#ping-test)
   - [End of lab 4](#end-of-lab-4)
 
 ## Lab Objectives
@@ -445,52 +444,42 @@ Keep your *vtysh* session open on any router and:
     admin@leaf00:~$ ip -6 route | grep seg6local
     fc00:0:1200::/48 nhid 63  encap seg6local action End flavors next-csid lblen 32 nflen 16 dev sr0 proto 196 metric 20 pref medium
 
-### Configure SONiC SRv6 Static Routes
-
-Its early days in the development of SONiC's SRv6 feature set. Currently SONiC supports SRv6 encapsulation for L3VPN routes, but not for regular ipv4 or ipv6 default table routes. 
-
-For reference, IOS-XR supports SRv6 encapsulation of BGP global table routes: [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb), and here is an example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
-
-In the meantime SONiC does support configuration of static routes with SRv6 encapsulations. The thought here is that early SRv6 uses in the data center would be built around deterministic load-balancing of large flows, and would most often be controller/SDN driven. In such an architecture having an SDN system push a big list of statics to a set of leaf nodes is entirely reasonable.
-
-1. Configure a SRv6 static route on SONiC **leaf00**
-  ```
-  ssh admin@clab-sonic-leaf00
-  ```
-  ```
-  vtysh
-  conf t
-  ```
-
-  Route to ipv6 prefix on *leaf03*. Note the SRv6 uSID combination of 1002, 1203, fe00. This uSID combo, or `"network program"` will direct traffic to the destination ipv6 prefix via *spine02*, to *leaf03*, which will then see its local static *uDT6 function* **fe00**. *leaf03* will proceed to decapsulate the outer header, perform a route lookup in the default table, and forward the packet based on the underlying destination address.
-
-  ```
-  ipv6 route 2001:db8:1024::/64 Ethernet0 segments fc00:0:1000:1203:fe06::
-  ```
-
-1. Configure a SRv6 static return route on SONiC **leaf03**
-  ```
-  ssh admin@clab-sonic-leaf03
-  ```
-  ```
-  vtysh
-  conf t
-  ```
-
-  Route to ipv6 prefix on *leaf00*. Similar to the previous step, this uSID combination will tunnel traffic from *leaf03* to *leaf00* via *spine02*. For simplicity (and to demonstrate uSID `*function*` locality) we've reused the same **fe00** function bits on all leaf nodes in the network:
-  ```
-  ipv6 route 2001:db8:1000::/64 Ethernet0 segments fc00:0:1000:1200:fe06::
-  ```
-
 ### Configure "ubuntu host" containers attached to SONiC topology
 
-The *host-routes.sh* shell script located in the lab_4/ansible/scripts directory will add ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
+In addition to configuring our SONiC fabric nodes, the *sonic-playbook.yaml* script also ran the `*host-routes.sh*` shell script located in the lab_4/ansible/scripts. This script added ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
 
-1. Run the *host-routes.sh* script
+1. Verify host IPs and routes
 
-### Ping test
+    From the topology host execute a *docker exec* command to display the ip addresses and routing table of ubuntu-host00:
 
+    ```
+    docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
+    ```
+    ```
+    docker exec -it clab-sonic-host00 ip -6 route
+    ```
+
+    Expected output:
+    ```
+    cisco@topology-host:$ docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
+    inet 200.0.100.2/24 scope global eth1
+    inet6 2001:db8:1000::2/64 scope global 
+    inet6 fe80::a8c1:abff:feb4:ba48/64 scope link
+
+    cisco@topology-host:$ docker exec -it clab-sonic-host00 ip -6 route
+    2001:db8:1000::/64 dev eth1 proto kernel metric 256 pref medium
+    2001:db8:1024::/64 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium   <--- v6 test route to ubuntu-host24
+    fc00::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
+    fe80::/64 dev eth1 proto kernel metric 256 pref medium
+    fe80::/64 dev eth2 proto kernel metric 256 pref medium
+    ```
+
+2. Ping test from *ubuntu-host00* to *ubuntu-host24*:
+
+    ```
+    docker exec -it clab-sonic-host00 ping 2001:db8:1024::2 -i .3 -c 4
+    ```
 
 ## End of lab 4
-Please proceed to [Lab 5](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
+Please proceed to [Lab 5: Host Based SRv6](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
 
