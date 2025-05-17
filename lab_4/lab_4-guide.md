@@ -267,7 +267,7 @@ Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we 
 
 6. Do a quick verification of interface IP:
    ```
-   show ip int
+   show ip interfaces 
    ```
 
    Example output:
@@ -402,7 +402,7 @@ Keep your *vtysh* session open on any router and:
       exit
     ```
 
-2. Check locator/sid-manager status - 'show run' to see the applied SRv6 configuration
+2. Check locator/sid-manager status 
     ```
     show segment-routing srv6 locator 
     show segment-routing srv6 manager
@@ -427,10 +427,12 @@ Keep your *vtysh* session open on any router and:
 
     ```
     exit
+    ```
+    ```
     ip -6 route
     ```
 
-    Note all the entries with 'proto bgp src', aka routes learned from BGP and installed in the linux routing table
+    Note all the entries with `*proto bgp src*`, aka routes (including ECMP routes!) learned from BGP and installed in the linux routing table
 
 4. Run the ip -6 route command again and grep for the node's locator:
 
@@ -447,9 +449,7 @@ Keep your *vtysh* session open on any router and:
 
 Its early days in the development of SONiC's SRv6 feature set. Currently SONiC supports SRv6 encapsulation for L3VPN routes, but not for regular ipv4 or ipv6 default table routes. 
 
-For reference, IOS-XR supports this capability [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb)
-
-Example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
+For reference, IOS-XR supports this capability [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb), and here is an example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
 
 In the meantime SONiC does support configuration of static routes with SRv6 encapsulations. The thought here is that early SRv6 uses in the data center would be built around deterministic load-balancing of large flows, and would be highly controller/SDN driven. In such an architecture having an SDN system push a big list of statics to a set of leaf nodes is entirely reasonable.
 
