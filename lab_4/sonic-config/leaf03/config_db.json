@@ -18,6 +18,10 @@
         "Loopback0|fc00:0:1203::1/128": {}
     },
 
+    "VRF": {
+        "Vrf1": {}
+    },
+
     "INTERFACE": {
         "Ethernet0": {
             "ipv6_use_link_local_only": "enable"
@@ -34,24 +38,14 @@
         "Ethernet16": {},
         "Ethernet16|200.24.100.1/24": {},
         "Ethernet16|2001:db8:1024:0::1/64": {},
-        "Ethernet20": {},
-        "Ethernet20|200.24.101.1/24": {},
-        "Ethernet20|2001:db8:1024:1::1/64": {},
-        "Ethernet24": {},
-        "Ethernet24|200.24.102.1/24": {},
-        "Ethernet24|2001:db8:1024:2::1/64": {}
-    },
-    
-    "TELEMETRY": {
-        "certs": {
-          "ca_crt": "/etc/sonic/telemetry/dsmsroot.cer",
-          "server_crt": "/etc/sonic/telemetry/streamingtelemetryserver.cer",
-          "server_key": "/etc/sonic/telemetry/streamingtelemetryserver.key"
+        "Ethernet20": {
+            "vrf_name": "Vrf1"
         },
-        "gnmi": {
-          "client_auth": "true",
-          "log_level": "2",
-          "port": "50051"
+        "Ethernet20|200.24.101.1/24": {
+            "vrf_name": "Vrf1"
+        },
+        "Ethernet20|2001:db8:1024:1::1/64": {
+            "vrf_name": "Vrf1"
         }
     }
 }

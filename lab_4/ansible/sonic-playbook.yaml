@@ -43,6 +43,10 @@
       command: "sudo ip link set sr0 up"
       ignore_errors: yes
 
+    - name: vrf sysctl
+      command: "sudo sysctl -w net.vrf.strict_mode=1"
+      ignore_errors: yes
+
     - name: Delete default sonic-vs BGP config
       ansible.builtin.command: >
         vtysh -c "configure terminal"
@@ -89,3 +93,12 @@
     - name: print srv6 SIDs
       debug:
         var: srv6_sid_result.stdout
+
+- name: apply host routes
+  hosts: localhost
+  become: true
+  tasks:
+
+    - name: apply host routes
+      command: "scripts/host-routes.sh"
+      ignore_errors: yes
