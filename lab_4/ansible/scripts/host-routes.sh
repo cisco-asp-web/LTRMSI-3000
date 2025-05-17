@@ -32,6 +32,7 @@ docker exec -it clab-sonic-host24 ip addr add 200.24.100.2/24 dev eth1
 docker exec -it clab-sonic-host24 ip addr add 2001:db8:1024:0::2/64 dev eth1
 docker exec -it clab-sonic-host24 ip -6 route add fc00:0::/32 via 2001:db8:1024:0::1 dev eth1
 docker exec -it clab-sonic-host24 ip route add 200.0.0.0/8 via 200.24.100.1 dev eth1
+docker exec -it clab-sonic-host24 ip route add 2001:db8:1000::/64 via 2001:db8:1024:0::1 dev eth1
 docker exec -it clab-sonic-host24 ip route
 docker exec -it clab-sonic-host24 ip -6 route
 
