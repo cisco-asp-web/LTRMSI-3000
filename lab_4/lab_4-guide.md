@@ -236,9 +236,9 @@ Usage: config [OPTIONS] COMMAND [ARGS]...
 
 ### Configure leaf00 from SONiC CLI
 
-In the next sections we'll use Ansible to apply configurations to most of the fabric, but we wanted to demonstrate SONiC CLI by partially configuring **leaf00**
+Before we proceed with applying full fabric configurations via Ansible, we wanted to demonstrate SONiC CLI by partially configuring **leaf00**
 
-1. ssh to leaf00 (password is `admin`)
+1. ssh to *leaf00* (password is `admin`)
     ```
     ssh admin@clab-sonic-leaf00
     ```
@@ -286,14 +286,14 @@ Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we 
 
 We'll run our fabric config automation with the [sonic-playbook.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/ansible/sonic-playbook.yaml). This playbook executes a number of tasks including:
 
-* Copy each node's *config_db.json* file to the */etc/sonic/* directory [Example leaf00/config_db.json](sonic-config/leaf00/config_db.json)
+* Copy each node's *config_db.json* file to the */etc/sonic/* directory [Example leaf00/config_db.json](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/config_db.json)
 * Load the config to activate the new settings
 * Run SONiC's hostname shell script to apply the node's hostname
-* Copy over and run a loopback shell script that we've created for each node [Example loopback.sh](sonic-config/leaf00/loopback.sh)
+* Copy over and run a loopback shell script that we've created for each node [Example loopback.sh](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/loopback.sh)
 * Save the config
 * Create and activate a loopback interface called **sr0** on each node. This loopback is needed for SONiC SRv6 functionality
 * Use the Ansible built-in command plugin to enter the FRR/BGP container and delete the pre-existing default BGP config
-* Copy and load our fabric FRR/BGP configs to each node [Example frr.conf](sonic-config/leaf00/frr.conf)
+* Copy and load FRR configs, which include BGP and SRv6 attributes, to each node; [Example frr.conf](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/frr.conf)
 
 
 1. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
@@ -319,7 +319,7 @@ We'll run our fabric config automation with the [sonic-playbook.yaml](https://gi
 
 ### Verify SONiC BGP peering
 
-SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Example from leaf00:
+SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Config example from leaf00:
 
    ```
    neighbor Ethernet0 interface remote-as 65000
@@ -432,9 +432,9 @@ Keep your *vtysh* session open on any router and:
     ip -6 route
     ```
 
-    Note all the entries with `*proto bgp src*`, aka routes (including ECMP routes!) learned from BGP and installed in the linux routing table
+    Note all the entries with `*proto bgp src*` - these are routes (including ECMP!) learned from BGP and installed in the linux routing table
 
-4. Run the ip -6 route command again and grep for the node's locator:
+4. Run the ip -6 route command again and grep for the local routes for the node's locator:
 
     ```
     ip -6 route | grep seg6local
@@ -449,9 +449,9 @@ Keep your *vtysh* session open on any router and:
 
 Its early days in the development of SONiC's SRv6 feature set. Currently SONiC supports SRv6 encapsulation for L3VPN routes, but not for regular ipv4 or ipv6 default table routes. 
 
-For reference, IOS-XR supports this capability [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb), and here is an example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
+For reference, IOS-XR supports SRv6 encapsulation of BGP global table routes: [Cisco CCO config guide](https://www.cisco.com/c/en/us/td/docs/iosxr/cisco8000/segment-routing/25xx/configuration/guide/b-segment-routing-cg-cisco8000-25xx/configuring-segment-routing-over-ipv6-srv6-micro-sids.html#concept_8k_b31_2nx_lvb), and here is an example from [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/xrd-config/xrd01.cfg#L201)
 
-In the meantime SONiC does support configuration of static routes with SRv6 encapsulations. The thought here is that early SRv6 uses in the data center would be built around deterministic load-balancing of large flows, and would be highly controller/SDN driven. In such an architecture having an SDN system push a big list of statics to a set of leaf nodes is entirely reasonable.
+In the meantime SONiC does support configuration of static routes with SRv6 encapsulations. The thought here is that early SRv6 uses in the data center would be built around deterministic load-balancing of large flows, and would most often be controller/SDN driven. In such an architecture having an SDN system push a big list of statics to a set of leaf nodes is entirely reasonable.
 
 1. Configure a SRv6 static route on SONiC **leaf00**
   ```
@@ -462,12 +462,13 @@ In the meantime SONiC does support configuration of static routes with SRv6 enca
   conf t
   ```
 
-  Route to ipv4 prefix on *leaf03*
+  Route to ipv6 prefix on *leaf03*. Note the SRv6 uSID combination of 1002, 1203, fe00. This uSID combo, or `"network program"` will direct traffic to the destination ipv6 prefix via *spine02*, to *leaf03*, which will then see its local static *uDT6 function* **fe00**. *leaf03* will proceed to decapsulate the outer header, perform a route lookup in the default table, and forward the packet based on the underlying destination address.
+
   ```
-  ip route 200.24.100.0/24 Ethernet0 segments fc00:0:1002:1203:fe00::
+  ipv6 route 2001:db8:1024::/64 Ethernet0 segments fc00:0:1000:1203:fe06::
   ```
 
-2. Configure a SRv6 static return route on SONiC **leaf03**
+1. Configure a SRv6 static return route on SONiC **leaf03**
   ```
   ssh admin@clab-sonic-leaf03
   ```
@@ -476,9 +477,9 @@ In the meantime SONiC does support configuration of static routes with SRv6 enca
   conf t
   ```
 
-  Route to ipv4 prefix on *leaf00*
+  Route to ipv6 prefix on *leaf00*. Similar to the previous step, this uSID combination will tunnel traffic from *leaf03* to *leaf00* via *spine02*. For simplicity (and to demonstrate uSID `*function*` locality) we've reused the same **fe00** function bits on all leaf nodes in the network:
   ```
-  ip route 200.0.100.0/24 Ethernet0 segments fc00:0:1002:1200:fe00::
+  ipv6 route 2001:db8:1000::/64 Ethernet0 segments fc00:0:1000:1200:fe06::
   ```
 
 ### Configure "ubuntu host" containers attached to SONiC topology
