@@ -786,7 +786,7 @@ SRv6 Locator (t=27): Most critical TLV for SRv6 control-plane:
   - End SID (t=5): fc00:0:1111:: → This is a Node SID (uN), meaning it represents the node itself and terminates the SRv6 path.
 
 
-
+![Edgeshark ISIS](../topo_drawings/lab1-edgeshark-isis-tlv.png)
 
 
 
