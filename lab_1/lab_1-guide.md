@@ -721,7 +721,7 @@ EdgeShark is a browser-based packet capture and analysis tool built into Contain
 
 To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *XRD1*.
 
-![Edgeshark launch](../topo_drawings/lab1-edgeshark-launch.png)
+![Edgeshark launch](/topo_drawings/lab1-edgeshark-launch.png)
 
 clicking on the interface will automatically launch wireshark and starts the capture.
 
