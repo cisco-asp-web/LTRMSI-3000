@@ -723,15 +723,69 @@ To launch EdgeShark and inspect traffic, simply click on the interface you want 
 
 ![Edgeshark launch](../topo_drawings/lab1-edgeshark-launch.png)
 
-clicking on the interface will automatically launch wireshark and starts the capture.
+Clicking on the interface will automatically launch wireshark and starts the capture.
 
-apply a filter on *isis* in the wireshark tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
+Apply a filter in the wireshark filter tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
 
 ```
 Wireshark Filter: "isis.lsp.lsp_id == 0000.0000.0001.00-00"
 ```
 
 ![Edgeshark isis filter](../topo_drawings/lab1-edgeshark-isis-filter.png)
+
+
+General IS-IS Information
+
+- LSP-ID: 0000.0000.0001.00-00 :
+  - Originating router System ID 0000.0000.0001, pseudonode 00, fragment 00.
+- IS Type: Level 2 (3):
+  - Operates as an IS-IS Level 2 Intermediate System.
+
+
+IS-IS TLVs:
+
+- Area Address (t=1): Defines IS-IS area (e.g., 49.0001)
+
+- Router ID (t=134): The IGP router identifier (e.g., 10.0.0.1) 
+
+- IPv4 Interface Address (t=132): IPv4 address used for routing; e.g., 10.0.0.1.
+
+- IPv6 Interface Address (t=232): E.g., fc00:0:1111::1, used to reach the node via IPv6
+
+- IS Type: Level 2 Intermediate System (IS type 3) — this router participates in inter-area routing.
+
+- Extended IS Reachability (t=22): Lists neighboring IS-IS nodes:
+  - 0000.0000.0002.00
+  - 0000.0000.0005.00
+
+Multi-Topology IS Reachability (t=222): Advertises neighbor reachability in topology ID 2 (IPv6):
+  - Same neighbors as above under an SRv6-aware topology.
+
+
+Extended IP Reachability (t=135): Lists IPv4 prefixes reachable through this router:
+  - 10.0.0.1/32
+  - 10.1.1.0/31
+
+
+SRv6 capabilities and Locator:
+
+SRv6 Capability (t=25): Indicates the router supports Segment Routing over IPv6 (SRv6).
+
+SR Algorithms (t=19): Indicates which path computation algorithms are supported:
+  - Algorithm 0 → Shortest Path First (SPF)
+  - Algorithm 1 → Strict SPF
+
+Node Maximum SID Depth (t=23): Specifies the maximum number of SIDs the node can push — here it’s 10.
+
+SRv6 Locator (t=27): Most critical TLV for SRv6 control-plane:
+  - Prefix: fc00:0:1111::/48
+  - Algorithm: 0 (SPF)
+  - Metric: 1 (cost to reach)
+  - Sub-TLVs:
+  - Prefix Attribute Flags (t=4): Flags not set (default behavior)
+  - End SID (t=5): fc00:0:1111:: → This is a Node SID (uN), meaning it represents the node itself and terminates the SRv6 path.
+
+
 
 
 
