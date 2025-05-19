@@ -33,6 +33,8 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
       - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
       - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
   - [End-to-End Connectivity - Edgeshark](#end-to-end-connectivity---edgeshark)
+    - [IS-IS Packet Analysis](#is-is-packet-analysis)
+    - [BGP Packet Analysis](#bgp-packet-analysis)
     - [End of Lab 1](#end-of-lab-1)
   
 ## Lab Objectives
@@ -725,6 +727,9 @@ To launch EdgeShark and inspect traffic, simply click on the interface you want 
 
 Clicking on the interface will automatically launch wireshark and starts the capture.
 
+
+### IS-IS Packet Analysis
+
 Apply a filter in the wireshark filter tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
 
 ```
@@ -788,7 +793,37 @@ SRv6 Locator (t=27): Most critical TLV for SRv6 control-plane:
 
 ![Edgeshark ISIS](../topo_drawings/lab1-edgeshark-isis-tlv.png)
 
+This IS-IS LSP confirms that:
+  - he router identified as xrd01 advertises both IPv4 and IPv6 reachability.
+  - It supports SRv6, advertising a locator (fc00:0:1111::/48) and a Node SID (fc00:0:1111::) using TLV 27.
+  - The node can push 10 SIDs, and supports Shortest Path First as well as Strict SPF algorithms.
+  - The router connects to other IS-IS nodes: 0000.0000.0002.00 and 0000.0000.0005.00.
+  - It advertises IPv4 prefixes (10.0.0.1/32, 10.1.1.0/31) and is reachable via IPv6 at fc00:0:1111::1.
 
+This LSP forms the foundation of the SRv6 control plane, enabling the steering of packets based on advertised SIDs in the data plane.
+
+
+### BGP Packet Analysis
+
+BGP is designed to be event-driven, not chatty. Unlike protocols like IS-IS or OSPF that periodically refresh their LSAs/LSPs, BGP sends UPDATE messages only when necessary, such as:
+  - A new route is learned or withdrawn
+  - Route attributes change (e.g., next hop, AS path)
+  - A new peer session is established
+
+Once routes are exchanged and no changes occur, the BGP session becomes quiet — only KEEPALIVE messages are sent periodically (usually every 60s) to maintain the TCP session.
+
+in our lab we are going to clear the bgp sessions on XRD01 so that we are able to visualize BGP updates that are related to SRv6.
+
+```
+RP/0/RP0/CPU0:xrd01#clear ip bgp * 
+Mon May 19 23:28:37.148 UTC
+```
+
+![Edgeshark BGP](../topo_drawings/lab1-edgeshark-bgp-clear.png)
+
+
+
+Apply a filter in the wireshark filter tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
 
 
 ### End of Lab 1
