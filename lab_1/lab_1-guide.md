@@ -716,5 +716,26 @@ SRv6 uSID locator and source address information for nodes in the lab:
 ## End-to-End Connectivity - Edgeshark
 
 
+EdgeShark is a browser-based packet capture and analysis tool built into Containerlab. It integrates seamlessly with Docker containers and allows users to capture traffic directly from interfaces without requiring local tools like tcpdump or Wireshark. In our lab, EdgeShark is essential for inspecting SRv6 headers, including the Segment Routing Header (SRH), directly from routers or container interfaces. It enables us to filter IPv6 traffic and visualize segment lists, encapsulation behavior, and forwarding decisions. This simplifies the debugging of network reachability issues, particularly in topologies using SRv6 policies. EdgeShark also lets us observe IS-IS or BGP update messages to verify the propagation of SRv6 SIDs and their associated behaviors. By capturing traffic on specific interfaces like Gi0/0/0/X, we can validate whether SRv6 policies are applied and enforced correctly in the data plane. It helps correlate control-plane routing decisions with real packet forwarding behavior. EdgeShark can be launched directly from Visual Studio Code via the Containerlab extension or through the command line, offering convenience and flexibility. Ultimately, it gives us a real-time, non-intrusive method to verify SRv6 service chaining, path steering, and overall lab connectivity.
+
+
+To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *XRD1*.
+
+![Edgeshark launch](../topo_drawings/lab1-edgeshark-launch.png)
+
+clicking on the interface will automatically launch wireshark and starts the capture.
+
+apply a filter on *isis* in the wireshark tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
+
+```
+Wireshark Filter: "isis.lsp.lsp_id == 0000.0000.0001.00-00"
+```
+
+![Edgeshark isis filter](../topo_drawings/lab1-edgeshark-isis-filter.png)
+
+
+
+
+
 ### End of Lab 1
 Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
