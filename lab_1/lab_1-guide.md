@@ -733,7 +733,7 @@ Wireshark Filter: "isis.lsp.lsp_id == 0000.0000.0001.00-00"
 
 ![Edgeshark isis filter](../topo_drawings/lab1-edgeshark-isis-filter.png)
 
-
+![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
 
 
 
