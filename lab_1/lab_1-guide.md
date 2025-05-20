@@ -804,4 +804,14 @@ This LSP forms the foundation of the SRv6 control plane, enabling the steering o
 
 
 ### End of Lab 1
+
+Lab 1 is completed, you can perform the [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md).
+
+Before proceeding the lab 1, we need to destroy the topology on containerlab 
+
+In the containerlab tab, right click under clus25 lab 1 and choose destroy.
+
+![Containerlab Destroy](../topo_drawings/lab1-containerlab-destroy.png)
+
+
 Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
