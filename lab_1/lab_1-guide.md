@@ -288,7 +288,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
 2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
-    fc00:0:8888::1 -c 2
+    ping fc00:0:8888::1 -c 2
     ```
     ```
     cisco@berlin:~$ ping fc00:0:8888::1 -c 2
@@ -314,7 +314,7 @@ You can now exit the Berlin VM and return to the SSH session on the topology hos
 Everything is done using the docker exec command to run network config commands inside each container.
 
 
-1. cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
+1. Exit the Berlin VM and from the `topology-host` cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
    ```
    cd ~/LTRMSI-3000/lab_1/scripts/
    ./container-ips.sh
@@ -380,7 +380,11 @@ To SSH into a router, you can use the containerlab visual code extension
 > Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' (traffic control) command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
 
 1. Optional: ping from **xrd01** to **xrd02** to see latency prior to applying the *add-latency.sh* script
-   
+   ```
+   ping 10.1.1.1
+   ```
+
+   Example output:
    ```
    RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
    Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
@@ -402,6 +406,11 @@ To SSH into a router, you can use the containerlab visual code extension
    ```
 
 3. Ping from router **xrd01** to **xrd02** and note the latency time.
+   ```
+   ping 10.1.1.1
+   ```
+
+   Example:
    ```
    RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
    Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
@@ -519,23 +528,6 @@ For full size image see [LINK](../topo_drawings/bgp-topology-large.png)
         Origin IGP, metric 0, localpref 100, valid, internal
         Received Path ID 0, Local Path ID 0, version 0
         Originator: 10.0.0.1, Cluster list: 10.0.0.6                          <------ route reflector xrd06
-    ```
-
-5. Verify the route-reflectors (**xrd05** and **xrd06**) have received BGP-LS NLRIs from **xrd01** and **xrd07**:
-    ```
-    show bgp link-state link-state summary
-    ```
-    ```
-    RP/0/RP0/CPU0:xrd05#show bgp link-state link-state summary
-
-    ### output truncated ###
-
-    Process       RcvTblVer   bRIB/RIB   LabelVer  ImportVer  SendTblVer  StandbyVer
-    Speaker             187        187        187        187         187           0
-
-    Neighbor        Spk    AS MsgRcvd MsgSent   TblVer  InQ OutQ  Up/Down  St/PfxRcd
-    10.0.0.1          0 65000      85      47      187    0    0 00:38:15         93
-    10.0.0.7          0 65000      85      46      187    0    0 00:38:32         93
     ```
 
 ## Configure and Validate SRv6
