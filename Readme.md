@@ -2,11 +2,21 @@
 
 ## Introduction: 
 
-In this immersive hands-on lab, explore how next-generation AI networking fabrics can be designed and deployed using SRv6, Kubernetes-native networking with Cilium, and open-source data center technologies. You’ll explore a new way to architect, program, and optimize traffic in high-performance compute environments using Cisco IOS-XR and SONiC. This session walks participants through a series of progressive tutorials and labs covering: - SRv6 fundamentals and real-world use cases for L3VPN and Traffic Engineering - Kubernetes integration using Cilium and SRv6 for modern service-aware routing - SONiC-based data center fabric bring-up and host-based SRv6. - Programmatic traffic control using custom SRv6 mappings and intelligent automation Participants will gain practical skills in deploying flexible, scalable, and programmable infrastructure purpose-built for AI, HPC, or cloud-native workloads. Whether you’re a network engineer, cloud architect, or AI infrastructure specialist, this session bridges the gap between architecture and hands-on implementation.
+In this immersive hands-on lab, explore how next-generation AI networking fabrics can be designed and deployed using SRv6, Kubernetes-native SRv6 with Cilium, and open-source data center technologies. You’ll explore a new way to architect, program, and optimize traffic in high-performance compute environments using Cisco IOS-XR and SONiC. This session walks participants through a series of progressive tutorials and labs covering:
+
+ - SRv6 fundamentals and foundational building blocks for SRv6 L3VPN and Traffic Engineering 
+
+ - Kubernetes integration using Cilium and SRv6 for modern service-aware routing 
+  
+ - SONiC-based data center fabric bring-up and host-based SRv6 
+  
+ - Programmatic traffic control using custom SRv6 mappings and intelligent automation 
+  
+Participants will gain practical skills in deploying flexible, scalable, and programmable infrastructure purpose-built for AI, HPC, or cloud-native workloads. Whether you’re a network engineer, cloud architect, or AI infrastructure specialist, this session bridges the gap between architecture and hands-on implementation.
 
 ## Contents
-* Repository Overview [LINK](#github-repository-overview)
-* Lab Topology [LINK](#dCloud-lab-Topology)
+ - [Repository Overview](#github-repository-overview)
+ - [Lab Topology](#dCloud-lab-Topology)
 * Remote Access [LINK](#remote-access)
 * Project Jalapeno [LINK](#jalapeno)
 * Lab 1 - XRd Topology Setup and SRv6 L3VPN + SRv6 TE Configuration [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-guide.md)

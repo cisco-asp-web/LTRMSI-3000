@@ -3,7 +3,7 @@
 # Lab 1: SRv6 uSID Packet Walk [5 Min]
 
 ### Description: 
-This is a supplemental lab guide used to deconstruct the forwarding process of traffic through the SRv6 lab topology in this lab. In Lab 1 we established the SRv6 underlay and enabled SRv6 encapsulation of IPv4 traffic in the global forwarding table or default VRF. This is distinct from Lab 2 where we will add the virtualization concept of L3VPN + SRv6.
+This is a supplemental lab guide used to deconstruct the forwarding process of traffic through the SRv6 topology. In Lab 1 we established the SRv6 underlay and enabled SRv6 encapsulation of IPv4 traffic in the global forwarding table or default VRF. This is distinct from Lab 2 where we will add the virtualization concept of L3VPN + SRv6.
 
 ## Contents
 - [Lab 1: SRv6 uSID Packet Walk \[5 Min\]](#lab-1-srv6-usid-packet-walk-5-min)

@@ -446,11 +446,11 @@ Keep your *vtysh* session open on any router and:
 
 ### Configure "ubuntu host" containers attached to SONiC topology
 
-In addition to configuring our SONiC fabric nodes, the *sonic-playbook.yaml* script also ran the `*host-routes.sh*` shell script located in the lab_4/ansible/scripts. This script added ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
+In addition to configuring our SONiC fabric nodes, the *sonic-playbook.yaml* script also ran the `host-routes.sh` shell script located in the lab_4/ansible/scripts directory. This script added ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
 
 1. Verify host IPs and routes
 
-    From the topology host execute a *docker exec* command to display the ip addresses and routing table of ubuntu-host00:
+    From the topology host execute *docker exec* commands to display the ip addresses and routing table of ubuntu-host00:
 
     ```
     docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
