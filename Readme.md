@@ -48,9 +48,10 @@ Within each lab directory you should see several files of importance:
 | lab_X-guide.md           | User guide for this lab                                      |
 
 
-We've recently launched a whole series of SRv6 labs on github, many of which are built on XRd:
-
-https://github.com/segmentrouting/srv6-labs
+> [!NOTE]
+> We've recently launched a whole series of SRv6 labs on github, many of which are built on XRd:
+> 
+> https://github.com/segmentrouting/srv6-labs
 
 
 # dCloud Instances 
@@ -60,7 +61,7 @@ Each lab instance is running on Cisco dCloud and is reachable via AnyConnect VPN
 
 # dCloud lab Topology
 
-The following diagram shows the high level architecture that will be used for this lab:
+The following diagram shows the dCloud VM topology that will be used for this lab:
 
 ![dCloud Topology](./topo_drawings/dcloud-topology.png)
 
@@ -90,7 +91,11 @@ To support this, we are using four virtual machines, each with a specific role. 
 
 ## Navigate through the labs.
 
-Once you've connected to your dCloud VPN all nodes in the lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
+1. Connect to your dCloud instance VPN
+
+![VPN](./topo_drawings/anyconnect.png)
+
+Once you've connected to VPN all nodes in the lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
 
 ![windows-rdpy](./topo_drawings/windows-rdp.png)
 
