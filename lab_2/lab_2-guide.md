@@ -68,8 +68,8 @@ SSH into xrd07 and type the following static routes:
 
 ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
 
-    **xrd07**
-    ```yaml
+  
+```yaml
     conf t
     
     router static
@@ -81,7 +81,7 @@ SSH into xrd07 and type the following static routes:
           fc00:0:40::/64 fc00:0:107:2::2
           fc00:0:50::/64 fc00:0:107:2::2
         commit
-    ```
+```
 
 1. Verify **Rome** VRF prefix reachability  
     Ping check from xrd07 gi 0/0/0/3 to Rome's 2nd NIC:  
