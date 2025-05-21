@@ -16,7 +16,6 @@ This lab is divided into two main sections :
     - [Validate BGP Monitoring Protocol (BMP)](#validate-bgp-monitoring-protocol-bmp)
   - [Jalapeno Overview](#jalapeno-overview)
   - [Validate Jalapeno State](#validate-jalapeno-state)
-    - [Arango Graph Database](#arango-graph-database)
     - [Install Jalapeno Graph Processors](#install-jalapeno-graph-processors)
     - [Kafka](#kafka)
   - [Populating Jalapeno DB with meta-data](#populating-jalapeno-db-with-meta-data)
@@ -159,31 +158,15 @@ The Jalapeno package is preinstalled and running on the **Jalapeno** VM (198.18.
 
     example: kubectl describe pod -n jalapeno topology-678ddb8bb4-rt9jg
     ```
-### Arango Graph Database
-At the heart of Jalapeno is the Arango Graph Database, which is used to model network topology and provide a graph-based data store for the network data collected via BMP or other sources. 
 
-4. Validate Jalapeno has populated the Arango graphDB with BMP data. Open the Arango web UI at:
 
-    ```
-    http://198.18.128.101:30852/
-    ```
-    
-    Login and select the "jalapeno" DB from the dropdown:
-    ```
-    user: root
-    password: jalapeno
-    DB: jalapeno
-    ```
-    Once logged the UI should then show you its *collections* view, which should look something like:
-   <img src="images/arango-collections.png" width="1000">
-
-5. Feel free to spot check the various data collections in Arango such as the *l3vpn_v4_prefix*. At this point some will be empty as we are not using those AFI/SAFI types.
+4. Feel free to spot check the various data collections in Arango such as the *l3vpn_v4_prefix*. At this point some will be empty as we are not using those AFI/SAFI types.
 
 **ArangoDB Query Language (AQL)**
 
 The ArangoDB Query Language (AQL) can be used to retrieve and modify data that are stored in ArangoDB. For more information on AQL see the ArangoDB documentation [HERE](https://www.arangodb.com/docs/stable/aql/index.html)
 
-6. Optional or for reference: feel free to connect to the DB and try some of the queries in the [lab_5-queries.md doc](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_5/lab_5-queries.md)
+
 
 ### Install Jalapeno Graph Processors
 Jalapeno's base installation processes BMP data and populates it into ArangoDB. We have since written some addtitional processors which mine the existing data collections and create enriched topology models or graphs. We'll add these additional processors to our Jalapeno K8s cluster via a simple shell script.
