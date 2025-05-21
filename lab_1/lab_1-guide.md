@@ -21,6 +21,7 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [User Credentials](#user-credentials)
     - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
+    - [Connect to the Topology Host and SSH to Containers.](#connect-to-the-topology-host-and-ssh-to-containers)
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
     - [Berlin VM](#berlin-vm)
     - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
@@ -204,9 +205,17 @@ Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for ins
 > All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.clab.yaml*
 If the terminal is not visible in VScode, please launch a new terminal using the terminal / New terminal tabs. that way, you will be directly connected to the topology host using SSH.
 
+
+### Connect to the Topology Host and SSH to Containers.
+
+The entire lab is doable from visual code, you should launch a terminal and it will automatically ssh into the topology host.
+
 ![terminal visual code](../topo_drawings/lab1-visual-code-terminal.png)
 
-You can also run ssh commands on the topology host using the terminal tab on visual code:
+```
+docker ps -a
+sudo containerlab inspect --all
+```
 
 ![ssh verification](../topo_drawings/lab1-visual-code-ssh-verification.png)
 
@@ -273,6 +282,7 @@ cisco@topology-host:~/LTRMSI-3000$ sudo containerlab inspect --all
 
 In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
 
+
 1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
    ```
    ssh cisco@berlin
@@ -329,14 +339,12 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 
 To SSH into a router, you can use the containerlab visual code extension
 
-![ssh into xrd](../topo_drawings/lab1-ssh-xrd01.png)
+![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
 
 
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
 
-    ```
-    ssh cisco@clab-clus25-xrd01
-    ```
+
 
     ```
     show isis topology
@@ -423,11 +431,11 @@ sudo ip netns exec clab-clus25-xrd01 tc qdisc add dev Gi0-0-0-1 root netem delay
 
 In the topology we are running a single ASN 65000 with BGP running on **xrd01**, **xrd05**, **xrd06**, **xrd07**.  Routers **xrd05** and **xrd06** are functioning as route reflectors and **xrd01** and **xrd07** are clients. 
 
-![BGP Topology](/topo_drawings/bgp-topology-medium.png)
+![BGP Topology](../topo_drawings/bgp-topology-medium.png)
 
-For full size image see [LINK](/topo_drawings/bgp-topology-large.png)
+For full size image see [LINK](../topo_drawings/bgp-topology-large.png)
 
-1. SSH into **xrd01** and verify its neighbor state
+1. SSH into **xrd01** using the visual code extension and verify its neighbor state
     ```
     show ip bgp neighbors brief
     ```
@@ -568,11 +576,9 @@ SRv6 uSID locator and source address information for nodes in the lab:
 > We've preconfigured SRv6 on **xrd02** thru **xrd06**, so you'll only need to configure **xrd01** and **xrd07**
 
 #### Configure SRv6 on xrd01
-1. SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
+1. Using the Visual Code extension, SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
 
-    ```
-    ssh cisco@clab-clus25-xrd01
-    ```
+
     ```
     conf t
 
@@ -622,12 +628,14 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
 #### Configure SRv6 on xrd07
 
-1. ssh to **xrd07** and apply the below config in a single shot:
 
-    ```
-    ssh cisco@clab-clus25-xrd07
-    ```
-    ```
+
+1. Using the Visual Code extension ssh to **xrd07** and apply the below config in a single shot:
+
+![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
+
+
+```
     conf t
 
     router isis 100
@@ -667,7 +675,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
       !
     !
     commit
-    ```
+```
 
 #### Validate SRv6 configuration and reachability
 
