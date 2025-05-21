@@ -10,6 +10,7 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
+  - [Amsterdam and Rome network configuration.](#amsterdam-and-rome-network-configuration)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
     - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
@@ -27,6 +28,25 @@ We will have achieved the following objectives upon completion of Lab 2:
 
 * Configure and validate SRv6 L3VPN
 * Configuration and testing of SRv6 TE policy and traffic steering
+
+
+## Amsterdam and Rome network configuration.
+
+Since we cleared the topology, we need to reconfigure the network for the *Amsterdam* and *Rome* Containers:
+
+
+1. From the topology host terminal: 
+   
+   cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
+   ```
+   cd ~/LTRMSI-3000/lab_1/scripts/
+   ./container-ips.sh
+   ```
+
+   The script should output results of applying IP addresses, routes.
+
+![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
+
 
 ## Configure SRv6 L3VPN
 The SRv6-based IPv4/IPv6 L3VPN featureset enables operation of IPv4/IPv6 L3VPN over a SRv6 data plane. Traditionally L3VPN has been operated over MPLS or SR-MPLS. SRv6 L3VPN uses the locator/function aspect of SRv6 Segment IDs (SIDs) instead of PE + VPN labels. 
@@ -151,10 +171,7 @@ SSH into xrd07 and type the following static routes:
       ```
 ### Configure SRv6 L3VPN on xrd01 and RR xrd05
 
-1. ssh to **xrd01** and apply the configuration in a single step:
-    ```
-    ssh cisco@clab-clus25-xrd01
-    ```
+1. Using the visual code extension, ssh to **xrd01** and apply the configuration in a single step:
 
     ```yaml
     conf t
@@ -187,9 +204,8 @@ SSH into xrd07 and type the following static routes:
    
     The BGP route reflectors will also need to have L3VPN capability added to their peering group. **xrd06** has been preconfigured, so you only need to configure **xrd05**
    
-    ```
-    ssh cisco@clab-clus25-xrd05
-    ```
+     Using the visual code extension, ssh to **xrd05** and apply the configuration in a single step:
+
     ```yaml
     conf t
     router bgp 65000
@@ -272,7 +288,7 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
 
 We will use the below diagram for reference:
 
-![L3VPN Topology](/topo_drawings/l3vpn-slow-fast-path.png)
+![L3VPN Topology](../topo_drawings/l3vpn-slow-fast-path.png)
 
 ### Create SRv6-TE steering policy
 For our SRv6-TE purposes we'll leverage the on-demand nexthop (ODN) feature set. Here is a nice example and explanation of ODN: [HERE](https://xrdocs.io/design/blogs/latest-converged-sdn-transport-ig)
@@ -317,9 +333,9 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 2. On **xrd07** advertise Rome's "40" and "50" prefixes with their respective color extended communities:
    
    **xrd07**
-   ```
-   ssh cisco@clab-clus25-xrd07
-   ``` 
+
+Using the visual code extension, SSH into xrd07 and type the following commands:
+
    ```yaml
    conf t
    extcommunity-set opaque bulk-transfer
@@ -359,9 +375,10 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 3. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
    
    **xrd01**
-   ```
-   ssh cisco@clab-clus25-xrd01
-   ``` 
+
+Using the visual code extension, SSH into xrd01 and type the following commands:
+
+
    ```
    show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
    show bgp vpnv4 uni vrf carrots 50.0.0.0/24
