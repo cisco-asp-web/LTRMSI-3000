@@ -15,14 +15,13 @@ In this immersive hands-on lab, explore how next-generation AI networking fabric
 Participants will gain practical skills in deploying flexible, scalable, and programmable infrastructure purpose-built for AI, HPC, or cloud-native workloads. Whether you’re a network engineer, cloud architect, or AI infrastructure specialist, this session bridges the gap between architecture and hands-on implementation.
 
 ## Contents
- - [Repository Overview](#github-repository-overview)
- - [Lab Topology](#dCloud-lab-Topology)
-* Remote Access [LINK](#remote-access)
-* Project Jalapeno [LINK](#jalapeno)
-* Lab 1 - XRd Topology Setup and SRv6 L3VPN + SRv6 TE Configuration [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-guide.md)
-* Lab 2 - Kubernetes SRv6 with Cilium (LINK TO PROVIDE)
-* Lab 3 - SONIC DC Fabric Bring Up (LINK TO PROVIDE)
-* Lab 4 - Host Based SRv6 static routing with SONIC (LINK TO PROVIDE)
+* Repository Overview [LINK](#github-repository-overview)
+* Lab Topology [LINK](#dCloud-lab-Topology)
+* Lab 1 - XRd Topology Setup and base SRv6 Config [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-guide.md)
+* Lab 2 - SRv6 L3VPN and SRv6 TE Configuration [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
+* Lab 3 - Kubernetes SRv6 with Cilium [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
+* Lab 4 - SONiC DC Fabric Bring Up [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/lab_4-guide.md)
+* Lab 5 - SONiC and Host Based SRv6 for Intelligent Fabric Load Balancing [LINK](!https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
 
 
 ## Github Repository Overview
@@ -89,15 +88,9 @@ To support this, we are using four virtual machines, each with a specific role. 
 | **Jalapeno Host**     | `cisco`    | `C1sco12345`   | 
 
 
-## Jalapeno
-
-Project Jalapeno combines existing open source tools with some new stuff we've developed into a data collection and warehousing infrastructure intended to enable development of SDN or network service applications. Think of it as applying microservices architecture and concepts to SDN: give developers the ability to quickly and easily build microservice control planes on top of a common data collection and warehousing infrastructure. More information on Jalapeno can be found at the Jalapeno Git repository: [LINK](https://github.com/cisco-open/jalapeno/blob/main/README.md)
-
-![jalapeno_architecture](https://github.com/cisco-open/jalapeno/blob/main/docs/img/jalapeno_architecture.png)
-
 ## Navigate through the labs.
 
-The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
+Once you've connected to your dCloud VPN all nodes in the lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
 
 ![windows-rdpy](./topo_drawings/windows-rdp.png)
 
