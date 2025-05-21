@@ -68,7 +68,7 @@ SSH into xrd07 and type the following static routes:
 
 ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
 
-  
+
 ```yaml
     conf t
     
