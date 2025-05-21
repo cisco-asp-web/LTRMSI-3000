@@ -788,7 +788,7 @@ SRv6 Locator (t=27): Most critical TLV for SRv6 control-plane:
 ![Edgeshark ISIS](../topo_drawings/lab1-edgeshark-isis-tlv.png)
 
 This IS-IS LSP confirms that:
-  - he router identified as xrd01 advertises both IPv4 and IPv6 reachability.
+  - The router identified as xrd01 advertises both IPv4 and IPv6 reachability.
   - It supports SRv6, advertising a locator (fc00:0:1111::/48) and a Node SID (fc00:0:1111::) using TLV 27.
   - The node can push 10 SIDs, and supports Shortest Path First as well as Strict SPF algorithms.
   - The router connects to other IS-IS nodes: 0000.0000.0002.00 and 0000.0000.0005.00.
@@ -801,14 +801,7 @@ This LSP forms the foundation of the SRv6 control plane, enabling the steering o
 ### End of Lab 1
 
 Lab 1 is completed, you can either: 
-  - perform [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or
-
-  -  destroy le lab 1 topology and proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md).
+  - Perform the optional [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or
 
 
-To destroy the topology, right click under clus25 lab 1 in the containerlab tab, and choose destroy.
-
-![Containerlab Destroy](../topo_drawings/lab1-containerlab-destroy.png)
-
-
-Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
+Proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
