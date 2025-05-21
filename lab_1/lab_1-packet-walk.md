@@ -181,7 +181,7 @@ In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We
       path-idx 0 NHID 0x0 [0x87418200 0x0]
       next hop VRF - 'default', table - 0xe0800000
       next hop fc00:0:7777::/128 via fc00:0:7777::/48
-    + SRv6 H.Encaps.Red SID-list {fc00:0:7777:e005::}  <--- uSID Encapsulation
+   +  SRv6 H.Encaps.Red SID-list {fc00:0:7777:e005::}  <--- uSID Encapsulation
 
     Hash  OK  Interface                 Address
    + 0     Y   GigabitEthernet0/0/0/1    fe80::42:c0ff:fea8:c003 <--- ECMP Next-hop
