@@ -123,7 +123,7 @@ We've preloaded our fabric topology and relevant SRv6 data in Jalapeno's backend
 
 2. Click on the *`ipv6_graph`* collection, then select the `content` tab to see data from our topology graph
 
-3. Optional or for reference: feel free to connect to the DB and try some of the queries in the [lab_5-queries.md doc](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_5/lab_5-queries.md)
+3. Optional or for reference: feel free to connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/jalapeno/SRv6_dCloud_Lab/tree/main/lab_5/lab_5-arango-queries.md)
 
 ## Jalapeno REST API
 
