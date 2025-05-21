@@ -815,4 +815,3 @@ In the containerlab tab, right click under clus25 lab 1 and choose destroy.
 
 
 Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
-test

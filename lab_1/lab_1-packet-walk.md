@@ -12,7 +12,7 @@ This is a supplemental lab guide used to deconstruct the forwarding process of t
   - [Lab Objectives](#lab-objectives)
   - [Packet Walk Results for traffic from Amsterdam to Rome over SRv6](#packet-walk-results-for-traffic-from-amsterdam-to-rome-over-srv6)
     - [SRv6 Encapsulation and BGP](#srv6-encapsulation-and-bgp)
-  - [Proceed to Lab 2](#proceed-to-lab-2)
+  - [End of Lab 1 - Packet Walk](#end-of-lab-1---packet-walk)
   
 
 ## Lab Objectives
@@ -33,31 +33,78 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
 >  Path selection using the global routing table as you will see in the detailed packet walk below
 >  has multiple ECMP path options.
 
-![Router 1 Topology](/topo_drawings/packet-walk-r1.png)
+![Router 1 Topology](../topo_drawings/packet-walk-r1.png)
 
-1. Run *docker exec* to start a ping from Amsterdam to Rome
+
+
+Log into the Amsterdam container and start a continous ping to the Rome Container.
+
+![Amsterdam login](../topo_drawings/lab1-packet-walk-amsterdam.png)
+
+
+
    ```
-   docker exec -it clab-clus25-amsterdam ping 20.0.0.1 -i .5
+   # ping 20.0.0.1 -i .5
+PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
+64 bytes from 20.0.0.1: icmp_seq=1 ttl=62 time=4.83 ms
+64 bytes from 20.0.0.1: icmp_seq=2 ttl=62 time=3.81 ms
+64 bytes from 20.0.0.1: icmp_seq=3 ttl=62 time=4.92 ms
+64 bytes from 20.0.0.1: icmp_seq=4 ttl=62 time=4.67 ms
+64 bytes from 20.0.0.1: icmp_seq=5 ttl=62 time=4.66 ms
+64 bytes from 20.0.0.1: icmp_seq=6 ttl=62 time=4.72 ms
+64 bytes from 20.0.0.1: icmp_seq=7 ttl=62 time=5.75 ms
+64 bytes from 20.0.0.1: icmp_seq=8 ttl=62 time=4.89 ms
+64 bytes from 20.0.0.1: icmp_seq=9 ttl=62 time=4.57 ms
+64 bytes from 20.0.0.1: icmp_seq=10 ttl=62 time=5.51 ms
    ```
 
-2. Then on the topology-host VM run tcpdump to capture SRv6 encapsulated traffic egressing **xrd01**. We don't know which interface the traffic will be hashed through so we may need to run tcpdump on both interfaces. Note, the tcpdump output may not show until you stop it with crtl-z.
-   ```
-   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
-   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
-   ```
+Then we want to capture the traffic using edgeshark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces:
 
-   Example output:
-   ```
-   cisco@xrd:~/LTRMSI-3000/lab_2$ sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
-   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
-   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
-   01:54:41.418301 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 11, length
-   01:54:41.421606 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 11, length 64
-   01:54:41.818159 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 12, length 64
-   01:54:41.821777 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 12, length 64
-   ```
+![XRD01 Capture 01 ](../topo_drawings/lab1-packet-walk-capture-xrd01-1.png)
+and 
 
-3. To see the encapsulated traffic further in the network you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
+![XRD01 Capture 02 ](../topo_drawings/lab1-packet-walk-capture-xrd01-2.png)
+
+
+By filtering only on ICMP packets, we should be able to see the traffic that is interesting to us.
+
+![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-capture-wireshark.png)
+
+if you expand one of the ICMP request packets, you will see the following :
+![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
+  
+
+We can see here that we have an IPv6 outer header with an embedeed IPv4/ICMP packet:
+   - IPv6 Source is: fc00:0:1111::1 : This is the ingress SRv6 node that inserted the outer header
+   - IPv6 Destination is: fc00:0:7777:e004: This is a Segment Identifier (SID) that encodes a specific function or destination. => In our case:  End.DT4 Endpoint with decapsulation and IPv4 table lookup IPv4 L3VPN use (equivalent of a per-VRF VPN label) (For more information: https://www.segment-routing.net/images/201901-SRv6.pdf)
+   - Next IP Header: 4 (IPIP)
+   - IPv4 Source is: 10.101.1.2 Which is the IP Address configured on the Amsterdam Eth1 interface.
+   - IPv4 Destination is: 20.0.0.1, which is the IP Address configured on the Rome container as a loopback inteface.
+
+
+
+> [!NOTE]
+> If you prefer to inspect the traffic using the cli you can connect to the topology host and type the following commands:
+> 
+>   ```
+>   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+>   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
+>   ```
+
+>
+>   Example output:
+>   ```
+>   cisco@xrd:~/LTRMSI-3000/lab_2$ sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+>   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+>   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
+>   01:54:41.418301 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 11, length
+>   01:54:41.421606 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 11, length 64
+>   01:54:41.818159 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 12, length 64
+>   01:54:41.821777 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 12, length 64
+>   ```
+
+
+To see the encapsulated traffic further in the network, feel free to capture traffic using the visual code extension as previously shown. Or you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
    ```
    sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-1
    sudo ip netns exec clab-clus25-xrd05 tcpdump -lni Gi0-0-0-1
@@ -65,6 +112,8 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
    sudo ip netns exec clab-clus25-xrd04 tcpdump -lni Gi0-0-0-1
    etc.
    ```
+
+
 
 ### SRv6 Encapsulation and BGP
 
@@ -147,5 +196,16 @@ In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We
    + 3     Y   GigabitEthernet0/0/0/2    fe80::42:c0ff:fea8:d003 <--- ECMP Next-hop
    ```
 
-## Proceed to Lab 2
+
+
+
+## End of Lab 1 - Packet Walk
+
+Lab 1 is completed, we need to destroy the topology on containerlab 
+
+In the containerlab tab, right click under clus25 lab 1 and choose destroy.
+
+![Containerlab Destroy](../topo_drawings/lab1-containerlab-destroy.png)
+
+
 Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
