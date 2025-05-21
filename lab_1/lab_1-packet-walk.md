@@ -16,7 +16,7 @@ This is a supplemental lab guide used to deconstruct the forwarding process of t
   
 
 ## Lab Objectives
-The student upon completion of Lab 1 should have achieved the following objectives:
+The student upon completion of the Lab 1 packet walk should have achieved the following objectives:
 
 * Understand how standard IPv4 or IPv6 packets are encapsulated with SRv6 headers
 * Understand the forwarding behavior of SRv6 enabled routers
@@ -25,7 +25,7 @@ The student upon completion of Lab 1 should have achieved the following objectiv
 
 ## Packet Walk Results for traffic from Amsterdam to Rome over SRv6
 
-The expected results of a packet capture on **xrd01** is to see ICMP IPv4 traffic sourced from **Amsterdam (10.101.2.1)** to a loopback interface on **Rome (20.0.0.1)** use SRv6 encapsulation across the network.
+The expected results of a packet capture on **xrd01** is to see ICMP IPv4 traffic sourced from **Amsterdam (10.101.1.2)** to a loopback interface on **Rome (20.0.0.1)** use SRv6 encapsulation across the network.
 
 See results below and notice both the ICMP echo and ICMP echo reply packets with SRv6 encapsulation. 
 > [!NOTE]
@@ -45,17 +45,11 @@ Log into the Amsterdam container and start a continous ping to the Rome Containe
 
    ```
    # ping 20.0.0.1 -i .5
-PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
-64 bytes from 20.0.0.1: icmp_seq=1 ttl=62 time=4.83 ms
-64 bytes from 20.0.0.1: icmp_seq=2 ttl=62 time=3.81 ms
-64 bytes from 20.0.0.1: icmp_seq=3 ttl=62 time=4.92 ms
-64 bytes from 20.0.0.1: icmp_seq=4 ttl=62 time=4.67 ms
-64 bytes from 20.0.0.1: icmp_seq=5 ttl=62 time=4.66 ms
-64 bytes from 20.0.0.1: icmp_seq=6 ttl=62 time=4.72 ms
-64 bytes from 20.0.0.1: icmp_seq=7 ttl=62 time=5.75 ms
-64 bytes from 20.0.0.1: icmp_seq=8 ttl=62 time=4.89 ms
-64 bytes from 20.0.0.1: icmp_seq=9 ttl=62 time=4.57 ms
-64 bytes from 20.0.0.1: icmp_seq=10 ttl=62 time=5.51 ms
+   PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
+   64 bytes from 20.0.0.1: icmp_seq=1 ttl=62 time=4.83 ms
+   64 bytes from 20.0.0.1: icmp_seq=2 ttl=62 time=3.81 ms
+   64 bytes from 20.0.0.1: icmp_seq=3 ttl=62 time=4.92 ms
+   64 bytes from 20.0.0.1: icmp_seq=4 ttl=62 time=4.67 ms
    ```
 
 Then we want to capture the traffic using edgeshark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces:
@@ -187,7 +181,7 @@ In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We
       path-idx 0 NHID 0x0 [0x87418200 0x0]
       next hop VRF - 'default', table - 0xe0800000
       next hop fc00:0:7777::/128 via fc00:0:7777::/48
-      SRv6 H.Encaps.Red SID-list {fc00:0:7777:e005::}
+    + SRv6 H.Encaps.Red SID-list {fc00:0:7777:e005::}  <--- uSID Encapsulation
 
     Hash  OK  Interface                 Address
    + 0     Y   GigabitEthernet0/0/0/1    fe80::42:c0ff:fea8:c003 <--- ECMP Next-hop
@@ -201,11 +195,4 @@ In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We
 
 ## End of Lab 1 - Packet Walk
 
-Lab 1 is completed, we need to destroy the topology on containerlab 
-
-In the containerlab tab, right click under clus25 lab 1 and choose destroy.
-
-![Containerlab Destroy](../topo_drawings/lab1-containerlab-destroy.png)
-
-
-Please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
+Lab 1 is completed, please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
