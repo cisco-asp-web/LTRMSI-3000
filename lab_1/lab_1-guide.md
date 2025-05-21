@@ -8,9 +8,6 @@ For more information on containerlab see:
 
 https://containerlab.dev/
 
-**Description:**
-
-In Lab 1 we will launch the XRd topology apply base SRv6 configurations and validate things are working. 
 
 ## Contents
 - [Lab 1 Guide: Deploy XRd Topology and apply SRv6 configurations \[20 Min\]](#lab-1-guide-deploy-xrd-topology-and-apply-srv6-configurations-20-min)
@@ -283,7 +280,9 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
    ```
    ssh cisco@berlin
+   ```
    or
+   ```
    ssh cisco@192.168.122.100
    ```
 
