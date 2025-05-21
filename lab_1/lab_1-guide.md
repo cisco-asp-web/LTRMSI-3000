@@ -8,18 +8,16 @@ For more information on containerlab see:
 
 https://containerlab.dev/
 
-### Description: 
+**Description:**
+
 In Lab 1 we will launch the XRd topology apply base SRv6 configurations and validate things are working. 
 
 ## Contents
 - [Lab 1 Guide: Deploy XRd Topology and apply SRv6 configurations \[20 Min\]](#lab-1-guide-deploy-xrd-topology-and-apply-srv6-configurations-20-min)
-    - [Description:](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Topology](#topology)
   - [Accessing the routers](#accessing-the-routers)
-    - [User Credentials](#user-credentials)
-    - [Management Network Topology](#management-network-topology)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
     - [Connect to the Topology Host and SSH to Containers.](#connect-to-the-topology-host-and-ssh-to-containers)
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
@@ -29,10 +27,9 @@ In Lab 1 we will launch the XRd topology apply base SRv6 configurations and vali
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
   - [Configure and Validate SRv6](#configure-and-validate-srv6)
-    - [SRv6 Configuration Steps](#srv6-configuration-steps)
-      - [Configure SRv6 on xrd01](#configure-srv6-on-xrd01)
-      - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
-      - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
+    - [Configure SRv6 on xrd01](#configure-srv6-on-xrd01)
+    - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
+    - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
   - [End-to-End Connectivity - Edgeshark](#end-to-end-connectivity---edgeshark)
     - [IS-IS Packet Analysis](#is-is-packet-analysis)
     - [End of Lab 1](#end-of-lab-1)
@@ -95,13 +92,13 @@ you are now connected to the topology host and can start topologies and inspect 
 ![connected visual code](../topo_drawings/lab1-visual-code-connected.png)
 
 
-### User Credentials
+**User Credentials**
 All VMs, routers, etc. use the same user credentials:
 ```
 User: cisco, Password: cisco123
 ```
 
-### Management Network Topology
+**Management Network Topology**
 
 ![Management Topology](/topo_drawings/management-network-medium.png)
 
@@ -569,13 +566,11 @@ SRv6 uSID locator and source address information for nodes in the lab:
 | xrd06       | loopback 0  | fc00:0000:6666::/48  | fc00:0000:6666::1    |
 | xrd07       | loopback 0  | fc00:0000:7777::/48  | fc00:0000:7777::1    |
 
-    
-### SRv6 Configuration Steps 
 
 > [!NOTE]
 > We've preconfigured SRv6 on **xrd02** thru **xrd06**, so you'll only need to configure **xrd01** and **xrd07**
 
-#### Configure SRv6 on xrd01
+### Configure SRv6 on xrd01
 1. Using the Visual Code extension, SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
 
 
@@ -626,8 +621,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
     commit
     ```
 
-#### Configure SRv6 on xrd07
-
+### Configure SRv6 on xrd07
 
 
 1. Using the Visual Code extension ssh to **xrd07** and apply the below config in a single shot:
@@ -677,7 +671,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
     commit
 ```
 
-#### Validate SRv6 configuration and reachability
+### Validate SRv6 configuration and reachability
 
 1. Validation commands
     ```
@@ -819,7 +813,7 @@ Lab 1 is completed, you can either:
   -  destroy le lab 1 topology and proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md).
 
 
-To destroy the topology,  right click under clus25 lab 1 in the containerlab tab, and choose destroy.
+To destroy the topology, right click under clus25 lab 1 in the containerlab tab, and choose destroy.
 
 ![Containerlab Destroy](../topo_drawings/lab1-containerlab-destroy.png)
 
