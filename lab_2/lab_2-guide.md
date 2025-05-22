@@ -10,7 +10,6 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
-  - [Amsterdam and Rome network configuration.](#amsterdam-and-rome-network-configuration)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
     - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
@@ -28,24 +27,6 @@ We will have achieved the following objectives upon completion of Lab 2:
 
 * Configure and validate SRv6 L3VPN
 * Configuration and testing of SRv6 TE policy and traffic steering
-
-
-## Amsterdam and Rome network configuration.
-
-Since we cleared the topology, we need to reconfigure the network for the *Amsterdam* and *Rome* Containers:
-
-
-1. From the topology host terminal: 
-   
-   cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
-   ```
-   cd ~/LTRMSI-3000/lab_1/scripts/
-   ./container-ips.sh
-   ```
-
-   The script should output results of applying IP addresses, routes.
-
-![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
 
 
 ## Configure SRv6 L3VPN
