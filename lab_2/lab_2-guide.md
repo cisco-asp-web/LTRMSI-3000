@@ -589,20 +589,41 @@ Using the visual code extension, SSH into xrd01 and type the following commands:
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-1. On the *topology-host* run a ping from the Amsterdam container to the bulk transport destination IPv4 and IPv6 addresses on Rome.
-    ```
-    docker exec -it clab-clus25-amsterdam ping 40.0.0.1 -i .5
-    ```
+1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
 
-    Reference tcpdump:
-    ```
-    sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
-    ```
+![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
-    Now lets try the IPv6 bulk transport destination
-    ```
-    docker exec -it clab-clus25-amsterdam ping fc00:0:40::1 -i .5
-    ```
+```
+ping 40.0.0.1 -i .5
+```
+
+Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+
+![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
+
+Here is a visual representation of our capture :
+
+![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-pcap.png) 
+
+If we focus on the IPv6 header (Outer Header - SRv6 transport layer) we can see the following:
+
+   - Source IPv6: fc00:0:1111::1 
+   - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
+
+
+  Now lets try the IPv6 bulk transport destination on *xrd01*
+
+  ```
+   ping fc00:0:40::1 -i .5
+  ```
+
+![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
+
+We can witness here that the same SRv6 uSID is being used for our ipv6 traffic as well.
+
+Source IPv6: fc00:0:1111::1
+Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
+
 
 
 
