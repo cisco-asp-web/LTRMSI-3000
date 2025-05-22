@@ -591,13 +591,12 @@ Using the visual code extension, SSH into xrd01 and type the following commands:
    - Source IPv6: fc00:0:1111::1 
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
-  Now lets try the IPv6 bulk transport destination on *xrd01*
+   Now lets try the IPv6 bulk transport destination on *xrd01*
+   ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
   
-  ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
-  
-  We can witness here that the same SRv6 uSID is being used for our ipv6 traffic as well.
-  Source IPv6: fc00:0:1111::1
-  Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
+   We can witness here that the same SRv6 uSID is being used for our ipv6 traffic as well.
+   Source IPv6: fc00:0:1111::1
+   Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
 
 
 
