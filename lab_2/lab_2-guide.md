@@ -288,7 +288,7 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
 
 We will use the below diagram for reference:
 
-![L3VPN Topology](../topo_drawings/l3vpn-slow-fast-path.png)
+![L3VPN Topology](/topo_drawings/l3vpn-slow-fast-path.png)
 
 ### Create SRv6-TE steering policy
 For our SRv6-TE purposes we'll leverage the on-demand nexthop (ODN) feature set. Here is a nice example and explanation of ODN: [HERE](https://xrdocs.io/design/blogs/latest-converged-sdn-transport-ig)
