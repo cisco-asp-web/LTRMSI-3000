@@ -604,7 +604,7 @@ Using the visual code extension, SSH into xrd01 and type the following commands:
 
 1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
 
-![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
+    ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
 2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
