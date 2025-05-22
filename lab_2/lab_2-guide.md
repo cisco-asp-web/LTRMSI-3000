@@ -590,34 +590,34 @@ Using the visual code extension, SSH into xrd01 and type the following commands:
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
 1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
+    ![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
-![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
+    ```
+    ping 40.0.0.1 -i .5
+    ```
+    
+2. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+   
+   ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
+   
+   Here is a visual representation of our capture :
+   
+   ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-pcap.png) 
+   
+   If we focus on the IPv6 header (Outer Header - SRv6 transport layer) we can see the following:
 
-```
-ping 40.0.0.1 -i .5
-```
-
-Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
-
-![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
-
-Here is a visual representation of our capture :
-
-![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-pcap.png) 
-
-If we focus on the IPv6 header (Outer Header - SRv6 transport layer) we can see the following:
 
    - Source IPv6: fc00:0:1111::1 
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
 
 
+<br>
+<br>
+
   Now lets try the IPv6 bulk transport destination on *xrd01*
 
-  ```
-   ping fc00:0:40::1 -i .5
-  ```
 
-![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
+![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
 
 We can witness here that the same SRv6 uSID is being used for our ipv6 traffic as well.
 
@@ -626,17 +626,20 @@ Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment cre
 
 
 
-
 #### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
-1.  Start a new tcpdump session on **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
-    ```
-    sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
-    ```
+
+1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
+
+![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
 2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
-    docker exec -it clab-clus25-amsterdam ping 50.0.0.1 -i .5
+    ping 50.0.0.1 -i .5
     ```
+
+    ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-fast.png) 
+
+
 
     Note the explicit segment-list we configured for our low latency policy:
 
@@ -649,10 +652,10 @@ Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment cre
 
     Normally we might expect the tcpudmp output to show *5555:6666:7777* in the packet header, however, when the XRd headend router performs its SRv6-TE policy calculation it recognized that **xrd05's** best path to **xrd07** is through **xrd06**, so it doesn't need to include the *6666* in the SID stack.
 
-    Optional: run the same ping test using the IPv6 address:
+    Optional: run the same ping test on *xrd01* using the IPv6 address and capture the traffic.
     
     ```
-    docker exec -it clab-clus25-amsterdam ping fc00:0:50::1 -i .5
+    ping fc00:0:50::1 -i .5
     ```
 
 
