@@ -306,20 +306,37 @@ Configuring SONiC's BGP container can be done from the command line and is very 
    ```
    write mem
    ```
-   
+
+6. Optional: run some *show* commands:
+   ```
+   show run
+   show bgp summary
+   show interface brief
+   ```   
+
+You may have noticed in the FRR config or show command output that SONiC supports eBGP unnumbered peering over its Ethernet interfaces. This is a huge advantage for deploying, automating, and managing hyperscale fabrics, and we wanted to highlight it here. 
+
+Config example from leaf00:
+
+   ```
+   neighbor Ethernet0 interface remote-as 65000
+   neighbor Ethernet4 interface remote-as 65001
+   neighbor Ethernet8 interface remote-as 65002
+   neighbor Ethernet12 interface remote-as 65003
+   ```
 
 ## Fabric Config Automation with Ansible 
 
-We'll run our fabric config automation with the [sonic-playbook.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/ansible/sonic-playbook.yaml). This playbook executes a number of tasks including:
+We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/ansible/sonic-playbook.yaml) to complete the configuration of our SONiC fabric. This playbook executes a number of tasks including:
 
-* Copy each node's *config_db.json* file to the */etc/sonic/* directory [Example leaf00/config_db.json](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/config_db.json)
+* Copy each node's *config_db.json* file to the */etc/sonic/* directory [Example spine00/config_db.json](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/spine00/config_db.json)
 * Load the config to activate the new settings
 * Run SONiC's hostname shell script to apply the node's hostname
-* Copy over and run a loopback shell script that we've created for each node [Example loopback.sh](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/loopback.sh)
+* Copy over and run a loopback shell script that we've created for each node [Example spine00 loopback.sh](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/spine00/loopback.sh)
 * Save the config
 * Create and activate a loopback interface called **sr0** on each node. This loopback is needed for SONiC SRv6 functionality
 * Use the Ansible built-in command plugin to enter the FRR/BGP container and delete the pre-existing default BGP config
-* Copy and load FRR configs, which include BGP and SRv6 attributes, to each node; [Example frr.conf](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/frr.conf)
+* Copy and load FRR configs, which include BGP and SRv6 attributes, to each node; [Example spine00 frr.conf](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/spine00/frr.conf)
 
 
 1. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
@@ -344,15 +361,6 @@ We'll run our fabric config automation with the [sonic-playbook.yaml](https://gi
     ``` 
 
 ### Verify SONiC BGP peering
-
-SONiC supports eBGP unnumbered peering over its Ethernet interfaces. Config example from leaf00:
-
-   ```
-   neighbor Ethernet0 interface remote-as 65000
-   neighbor Ethernet4 interface remote-as 65001
-   neighbor Ethernet8 interface remote-as 65002
-   neighbor Ethernet12 interface remote-as 65003
-   ```
 
 1. ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
     ```
