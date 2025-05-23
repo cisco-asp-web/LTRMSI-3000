@@ -220,10 +220,10 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
    ```
    
    Example validation for vpnv4 route
-   ```yaml
+   ```diff
    RP/0/RP0/CPU0:xrd01#show bgp vpnv4 unicast rd 10.0.0.7:1 40.0.0.0/24   
    Tue Jan 31 23:36:41.390 UTC
-   BGP routing table entry for 40.0.0.0/24, Route Distinguisher: 10.0.0.7:1   <--- WE HAVE A ROUTE. YAH
+   +BGP routing table entry for 40.0.0.0/24, Route Distinguisher: 10.0.0.7:1   <--- WE HAVE A ROUTE. YAH
    Versions:
      Process           bRIB/RIB  SendTblVer
      Speaker                  11           11
@@ -233,12 +233,12 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
      Path #1: Received by speaker 0
      Not advertised to any peer
      Local
-       fc00:0:7777::1 (metric 3) from fc00:0:5555::1 (10.0.0.7)   <--------- SOURCE xrd07
+   +    fc00:0:7777::1 (metric 3) from fc00:0:5555::1 (10.0.0.7)   <--------- SOURCE xrd07
          Received Label 0xe0040
          Origin incomplete, metric 0, localpref 100, valid, internal, best, group-best, import-candidate, not-in-vrf
          Received Path ID 0, Local Path ID 1, version 5
          Extended community: RT:9:9 
-         Originator: 10.0.0.7, Cluster list: 10.0.0.5             <------- FROM RR xrd05
+   +      Originator: 10.0.0.7, Cluster list: 10.0.0.5             <------- FROM RR xrd05
          PSID-Type:L3, SubTLV Count:1
          SubTLV:
            T:1(Sid information), Sid:fc00:0:7777::, Behavior:63, SS-TLV Count:1
@@ -252,7 +252,7 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
          Origin incomplete, metric 0, localpref 100, valid, internal, import-candidate, not-in-vrf
          Received Path ID 0, Local Path ID 0, version 0
          Extended community: RT:9:9 
-         Originator: 10.0.0.7, Cluster list: 10.0.0.6             <------- FROM RR xrd06
+   +      Originator: 10.0.0.7, Cluster list: 10.0.0.6             <------- FROM RR xrd06
          PSID-Type:L3, SubTLV Count:1
          SubTLV:
            T:1(Sid information), Sid:fc00:0:7777::, Behavior:63, SS-TLV Count:1
@@ -311,11 +311,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
          Source AFI: VPNv4 Unicast, Source VRF: default, Source Route Distinguisher: 10.0.0.7:1
    ```
       
-2. On **xrd07** advertise Rome's "40" and "50" prefixes with their respective color extended communities:
+2. On **xrd07** configure ext-comms, route-policies, and BGP such that *xrd07* advertises Rome's "40" and "50" prefixes with their respective color extended communities:
    
    **xrd07**
 
-Using the visual code extension, SSH into xrd07 and type the following commands:
+  Using the visual code extension, SSH into xrd07 and type the following commands:
 
    ```yaml
    conf t
@@ -357,7 +357,7 @@ Using the visual code extension, SSH into xrd07 and type the following commands:
    
    **xrd01**
 
-Using the visual code extension, SSH into xrd01 and type the following commands:
+  Using the visual code extension, SSH into xrd01 and type the following commands:
 
 
    ```
