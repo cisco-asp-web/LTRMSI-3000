@@ -399,7 +399,7 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
     
 ### SONiC SRv6 configuration
 
-Keep your *vtysh* session open on any router and:
+Keep your *vtysh* session open on any **leaf** router and:
 
 1. Check SONiC SRv6 configuration
    ```
@@ -411,8 +411,9 @@ Keep your *vtysh* session open on any router and:
    segment-routing
     srv6
       static-sids
-      sid fc00:0:1200::/48 locator MAIN behavior uN                       <-- Locator behavior "uN"
-      sid fc00:0:1200:fe00::/64 locator MAIN behavior uDT4 vrf default    <-- static uDT4 function for prefixes in the default table
+      sid fc00:0:1200::/48 locator MAIN behavior uN                      <-- Locator behavior "uN"
+      sid fc00:0:1200:fe04::/64 locator MAIN behavior uDT4 vrf default   <-- static uDT4 function for prefixes in the default ipv4 table
+      sid fc00:0:1200:fe06::/64 locator MAIN behavior uDT6 vrf default   <-- static uDT6 function for prefixes in the default ipv6 table    
       exit
       !
     exit
