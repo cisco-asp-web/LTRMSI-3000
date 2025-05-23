@@ -94,11 +94,11 @@
       debug:
         var: srv6_sid_result.stdout
 
-- name: apply host routes
-  hosts: localhost
-  #become: true
-  tasks:
+# - name: apply host routes
+#   hosts: localhost
+#   #become: true
+#   tasks:
 
-    - name: apply host routes
-      command: "scripts/host-routes.sh"
-      ignore_errors: yes
+#     - name: apply host routes
+#       command: "scripts/host-routes.sh"
+#       ignore_errors: yes
