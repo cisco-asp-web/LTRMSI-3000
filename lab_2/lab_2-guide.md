@@ -357,7 +357,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    
    **xrd01**
 
-  Using the visual code extension, SSH into xrd01 and type the following commands:
+   Using the visual code extension, SSH into xrd01 and type the following commands:
 
 
    ```
