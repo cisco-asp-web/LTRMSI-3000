@@ -111,7 +111,7 @@ The icons should turn green to visually indicate that the topology has been succ
 
 ![connected visual code](../topo_drawings/lab1-topology-launched.png)
 
-we can also verify the containerlab logs in the visual code output window 
+We can also verify the containerlab logs in the visual code output window. Truncated example:
 
 ```
 [DEBUG] Containerlab extension activated.
@@ -132,37 +132,13 @@ Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for ins
 [stderr] 16:41:26 INFO Creating container name=rome
 [stderr] 16:41:26 INFO Creating container name=xrd03
 [stderr] 16:41:26 INFO Creating container name=xrd02
-[stderr] 16:41:26 INFO Creating container name=xrd01
-[stderr] 16:41:26 INFO Creating container name=xrd06
-[stderr] 16:41:26 INFO Creating container name=xrd05
-[stderr] 16:41:26 INFO Creating container name=xrd07
-[stderr] 16:41:26 INFO Creating container name=xrd04
-[stderr] 16:41:27 INFO Created link: xrd01:Gi0-0-0-1 ▪┄┄▪ xrd02:Gi0-0-0-0
-[stderr] 16:41:27 INFO Created link: xrd05:Gi0-0-0-1 ▪┄┄▪ xrd04:Gi0-0-0-2
-[stderr] 16:41:27 INFO Created link: xrd01:Gi0-0-0-2 ▪┄┄▪ xrd05:Gi0-0-0-0
-[stderr] 16:41:27 INFO Created link: xrd04:Gi0-0-0-1 ▪┄┄▪ xrd07:Gi0-0-0-1
-[stderr] 16:41:27 INFO Running postdeploy actions for Cisco XRd 'xrd04' node
-[stderr] 16:41:27 INFO Running postdeploy actions for Cisco XRd 'xrd05' node
-[stderr] 16:41:27 INFO Created link: xrd02:Gi0-0-0-1 ▪┄┄▪ xrd03:Gi0-0-0-0
-[stderr] 16:41:27 INFO Running postdeploy actions for Cisco XRd 'xrd01' node
-[stderr] 16:41:28 INFO Created link: xrd02:Gi0-0-0-2 ▪┄┄▪ xrd06:Gi0-0-0-1
-[stderr] 16:41:28 INFO Created link: xrd05:Gi0-0-0-2 ▪┄┄▪ xrd06:Gi0-0-0-2
-[stderr] 16:41:28 INFO Created link: xrd01:Gi0-0-0-0 ▪┄┄▪ amsterdam:eth1
-[stderr] 16:41:28 INFO Created link: xrd02:Gi0-0-0-3 ▪┄┄▪ berlin-net:xrd02-Gi0-0-0-3
-[stderr] 16:41:28 INFO Running postdeploy actions for Cisco XRd 'xrd02' node
-[stderr] 16:41:28 INFO Created link: xrd03:Gi0-0-0-1 ▪┄┄▪ xrd04:Gi0-0-0-0
-[stderr] 16:41:28 INFO Running postdeploy actions for Cisco XRd 'xrd03' node
-[stderr] 16:41:28 INFO Created link: xrd07:Gi0-0-0-0 ▪┄┄▪ rome:eth1
-[stderr] 16:41:28 INFO Running postdeploy actions for Cisco XRd 'xrd07' node
-[stderr] 16:41:28 INFO Created link: xrd06:Gi0-0-0-0 ▪┄┄▪ xrd07:Gi0-0-0-2
+<snip>
 [stderr] 16:41:28 INFO Running postdeploy actions for Cisco XRd 'xrd06' node
 [stderr] 16:41:28 INFO Created link: xrd01:Gi0-0-0-3 ▪┄┄▪ amsterdam:eth2
 [stderr] 16:41:28 INFO Created link: xrd07:Gi0-0-0-3 ▪┄┄▪ rome:eth2
 [stderr] 16:41:28 INFO Adding host entries path=/etc/hosts
 [stderr] 16:41:28 INFO Adding SSH config for nodes path=/etc/ssh/ssh_config.d/clab-clus25.conf
-🎉 A newer containerlab version (0.68.0) is available!
-Release notes: https://containerlab.dev/rn/0.68/
-Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for installation options.
+
 ╭───────────────────────┬────────────────────────────────┬─────────┬────────────────╮
 │          Name         │           Kind/Image           │  State  │ IPv4/6 Address │
 ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
@@ -213,57 +189,6 @@ sudo containerlab inspect --all
 
 ![ssh verification](../topo_drawings/lab1-visual-code-ssh-verification.png)
 
-
-
-```
-cisco@topology-host:~/LTRMSI-3000$ 
-cisco@topology-host:~/LTRMSI-3000$ docker ps -a
-CONTAINER ID   IMAGE                            COMMAND                  CREATED         STATUS          PORTS                                                   NAMES
-e81a6870c3aa   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd02
-1dcfbf7e3634   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd06
-5842d4a21903   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd01
-c88ed1971e03   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd05
-6a3fcf3d7596   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd04
-323248a050b7   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd07
-5e15fbd28857   cisco-xrd-control-plane:24.4.1   "/usr/sbin/init"         4 minutes ago   Up 4 minutes                                                            clab-clus25-xrd03
-b3645d58692b   rome:latest                      "/bin/bash"              4 minutes ago   Up 4 minutes                                                            clab-clus25-rome
-7ad7008f74bd   amsterdam:latest                 "/bin/bash"              4 minutes ago   Up 4 minutes                                                            clab-clus25-amsterdam
-74382efd967c   ghcr.io/siemens/ghostwire        "/gostwire --http=[:…"   2 weeks ago     Up 27 minutes                                                           edgeshark-gostwire-1
-1ed85fafdbe1   ghcr.io/siemens/packetflix       "/packetflix --port=…"   2 weeks ago     Up 27 minutes   5000/tcp, 0.0.0.0:5001->5001/tcp, [::]:5001->5001/tcp   edgeshark-edgeshark-1
-cisco@topology-host:~/LTRMSI-3000$ sudo containerlab inspect --all
-[sudo] password for cisco:  cisco123
-╭────────────────────────────────┬──────────┬───────────────────────┬────────────────────────────────┬─────────┬────────────────╮
-│            Topology            │ Lab Name │          Name         │           Kind/Image           │  State  │ IPv4/6 Address │
-├────────────────────────────────┼──────────┼───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│ lab_1/lab_1-topology.clab.yaml │ clus25   │ clab-clus25-amsterdam │ linux                          │ running │ 10.254.254.108 │
-│                                │          │                       │ amsterdam:latest               │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-rome      │ linux                          │ running │ 10.254.254.109 │
-│                                │          │                       │ rome:latest                    │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd01     │ cisco_xrd                      │ running │ 10.254.254.101 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd02     │ cisco_xrd                      │ running │ 10.254.254.102 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd03     │ cisco_xrd                      │ running │ 10.254.254.103 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd04     │ cisco_xrd                      │ running │ 10.254.254.104 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd05     │ cisco_xrd                      │ running │ 10.254.254.105 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd06     │ cisco_xrd                      │ running │ 10.254.254.106 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-│                                │          ├───────────────────────┼────────────────────────────────┼─────────┼────────────────┤
-│                                │          │ clab-clus25-xrd07     │ cisco_xrd                      │ running │ 10.254.254.107 │
-│                                │          │                       │ cisco-xrd-control-plane:24.4.1 │         │ N/A            │
-╰────────────────────────────────┴──────────┴───────────────────────┴────────────────────────────────┴─────────┴────────────────╯
-
-```
 
 
 
