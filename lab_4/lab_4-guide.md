@@ -108,7 +108,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 | TeamD                | Runs open-source implementation of LAG protocol |
 | GNMI                 | SONiC gnmi/telemetry service |
 
-2. List the SONiC docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 of SONiC's docker containers to come up. 
+1. List SONiC's docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 docker containers to come up. 
     ```
     docker ps
     ```
@@ -131,7 +131,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
     bab374f5a2b5   docker-database:latest               "/usr/local/bin/dock…"   6 minutes ago   Up 6 minutes             database
     ```
 
-In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux:
+In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
 
 3. Try some SONiC CLI commands:
     ```
@@ -144,11 +144,11 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from Linux:
 
 If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
 
-SONiC leverages the FRR [Free Range Routing](https://frrouting.org/) open source routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
+SONiC leverages the open-source FRR [Free Range Routing](https://frrouting.org/) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
 
 The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
-2. Access **leaf00's** FRR/BGP container via *vtysh*
+1. Access **leaf00's** FRR/BGP container via *vtysh*
     ```
     vtysh
     ```
@@ -280,6 +280,33 @@ Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we 
    eth0                   10.0.0.15/24         up/up         N/A             N/A
    lo                     127.0.0.1/16         up/up         N/A             N/A
    ```
+
+**Manual Configuration of FRR**
+
+Configuring SONiC's BGP container can be done from the command line and is very much like IOS.
+
+1. Invoke FRR's VTY shell
+   ```
+   vtysh
+   ```
+
+2. Enter configuration mode
+   ```
+   conf t
+   ```
+
+3. This particular SONiC image was pre-configured with a BGP instance. We'll delete that instance first, then apply the config we want:
+   ```
+   no router bgp 65100
+   ```
+
+4. Copy **leaf00's** FRR config [LINK](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/frr.conf) and paste it into the terminal
+
+5. Save the config
+   ```
+   write mem
+   ```
+   
 
 ## Fabric Config Automation with Ansible 
 
