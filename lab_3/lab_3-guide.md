@@ -1,7 +1,7 @@
 # Lab 3: SRv6 for Kubernetes with Cilium [30 Min]
 
 ### Description
-Now that we've established SRv6 L3VPNs across our network, we're going to transition from **router-based SRv6** to **host-based SRv6**. Our first step will be to enable SRv6 L3VPN for Kubernetes. The Berlin VM has had Kubernetes pre-installed and is running the *Cilium CNI* (Container Network Interface). In this lab we'll review some basic Kubernetes commands (kubectl) and then we'll setup Cilium BGP peering with our XRd route reflectors. After that we'll configure Cilium SRv6 SID manager and Locator pool. Finally we'll add a couple containers to our Berlin K8s cluster and join them to the carrots VRF.
+Now that we've established SRv6 L3VPNs across our network, we're going to transition from **router-based SRv6** to **host-based SRv6**. Our first step will be to enable SRv6 L3VPN for Kubernetes. The Berlin VM has Kubernetes pre-installed and is running the *Cilium CNI* (Container Network Interface). In this lab we'll review some basic Kubernetes commands (kubectl) and then we'll setup Cilium BGP peering with our XRd route reflectors. After that we'll configure Cilium SRv6 SID manager and Locator pool. Finally we'll add a couple containers to our Berlin K8s cluster and join them to the carrots VRF.
 
 > [!NOTE]
 > This portion of the lab makes use of Cilium Enterprise, which is a licensed set of features. The Cilium SRv6 feature set is in Beta is not available in the open source version. If you are interested in SRv6 on Cilium or other Enterprise features, please contact the relevant Cisco Isovalent sales team.  
@@ -28,9 +28,8 @@ https://cilium.io/labs/
     - [Verify Cilium advertised L3vpn prefixes are reaching remote xrd nodes](#verify-cilium-advertised-l3vpn-prefixes-are-reaching-remote-xrd-nodes)
     - [Run a ping test!](#run-a-ping-test)
     - [Optional Edgeshark section](#optional-edgeshark-section)
-  - [Create a radish VRF and pod](#create-a-radish-vrf-and-pod)
+  - [Optional: create a radish VRF and pod](#optional-create-a-radish-vrf-and-pod)
     - [Optional Edgeshark](#optional-edgeshark)
-    - [Optional: Move a Carrots pod into the Radish VRF](#optional-move-a-carrots-pod-into-the-radish-vrf)
   - [Lab 3 Appendix](#lab-3-appendix)
   - [End of lab 3](#end-of-lab-3)
 
@@ -124,7 +123,7 @@ On the **Berlin VM** change to the lab_3/cilium directory and check out the cont
    ls
    ```
 
-   See the below output:
+   The files we'll be working with are:
    * [01-bgp-cluster.yaml](cilium/01-bgp-cluster.yaml) - Cilium BGP global configuration
    * [02-bgp-peer.yaml](cilium/02-bgp-peer.yaml) - Cilium BGP peer address families and route policies
    * [03-bgp-node-override.yaml](cilium/03-bgp-node-override.yaml) - Cilium BGP node override; we use this to specify the BGP source address
@@ -617,7 +616,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
    *>i10.200.0.0/24      fc00:0:8888::1                100      0 ?
    ```
 
-   In the output of the second command we expect to see detailed information. Here is truncated output:
+   In the output of the second command we expect to see detailed information. Here is truncated output, note due to Cilium's dynamic allocation, your *Received Label* and *Sid* values will most likely differ from this example:
    ```diff
    Path #1: Received by speaker
    Not advertised to any peer
@@ -672,7 +671,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
 
 ### Run a ping test!
 
-3. On the Berlin VM exec into one of the carrotspod containers and ping Amsterdam's interface in the carrots VRF:
+1. On the Berlin VM exec into one of the carrotspod containers and ping Rome's interface in the carrots VRF:
     ```
     kubectl exec -it -n veggies carrots0 -- sh
     ```
@@ -694,7 +693,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
     ```
 
 
-## Create a radish VRF and pod
+## Optional: create a radish VRF and pod
 In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface to it. Then we redistributed VRF radish's *connected* routes. Now we'll create a radish VRF and pod in Cilium.
 
 1. Exit from the carrots pod if you haven't already and apply the radish VRF yaml file:
@@ -744,37 +743,6 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
 
 ### Optional Edgeshark
 
-### Optional: Move a Carrots pod into the Radish VRF
-To demonstrate the flexibility of Cilium's SRv6 implementation, we'll switch the carrots1 pod from the carrots VRF to the radish VRF and run a ping again:
-
-1. Apply the CRD
-   ```
-   kubectl apply -f 09-carrot-to-radish.yaml
-   ```
-
-2. Verify carrots1 is now in the radish VRF:
-   ```
-   kubectl describe pod -n veggies carrots1 | more
-   ```
-
-   Expected output:
-   ```diff
-   cisco@berlin:~/LTRMSI-3000lab_3/cilium$ kubectl describe pod -n veggies carrots1
-   +   Name:             carrots1
-   Namespace:        veggies
-   Priority:         0
-   Service Account:  default
-   Node:             berlin/198.18.4.2
-   Start Time:       Sun, 04 May 2025 12:25:34 -0700
-   Labels:           app=alpine-ping
-   +                 vrf=radish                            # carrots1 is now in the radish VRF
-   Annotations:      <none>
-   Status:           Running
-   IP:               10.200.0.164
-   IPs:
-        IP:  10.200.0.164
-        IP:  2001:db8:42::d582
-   ```
 
 > [!NOTE]
 > In a future version of this lab we hope to add support for Cilium SRv6-TE. 
