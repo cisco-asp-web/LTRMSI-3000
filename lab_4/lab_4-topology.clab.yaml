@@ -91,17 +91,17 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    leaf00-bridge:
-      kind: bridge
+    # leaf00-bridge:
+    #   kind: bridge
 
-    leaf01-bridge:
-      kind: bridge
+    # leaf01-bridge:
+    #   kind: bridge
 
-    leaf02-bridge:
-      kind: bridge
+    # leaf02-bridge:
+    #   kind: bridge
 
-    leaf03-bridge:
-      kind: bridge
+    # leaf03-bridge:
+    #   kind: bridge
 
   links:
 
@@ -127,19 +127,19 @@ topology:
 
     - endpoints: ["leaf00:eth5", "host00:eth1"]
     - endpoints: ["leaf00:eth6", "host00:eth2"]
-    - endpoints: ["leaf00:eth7", "leaf00-bridge:leaf00-eth7"]
+#    - endpoints: ["leaf00:eth7", "leaf00-bridge:leaf00-eth7"]
  
 
     - endpoints: ["leaf01:eth5", "host01:eth1"]
     - endpoints: ["leaf01:eth6", "host01:eth2"]
-    - endpoints: ["leaf01:eth7", "leaf01-bridge:leaf01-eth7"]
+#    - endpoints: ["leaf01:eth7", "leaf01-bridge:leaf01-eth7"]
 
     - endpoints: ["leaf02:eth5", "host02:eth1"]  
     - endpoints: ["leaf02:eth6", "host02:eth2"]
-    - endpoints: ["leaf02:eth7", "leaf02-bridge:leaf02-eth7"]
+#    - endpoints: ["leaf02:eth7", "leaf02-bridge:leaf02-eth7"]
 
     - endpoints: ["leaf03:eth5", "host03:eth1"]
     - endpoints: ["leaf03:eth6", "host03:eth2"]
-    - endpoints: ["leaf03:eth7", "leaf03-bridge:leaf03-eth7"]
+#    - endpoints: ["leaf03:eth7", "leaf03-bridge:leaf03-eth7"]
 
 
