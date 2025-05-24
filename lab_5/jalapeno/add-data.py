@@ -22,8 +22,8 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Create collections and upload data to ArangoDB')
     parser.add_argument('-d', '--data', nargs='+', 
-                       choices=['fabric-node', 'fabric-edge', 'hosts', 'all'],
-                       help='Specify which data to upload: fabric-node, fabric-edge, hosts, or all')
+                       choices=['fabric-node', 'fabric-graph', 'hosts', 'all'],
+                       help='Specify which data to upload: fabric-node, fabric-graph, hosts, or all')
     return parser.parse_args()
 
 def upload_fabric_nodes(db, file_path):
@@ -100,10 +100,10 @@ def upload_hosts(db, file_path):
 
 def upload_fabric_edges(db, file_path):
     """
-    Create fabric_edge collection and upload data from fabric-edge.json
+    Create fabric_edge collection and upload data from fabric-graph.json
     Args:
         db: ArangoDB database connection
-        file_path: Path to the fabric-edge.json file
+        file_path: Path to the fabric-graph.json file
     """
     try:
         # Read the data from JSON file
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         print("\nUploading host data...")
         upload_hosts(db, "hosts.json")
         print("\nUploading fabric edge data...")
-        upload_fabric_edges(db, "fabric-edge.json")
+        upload_fabric_edges(db, "fabric-graph.json")
 
     else:
         # Run only specified functions
@@ -155,6 +155,6 @@ if __name__ == "__main__":
         if 'hosts' in args.data:
             print("\nUploading host data...")
             upload_hosts(db, "hosts.json") 
-        if 'fabric-edge' in args.data:
+        if 'fabric-graph' in args.data:
             print("\nUploading fabric edge data...")
-            upload_fabric_edges(db, "fabric-edge.json")
+            upload_fabric_edges(db, "fabric-graph.json")

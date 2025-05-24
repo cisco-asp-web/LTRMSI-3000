@@ -7,9 +7,9 @@
   become: true
   tasks:
 
-    - name: run add-br.sh
-      command: "scripts/add-br.sh"
-      ignore_errors: yes
+    # - name: run add-br.sh
+    #   command: "scripts/add-br.sh"
+    #   ignore_errors: yes
 
     - name: deploy clab topology
       command: "clab deploy -t ../lab_4-topology.clab.yaml"
