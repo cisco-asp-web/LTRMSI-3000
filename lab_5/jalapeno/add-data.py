@@ -1,6 +1,6 @@
 # Script writes site and link meta data into the Arango graphDB
 # requires https://pypi.org/project/python-arango/
-# python3 add_meta_data.py
+# python3 add-data.py
 
 from arango import ArangoClient
 import json
