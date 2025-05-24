@@ -158,5 +158,47 @@
         "_key": "10.0.0.3_spine03_10.0.0.203_leaf03",
         "_from": "fabric-node/10.0.0.3_spine03",
         "_to": "fabric-node/10.0.0.203_leaf03"
+    },
+    
+    {
+        "_key": "clab-sonic-host00_leaf00",
+        "_from": "hosts/clab-sonic-host00",
+        "_to": "fabric-node/10.0.0.200_leaf00"
+    },
+    {
+        "_key": "clab-sonic-host01_leaf01",
+        "_from": "hosts/clab-sonic-host01",
+        "_to": "fabric-node/10.0.0.201_leaf01"
+    },
+    {
+        "_key": "clab-sonic-host02_leaf02",
+        "_from": "hosts/clab-sonic-host02",
+        "_to": "fabric-node/10.0.0.202_leaf02"
+    },
+    {
+        "_key": "clab-sonic-host03_leaf03",
+        "_from": "hosts/clab-sonic-host03",
+        "_to": "fabric-node/10.0.0.203_leaf03"
+    },
+    {
+        "_key": "leaf00_clab-sonic-host00",
+        "_from": "fabric-node/10.0.0.200_leaf00",
+        "_to": "hosts/clab-sonic-host00"
+    },
+    {
+        "_key": "leaf01_clab-sonic-host01",
+        "_from": "fabric-node/10.0.0.201_leaf01",
+        "_to": "hosts/clab-sonic-host01"
+    },
+    {
+        "_key": "leaf02_clab-sonic-host02",
+        "_from": "fabric-node/10.0.0.202_leaf02",
+        "_to": "hosts/clab-sonic-host02"
+    },
+    {
+        "_key": "leaf03_clab-sonic-host03",
+        "_from": "fabric-node/10.0.0.203_leaf03",
+        "_to": "hosts/clab-sonic-host03"
     }
+
 ]
