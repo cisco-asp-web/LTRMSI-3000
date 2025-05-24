@@ -98,9 +98,9 @@ def upload_hosts(db, file_path):
     except Exception as e:
         print(f"Error uploading host data: {str(e)}")
 
-def upload_fabric_edges(db, file_path):
+def upload_fabric_graphs(db, file_path):
     """
-    Create fabric_edge collection and upload data from fabric-graph.json
+    Create fabric_graph collection and upload data from fabric-graph.json
     Args:
         db: ArangoDB database connection
         file_path: Path to the fabric-graph.json file
@@ -111,11 +111,11 @@ def upload_fabric_edges(db, file_path):
             edge_data = json.load(f)
         
         # Create collection if it doesn't exist
-        if not db.has_collection('fabric_edge'):
-            db.create_collection('fabric_edge', edge=True)
-            print("Created fabric_edge collection")
+        if not db.has_collection('fabric_graph'):
+            db.create_collection('fabric_graph', edge=True)
+            print("Created fabric_graph collection")
         
-        collection = db.collection('fabric_edge')
+        collection = db.collection('fabric_graph')
         
         # AQL query to insert/update data
         aql = """
@@ -123,7 +123,7 @@ def upload_fabric_edges(db, file_path):
             UPSERT { _key: edge._key }
             INSERT edge
             REPLACE edge
-            IN fabric_edge
+            IN fabric_graph
             RETURN NEW
         """
         
@@ -145,7 +145,7 @@ if __name__ == "__main__":
         print("\nUploading host data...")
         upload_hosts(db, "hosts.json")
         print("\nUploading fabric edge data...")
-        upload_fabric_edges(db, "fabric-graph.json")
+        upload_fabric_graphs(db, "fabric-graph.json")
 
     else:
         # Run only specified functions
@@ -157,4 +157,4 @@ if __name__ == "__main__":
             upload_hosts(db, "hosts.json") 
         if 'fabric-graph' in args.data:
             print("\nUploading fabric edge data...")
-            upload_fabric_edges(db, "fabric-graph.json")
+            upload_fabric_graphs(db, "fabric-graph.json")
