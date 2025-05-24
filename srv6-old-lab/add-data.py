@@ -1,6 +1,6 @@
 # Script writes site and link meta data into the Arango graphDB
 # requires https://pypi.org/project/python-arango/
-# python3 add-data.py
+# python3 add-data.py -d bgp
 
 from arango import ArangoClient
 import json
@@ -46,8 +46,8 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Insert/Update data in ArangoDB')
     parser.add_argument('-d', '--data', nargs='+', 
-                       choices=['peer', 'bgp', 'fabric', 'prefix', 'gpu', 'host', 'host-edges', 'metrics', 'all'],
-                       help='Specify which data to insert/update: peer, bgp, fabric, prefix, gpu, host, host-edges, metrics, or all')
+                       choices=['peer', 'bgp', 'fabric', 'fabric-edges', 'prefix', 'gpu', 'host', 'host-edges', 'metrics', 'all'],
+                       help='Specify which data to insert/update: peer, bgp, fabric, fabric-edges, prefix, gpu, host, host-edges, metrics, or all')
     return parser.parse_args()
 
 def insert_peer_data(db, peer_file_path):
@@ -116,6 +116,41 @@ def insert_bgp_data(db, bgp_file_path):
         # Execute AQL query
         db.aql.execute(aql, bind_vars={'bgp_nodes': bgp_data})
         print(f"Successfully inserted/updated {len(bgp_data)} BGP node records")
+        
+    except Exception as e:
+        print(f"Error inserting BGP data: {str(e)}")
+
+def insert_fabric_data(db, fabric_file_path):
+    """
+    Insert/Update fabric node data with SRv6 SIDs and CLOS tier data from fabric-node.json into the jalapeno database
+    Args:
+        db: ArangoDB database connection
+        bgp_file_path: Path to the bgp-node.json file
+    """
+    try:
+        # Read the fabric data from JSON file
+        with open(fabric_file_path, 'r') as f:
+            fabric_data = json.load(f)
+        
+        # Ensure bgp_node collection exists
+        if not db.has_collection('fabric_node'):
+            db.create_collection('fabric_node')
+        
+        fabric_collection = db.collection('fabric_node')
+        
+        # AQL query to insert/update fabric data
+        aql = """
+        FOR node in @fabric_nodes
+            UPSERT { _key: node._key }
+            INSERT node
+            UPDATE node
+            IN fabric_node
+            RETURN NEW
+        """
+        
+        # Execute AQL query
+        db.aql.execute(aql, bind_vars={'fabric_nodes': fabric_data})
+        print(f"Successfully inserted/updated {len(fabric_data)} fabric node records")
         
     except Exception as e:
         print(f"Error inserting BGP data: {str(e)}")
@@ -330,6 +365,41 @@ def update_ipv6_metrics(db, metrics_file_path):
     except Exception as e:
         print(f"Error inserting telemetry data: {str(e)}")
 
+def insert_fabric_edges_v6(db, edge_file_path):
+    """
+    Insert fabric IPv6 edge data from fabric-edge.json into the ipv6_graph collection
+    Args:
+        db: ArangoDB database connection
+        edge_file_path: Path to the fabric-edge.json file
+    """
+    try:
+        # Read the edge data from JSON file
+        with open(edge_file_path, 'r') as f:
+            edge_data = json.load(f)
+        
+        # Ensure ipv6_graph collection exists
+        if not db.has_collection('fabric_graph'):
+            db.create_collection('fabric_graph', edge=True)  # Note: edge=True for edge collection
+        
+        edge_collection = db.collection('fabric_graph')
+        
+        # AQL query to insert/update edge data
+        aql = """
+        FOR edge in @edges
+            UPSERT { _key: edge._key }
+            INSERT edge
+            REPLACE edge
+            IN fabric_graph
+            RETURN NEW
+        """
+        
+        # Execute AQL query
+        db.aql.execute(aql, bind_vars={'edges': edge_data})
+        print(f"Successfully inserted/updated {len(edge_data)} fabric IPv6 edge records")
+        
+    except Exception as e:
+        print(f"Error inserting fabric IPv6 edge data: {str(e)}")
+
 # Add this at the end of your file to test the function
 if __name__ == "__main__":
     args = parse_args()
@@ -340,16 +410,21 @@ if __name__ == "__main__":
         insert_peer_data(db, "sonic-peer.json")
         print("\nInserting BGP data...")
         insert_bgp_data(db, "bgp-node.json")
+        print("\nInserting fabric data...")
+        insert_fabric_data(db, "fabric-node.json")
+        print("\nInserting fabric edge data...")
+        insert_fabric_edges_v6(db, "fabric-edge.json")
         print("\nUpdating prefix tiers...")
         update_prefix_tiers(db)
         print("\nInserting GPU data...")
         insert_gpu_data(db, "gpus.json")
-        print("\nInserting GPU IPv6 edge data...")
+        print("\nInserting host data...")
         insert_host_data(db, "hosts.json")
+        print("\nInserting GPU IPv6 edge data...")
         insert_gpu_edges_v6(db, "gpu-edge-v6.json")
-        print("\nUpdating IPv6 edge metrics...")
         print("\nInserting host IPv6 edge data...")
         insert_host_edges_v6(db, "host-edge-v6.json")
+        print("\nUpdating IPv6 edge metrics...")
         update_ipv6_metrics(db, "latency-util.json")
     else:
         # Run only specified functions
@@ -359,6 +434,12 @@ if __name__ == "__main__":
         if 'bgp' in args.data:
             print("\nInserting BGP data...")
             insert_bgp_data(db, "bgp-node.json")
+        if 'fabric' in args.data:
+            print("\nInserting fabric data...")
+            insert_fabric_data(db, "fabric-node.json")
+        if 'fabric-edges' in args.data:
+            print("\nInserting fabric edge data...")
+            insert_fabric_edges_v6(db, "fabric-edge.json")
         if 'prefix' in args.data:
             print("\nUpdating prefix tiers...")
             update_prefix_tiers(db)
