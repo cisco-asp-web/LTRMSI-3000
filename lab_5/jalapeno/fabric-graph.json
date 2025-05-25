@@ -2,7 +2,11 @@
     {
         "_key": "10.0.0.200_leaf00_10.0.0.0_spine00",
         "_from": "fabric_node/10.0.0.200_leaf00",
-        "_to": "fabric_node/10.0.0.0_spine00"
+        "_to": "fabric_node/10.0.0.0_spine00",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
     },
     {
         "_key": "10.0.0.201_leaf01_10.0.0.0_spine00",

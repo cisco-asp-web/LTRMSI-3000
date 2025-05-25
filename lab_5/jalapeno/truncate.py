@@ -6,7 +6,7 @@ user = "root"
 pw = "jalapeno"
 dbname = "jalapeno"
 
-client = ArangoClient(hosts='http://198.18.133.111:30852')
+client = ArangoClient(hosts='http://198.18.128.101:30852')
 db = client.db(dbname, username=user, password=pw)
 
 if db.has_collection('bgp_node'):

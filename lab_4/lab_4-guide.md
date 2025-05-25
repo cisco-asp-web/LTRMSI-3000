@@ -13,7 +13,6 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [Deploy containerlab SONiC topology](#deploy-containerlab-sonic-topology)
-    - [Ansible "deploy-playbook"](#ansible-deploy-playbook)
   - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
     - [SONiC Docker Containers](#sonic-docker-containers)
   - [SONiC Configuration Files](#sonic-configuration-files)
@@ -34,26 +33,18 @@ We will have achieved the following objectives upon completion of Lab 4:
 
 
 ## Deploy containerlab SONiC topology
-Given its origins in the Hyperscale world, SONiC has been designed from the ground up as an automation friendly NOS. So in this lab we'll make heavy use of task automation with *Ansible*.
 
-### Ansible "deploy-playbook"
-The first Ansible playbook is a simple one; it launches the containerlab SONiC topology, and it runs a couple scripts to establish linux test bridges and to reset stored SSH keys.
+We'll return to the containerlab visual code extension to launch lab 4:
 
-[deploy-playbook](ansible/deploy-playbook.yaml)
+**replace this diagram with screenshot of deploying lab 4**
+![connected visual code](../topo_drawings/lab1-launch-topology.png)
 
-1. cd into the lab_4/ansible directory and run the *deploy-playbook*
+The icons should turn green to visually indicate that the topology has been successfully deployed in Containerlab.
 
-   ```
-   cd ~/LTRMSI-3000/lab_4/ansible
+**replace this diagram with screenshot of deploying lab 4**
+![connected visual code](../topo_drawings/lab1-topology-launched.png)
 
-   ansible-playbook -i hosts deploy-playbook.yaml -e "ansible_user=cisco ansible_ssh_pass=cisco123 ansible_sudo_pass=cisco123" -vv
-   ```
-   
-   Once the script completes the end-summary of the output should look like this:
-   ```
-   PLAY RECAP ****************************************************************************
-   localhost   : ok=4  changed=3  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0   
-   ```
+**paste in some deploy output showing the sonic and host nodes**
 
 ## SONiC: A Very Quick Tour
 
