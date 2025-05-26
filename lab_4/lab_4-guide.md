@@ -21,7 +21,7 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [Fabric Config Automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
     - [SONiC SRv6 configuration](#sonic-srv6-configuration)
-    - [Configure "ubuntu host" containers attached to SONiC topology](#configure-ubuntu-host-containers-attached-to-sonic-topology)
+    - [Verify Host IPs and Routes](#verify-host-ips-and-routes)
   - [End of lab 4](#end-of-lab-4)
 
 ## Lab Objectives
@@ -182,17 +182,6 @@ Load config from the file /etc/sonic/config_db.json? [y/N]: y
 Running command: /usr/local/bin/sonic-cfggen -j /etc/sonic/config_db.json --write-to-db
 ```
 
-**config reload**
-
-This command is used to clear current configuration and import new configurationn from the input file or from */etc/sonic/config_db.json*. This command shall stop all services before clearing the configuration and it then restarts those services.
-
-The command *config reload* restarts various services/containers running in the device and it takes some time to complete the command.
-
-- Usage:
-```
-config reload [-y|--yes] [-l|--load-sysinfo] [<filename>] [-n|--no-service-restart] [-f|--force]
-```
-
 **config save**
 
 The command *config save* is used to save the redis CONFIG_DB into the user-specified filename or into the default /etc/sonic/config_db.json. This is analogous to the Cisco IOS command *copy run start*. 
@@ -337,7 +326,7 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
     ansible-playbook -i hosts sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
     ```
 
-    The sonic playbook produces a lot of console output, by the time it completes we expect to see something like this:
+    The sonic playbook produces a lot of console output. Don't worry about errors on the *vrf sysctl* task as those come from *spine* nodes where no VRFs are configured. By the time the playbook completes we expect to see something like this:
 
     ```
     PLAY RECAP *************************************************************************************
@@ -345,10 +334,10 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
     leaf01   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
     leaf02   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
     leaf03   : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-    spine00  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-    spine01  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-    spine02  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-    spine03  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+    spine00  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+    spine01  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+    spine02  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1   
+    spine03  : ok=14   changed=12   unreachable=0    failed=0    skipped=0    rescued=0    ignored=1 
     ``` 
 
 ### Verify SONiC BGP peering
@@ -471,9 +460,9 @@ Keep your *vtysh* session open on any **leaf** router and:
     admin@leaf00:~$ ip -6 route | grep seg6local
     fc00:0:1200::/48 nhid 63  encap seg6local action End flavors next-csid lblen 32 nflen 16 dev sr0 proto 196 metric 20 pref medium
 
-### Configure "ubuntu host" containers attached to SONiC topology
+### Verify Host IPs and Routes
 
-In addition to configuring our SONiC fabric nodes, the *sonic-playbook.yaml* script also ran the `host-routes.sh` shell script located in the lab_4/ansible/scripts directory. This script added ip address and route entries to the Ubuntu containers attached to our SONiC topology. The linux static route entries point to the remote *ubuntu host* containers in our topology, with the directly connected SONiC leaf node as the nexthop.
+The containerlab topology file included a number of *`exec`* commands to be run inside the *ubuntu-host* containers. These commands gave the containers their IP addresses and some basic static routes for fabric reachability.
 
 1. Verify host IPs and routes
 
@@ -501,10 +490,10 @@ In addition to configuring our SONiC fabric nodes, the *sonic-playbook.yaml* scr
     fe80::/64 dev eth2 proto kernel metric 256 pref medium
     ```
 
-2. Ping test from *ubuntu-host00* to *ubuntu-host24*:
+2. Ping test from *ubuntu-host00* to *ubuntu-host03*:
 
     ```
-    docker exec -it clab-sonic-host00 ping 2001:db8:1024::2 -i .3 -c 4
+    docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3 -c 4
     ```
 
 ## End of lab 4
