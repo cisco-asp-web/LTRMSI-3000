@@ -1,11 +1,7 @@
 [vms]
 topology-host ansible_host=198.18.133.100
 
-jalapeno ansible_host=198.18.133.102
+jalapeno ansible_host=198.18.128.101
 
-amsterdam ansible_host=198.18.128.102
-
-rome ansible_host=198.18.128.103
-
-berlin ansible_host=198.18.128.104
+berlin ansible_host=192.168.122.100
 

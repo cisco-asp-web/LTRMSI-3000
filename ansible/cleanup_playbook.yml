@@ -36,43 +36,16 @@
   become: false
   tasks:
 
-    - name: cleanup graph processors
-      command: ./destroy.sh
+    - name: clear fabric_graph load
+      command: python3 clear-load.py
       args:
-        chdir: /home/dcloud/LTRMSI-3000/lab_5/graph-processors
+        chdir: /home/dcloud/LTRMSI-3000/lab_5/jalapeno
       ignore_errors: yes
 
-- name: amsterdam cleanup
-  hosts: amsterdam
-  become: true
-  tasks:
-
-    - name: cleanup vpp steering policy
-      command: vppctl sr steer del l3 fc00:0:107:1::/64
-      ignore_errors: yes
-
-    - name: cleanup vpp sr policy
-      command: vppctl sr policy del bsid 101::102
-      ignore_errors: yes
-
-- name: rome cleanup
-  hosts: rome
-  become: true
-  tasks:
-
-    - name: cleanup linux routes
-      command: ip -6 route del fc00:0:101:2::/64 encap seg6 dev ens192
-      ignore_errors: yes
-
-- name: berlin cleanup linux
+- name: berlin cleanup cilium
   hosts: berlin
   become: false
   tasks:
-
-    - name: cleanup linux routes
-      command: sudo ip -6 route del fc00:0:7777::/48  encap seg6  dev ens192
-      become: true
-      ignore_errors: yes
 
     - name: cleanup cilium
       command: kubectl delete -f 99-cilium-all.yaml
