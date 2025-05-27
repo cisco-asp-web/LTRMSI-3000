@@ -27,9 +27,9 @@ https://cilium.io/labs/
   - [Establish Cilium VRFs and Create Pods](#establish-cilium-vrfs-and-create-pods)
     - [Verify Cilium advertised L3vpn prefixes are reaching remote xrd nodes](#verify-cilium-advertised-l3vpn-prefixes-are-reaching-remote-xrd-nodes)
     - [Run a ping test!](#run-a-ping-test)
-    - [Optional Edgeshark section](#optional-edgeshark-section)
+    - [Optional - Traffic capture using Edgeshark](#optional---traffic-capture-using-edgeshark)
   - [Optional: create a radish VRF and pod](#optional-create-a-radish-vrf-and-pod)
-    - [Optional Edgeshark](#optional-edgeshark)
+    - [Optional - Traffic capture using Edgeshark](#optional---traffic-capture-using-edgeshark-1)
   - [Lab 3 Appendix](#lab-3-appendix)
   - [End of lab 3](#end-of-lab-3)
 
@@ -648,7 +648,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
     kubectl exec -it -n veggies carrots0 -- ping 10.107.2.2 -i .5
     ```
 
-### Optional Edgeshark section
+### Optional - Traffic capture using Edgeshark
 
 Berlin is a virtual machine connected to the Containerlab topology via a Linux bridge. You can inspect traffic either at the source (on the bridge) or at the destination (Rome container’s eth2).
 
@@ -660,11 +660,7 @@ To capture traffic near the source:
 
 ![Edgeshark on the linux bridge](../topo_drawings/lab33edgeshark-linux-bridge.png)
 
-1. Optional: return to the XRd VM and run a tcpdump to capture Cilium's SRv6 encapsulation of outbound packets:
-
-    ```
-    sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-3
-    ```
+or use the containerlab extension to capture the traffic on Rome's eth2 interface as we previously executed in lab 1 and 2 
 
 
 ## Optional: create a radish VRF and pod
@@ -703,19 +699,21 @@ In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface t
     kubectl exec -it -n veggies radish0 -- /bin/sh
     ```
     ```
-    ping 100.0.7.1 -i .4
+    ping 100.0.7.2 -i .4
     ```
 
     Expected output:
     ```
     cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ kubectl exec -it -n veggies radish0 -- /bin/sh
-    / # ping 100.0.7.1
-    PING 100.0.7.1 (100.0.7.1): 56 data bytes
-    64 bytes from 100.0.7.1: seq=0 ttl=253 time=4.373 ms
-    64 bytes from 100.0.7.1: seq=1 ttl=253 time=3.924 ms
+    / # ping 100.0.7.2
+    PING 100.0.7.2 (100.0.7.2): 56 data bytes
+    64 bytes from 100.0.7.2: seq=0 ttl=253 time=4.373 ms
+    64 bytes from 100.0.7.2: seq=1 ttl=253 time=3.924 ms
     ```
 
-### Optional Edgeshark
+### Optional - Traffic capture using Edgeshark
+
+Just as in the previous section, you can inspect the traffic either at the source (Linux bridge connected to containerlab) or at the destination (Rome's eth1 interface)
 
 
 > [!NOTE]
