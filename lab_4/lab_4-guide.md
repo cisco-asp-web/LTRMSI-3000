@@ -82,36 +82,11 @@ SONiC is Linux plus a microservices-style architecture comprised of various modu
 For a deep dive on SONiC architecture and containers please see: https://sonicfoundation.dev/deep-dive-into-sonic-architecture-design/
 
 
-1. ssh to leaf00 in our topology (note: password is *`admin`*)
-    ```
-    ssh admin@clab-sonic-leaf00
-    ```
+1. ssh to leaf00 in our topology using the visual code extenstion  (note: password is *`admin`*)
 
-    Expected output:
-    ```
-    cisco@topology-host:~/LTRMSI-3000/lab_4/ansible$ ssh admin@clab-sonic-leaf00
-    Warning: Permanently added 'clab-sonic-leaf00' (RSA) to the list of known hosts.
-    Debian GNU/Linux 12 \n \l
+![ssh into leaf 00](../topo_drawings/lab4-ssh-leaf00.png)
 
-    admin@clab-sonic-leaf00's password: 
-    Linux sonic 6.1.0-22-2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.94-1 (2024-06-21) x86_64
-    You are on
-      ____   ___  _   _ _  ____
-     / ___| / _ \| \ | (_)/ ___|
-     \___ \| | | |  \| | | |
-      ___) | |_| | |\  | | |___
-     |____/ \___/|_| \_|_|\____|
 
-    -- Software for Open Networking in the Cloud --
-
-    Unauthorized access and/or use are prohibited.
-    All access and/or use are subject to monitoring.
-
-    Help:    https://sonic-net.github.io/SONiC/
-
-    Last login: Sun May  4 20:51:27 2025
-    admin@sonic:~$
-    ```
 ### SONiC Docker Containers
 
 | Docker Container Name| Description                                                      |
