@@ -12,7 +12,7 @@ Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
   - [Contents](#contents)
     - [Why host-based SRv6?](#why-host-based-srv6)
   - [Lab Objectives](#lab-objectives)
-  - [SRv6 Fabric Load Balancing](#srv6-fabric-load-balancing)
+  - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
   - [Jalapeno](#jalapeno)
     - [Arango Graph Database](#arango-graph-database)
   - [Jalapeno REST API](#jalapeno-rest-api)
@@ -44,9 +44,22 @@ The student upon completion of Lab 5 should have achieved the following objectiv
 * Understanding of SONiC's SRv6 uSID shift-and-forward capabilities
 * Familiarity with the open-source Jalapeno project, its API, and UI
 
-## SRv6 Fabric Load Balancing
+## Host-Based SRv6 for Intelligent Fabric Load Balancing
 
-Use case writeup
+
+Recently at the EMEA OCP summit Guohan Lu from Microsoft explained how they build Source Routed AI Backend Networks with SRv6:
+
+https://www.segment-routing.net/conferences/2025-ocp-emea-microsoft-srv6-ai-backend/
+
+The key problem to solve is large, long-lived flows being ECMP'd can result in path collision or hotspots in the fabric. With AI training this can lead to delays or even job failures such that the training run needs to be restarted. Given the cost of running large GPU pools, delay or failure can be very costly indeed.
+
+The solution: coordination of all senders source routing their traffic over disjoint paths through the fabric.
+
+In addition to basic Fabric Load Balancing we also envision the use of SRv6 to partition the network such that tenants' or customers' training jobs do not ever come into conflict across the fabric.
+
+While SRv6-based fabric load balancing seems quite useful for AI backend networks, to date SR/SRv6 have not really been deployed in traditional frontend DC fabrics as ECMP has generally been good enough. However, we do see potential for a similar kind of implementation for the frontend where large flows could load balanced across the fabric using source routing or host-based SRv6
+
+Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to demonstrate this capability in the lab we'll leverage the open-source project Jalapeno.
 
 Insert diagram with Jalapeno controller/API interaction
 
@@ -55,37 +68,18 @@ Insert diagram with Jalapeno controller/API interaction
 
 The Jalapeno package is preinstalled and running on the **Jalapeno** VM (198.18.128.101).
 
-1. SSH to the Jalapeno VM and verify k8s pods are running. For those students new to Kubernetes you can reference this cheat sheet [HERE](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
+1. SSH to the Jalapeno VM and display the running k8s pods. Those who are new to Kubernetes can reference this cheat sheet [HERE](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
 
     ```
     ssh cisco@198.18.128.101
     ```
     
-    Verify k8s pods
+    Display k8s pods
     ```
     kubectl get pods -A
     ```
-    The output should look something like the truncated output below. Note that the Jalapeno VM is also using Cilium as its CNI, and that all of the Jalapeno pods/microservices are running in the **jalapeno** namespace.  Also, the Jalapeno K8s cluster is completely independent of the K8s cluster on the Berlin VM. In our simulation the Berlin VM is a consumer of services on our SRv6 network, which may include services that are accessed by interacting with Jalapeno.
+    Note that the Jalapeno VM is also using Cilium as its CNI, and that all of the Jalapeno pods/microservices are running in the **jalapeno** namespace.  Also, the Jalapeno K8s cluster is completely independent of the K8s cluster on the Berlin VM. In our simulation the Berlin VM is a consumer of services on our SRv6 network, which may include services that are accessed by interacting with Jalapeno.
 
-    ```yaml
-    cisco@jalapeno:~/jalapeno/install$ kubectl get pods -A
-    NAMESPACE     NAME                                           READY   STATUS    RESTARTS         AGE
-    jalapeno      arangodb-0                                     1/1     Running   0                86s
-    jalapeno      gobmp-5db68bd644-dgg7w                         1/1     Running   1 (44s ago)      78s
-    jalapeno      grafana-deployment-565756bd74-d26pj            1/1     Running   0                86s
-    jalapeno      influxdb-0                                     1/1     Running   0                86s
-    jalapeno      jalapeno-api-5d8469557-gpz8j                   1/1     Running   0                85s
-    jalapeno      jalapeno-ui-54f8f95c5d-pn79v                   1/1     Running   0                84s
-    jalapeno      kafka-0                                        1/1     Running   0                87s
-    jalapeno      lslinknode-edge-b954577f9-w46gf                1/1     Running   3 (53s ago)      72s
-    jalapeno      telegraf-egress-deployment-5795ffdd9c-7xjj4    1/1     Running   0                73s
-    jalapeno      telegraf-ingress-deployment-5b456574dc-vlnvq   1/1     Running   0                79s
-    jalapeno      topology-678ddb8bb4-klzmt                      1/1     Running   1 (41s ago)      73s
-    jalapeno      zookeeper-0                                    1/1     Running   0                87s
-    kube-system   cilium-k8fht                                   1/1     Running   3 (4h41m ago)    363d
-    kube-system   cilium-operator-6f5db4f885-nmpwb               1/1     Running   3 (4h41m ago)    363d
-  
-    ```
 
 ### Arango Graph Database
 At the heart of Jalapeno is the Arango Graph Database, which is used to model network topology and provide a graph-based data store for the network data collected via BMP or other sources. 
@@ -102,40 +96,41 @@ At the heart of Jalapeno is the Arango Graph Database, which is used to model ne
     password: jalapeno
     DB: jalapeno
     ```
-    Once logged the UI should then show you its *collections* view, which should look something like:
-   <img src="images/arango-collections.png" width="1000">
+    Once logged in the UI will show you its *collections* view. If you like, take a moment to browse around the collections
 
 
-We've preloaded our fabric topology and relevant SRv6 data in Jalapeno's backend graph database (ArangoDB)
+We've preloaded our fabric topology and relevant SRv6 data in the Jalapeno/ArangoDB instance.
 
-2. Click on the *`fabric_graph`* collection, then select the `content` tab to see data from our topology graph
+1. Click on the *`fabric_graph`* collection, then select the `content` tab to see data from our topology graph
 
-3. Optional or for reference: feel free to connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/cisco-asp-web/LTRMSI-3000/tree/main/lab_5/lab_5-arango-queries.md)
+2. Optional or for reference: connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/cisco-asp-web/LTRMSI-3000/tree/main/lab_5/lab_5-arango-queries.md)
 
 ## Jalapeno REST API
 
 The Jalapeno REST API is used to run queries against the ArangoDB and retrieve graph topology data or execute shortest path calculations. 
 
 1. Optional: test the Jalapeno REST API:
-   From the ssh session on the Jalapeno VM or the XRD VM (or the command line on your local machine) validate the Jalapeno REST API is running. We installed the *`jq`* tool to help with improved JSON parsing:
+   From the ssh session on the *jalapeno VM* or the *topology-host VM* (or the command line on your local machine) validate the Jalapeno REST API is running. We installed the *`jq`* tool on the *jalapeno VM* to help with improved JSON parsing:
    ```
    curl http://198.18.128.101:30800/api/v1/collections | jq | more
    ```
 
-   The API also has auto-generated documentation at: [http://198.18.128.101:30800/docs/](http://198.18.128.101:30800/docs/) 
+   The API has auto-generated documentation at: [http://198.18.128.101:30800/docs/](http://198.18.128.101:30800/docs/) 
 
-2. The Jalapeno API github repo has a collection of example curl commands as well:
+   The Jalapeno API github repo has a collection of example curl commands as well:
 
-    [Jalapeno API Github](https://github.com/jalapeno/jalapeno-api/blob/main/notes/curl-commands.md)
+   [Jalapeno API Github](https://github.com/jalapeno/jalapeno-api/blob/main/notes/curl-commands.md)
 
 
 ## Jalapeno Web UI
 
-The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph as we saw in the previous section. From there, its not too difficult to conceive of building network services based on calls to the Jalapeno API and leveraging the SRv6 uSID stacks that are returned.
+The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph. In fact, our SONiC *`fabric_graph`* data was simply uploaded from a json file. 
 
-Each lab instance has a Jalapeno Web UI that can be accessed at the following URL: [http://198.18.128.101:30700](http://198.18.128.101:30700). 
+Once the topology graphs are in place its not too difficult to conceive of building network services based on calls to the Jalapeno API and leveraging the SRv6 uSID stacks that are returned.
 
-On the left hand sidebar you will see that UI functionality is split into three sections:
+The Jalapeno Web UI can be accessed at: [http://198.18.128.101:30700](http://198.18.128.101:30700). 
+
+On the left hand sidebar you will see that UI functionality is split into two sections:
 
 - **Data Collections**: explore raw object and graph data collected from the network.
 - **Topology Viewer**: explore the network topology graphs and perform path calculations.
