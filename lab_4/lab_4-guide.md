@@ -254,12 +254,8 @@ admin@sonic:~$ show runningconfiguration all
 
 Before we proceed with applying full fabric configurations via Ansible, we wanted to demonstrate SONiC CLI by partially configuring **leaf00**
 
-1. ssh to *leaf00* (password is `admin`)
-    ```
-    ssh admin@clab-sonic-leaf00
-    ```
 
-2. Configure hostname and *Loopback0* IPv4 and IPv6 addresses
+1. Using the containerlab visual code extension, ssh to *leaf00* (password is `admin`) and configure hostname and *Loopback0* IPv4 and IPv6 addresses
    ```
    sudo config hostname leaf00
    sudo config interface ip add Loopback0 10.0.0.200/32
