@@ -121,16 +121,16 @@ topology:
     - endpoints: ["leaf03:eth3", "spine02:eth4"]
     - endpoints: ["leaf03:eth4", "spine03:eth4"]
 
-    - endpoints: ["leaf00:eth5", "clab-sonic-host00:eth1"]
-    - endpoints: ["leaf00:eth6", "clab-sonic-host00:eth2"] 
+    - endpoints: ["leaf00:eth5", "host00:eth1"]
+    - endpoints: ["leaf00:eth6", "host00:eth2"] 
 
-    - endpoints: ["leaf01:eth5", "clab-sonic-host01:eth1"]
-    - endpoints: ["leaf01:eth6", "clab-sonic-host01:eth2"]
+    - endpoints: ["leaf01:eth5", "host01:eth1"]
+    - endpoints: ["leaf01:eth6", "host01:eth2"]
 
-    - endpoints: ["leaf02:eth5", "clab-sonic-host02:eth1"]  
-    - endpoints: ["leaf02:eth6", "clab-sonic-host02:eth2"]
+    - endpoints: ["leaf02:eth5", "host02:eth1"]  
+    - endpoints: ["leaf02:eth6", "host02:eth2"]
 
-    - endpoints: ["leaf03:eth5", "clab-sonic-host03:eth1"]
-    - endpoints: ["leaf03:eth6", "clab-sonic-host03:eth2"]
+    - endpoints: ["leaf03:eth5", "host03:eth1"]
+    - endpoints: ["leaf03:eth6", "host03:eth2"]
 
 
