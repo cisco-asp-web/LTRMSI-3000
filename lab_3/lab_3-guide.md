@@ -650,7 +650,17 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
 
 ### Optional Edgeshark section
 
-4. Optional: return to the XRd VM and run a tcpdump to capture Cilium's SRv6 encapsulation of outbound packets:
+Berlin is a virtual machine connected to the Containerlab topology via a Linux bridge. You can inspect traffic either at the source (on the bridge) or at the destination (Rome container’s eth2).
+
+To capture traffic near the source:
+	1.	Open Firefox
+	2.	Go to EdgeShark (http://198.18.133.100:5001/w)
+	3.	Click Refresh
+	4.	Select the desired interface to start the capture.
+
+![Edgeshark on the linux bridge](../topo_drawings/lab33edgeshark-linux-bridge.png)
+
+1. Optional: return to the XRd VM and run a tcpdump to capture Cilium's SRv6 encapsulation of outbound packets:
 
     ```
     sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-3
