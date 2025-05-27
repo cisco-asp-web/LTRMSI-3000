@@ -47,7 +47,7 @@ topology:
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.195
 
-    clab-sonic-host00:
+    host00:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -60,7 +60,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    clab-sonic-host01:
+    host01:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -73,7 +73,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    clab-sonic-host02:
+    host02:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -86,7 +86,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    clab-sonic-host03:
+    host03:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
