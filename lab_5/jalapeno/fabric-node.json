@@ -81,6 +81,14 @@
               "flag": 0,
               "algo": 0
             }
+          },
+          {
+            "srv6_sid": "fc00:0:1200:fe06::",
+            "srv6_endpoint_behavior": {
+              "endpoint_behavior": 62,
+              "flag": 0,
+              "algo": 0
+            }
           }
         ]
       },
@@ -95,6 +103,14 @@
             "srv6_sid": "fc00:0:1201::",
             "srv6_endpoint_behavior": {
               "endpoint_behavior": 48,
+              "flag": 0,
+              "algo": 0
+            }
+          },
+          {
+            "srv6_sid": "fc00:0:1201:fe06::",
+            "srv6_endpoint_behavior": {
+              "endpoint_behavior": 62,
               "flag": 0,
               "algo": 0
             }
@@ -115,6 +131,14 @@
               "flag": 0,
               "algo": 0
             }
+          },
+          {
+            "srv6_sid": "fc00:0:1202:fe06::",
+            "srv6_endpoint_behavior": {
+              "endpoint_behavior": 62,
+              "flag": 0,
+              "algo": 0
+            }
           }
         ]
       },
@@ -129,6 +153,14 @@
             "srv6_sid": "fc00:0:1203::",
             "srv6_endpoint_behavior": {
               "endpoint_behavior": 48,
+              "flag": 0,
+              "algo": 0
+            }
+          },
+          {
+            "srv6_sid": "fc00:0:1203:fe06::",
+            "srv6_endpoint_behavior": {
+              "endpoint_behavior": 62,
               "flag": 0,
               "algo": 0
             }
