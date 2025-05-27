@@ -120,7 +120,7 @@ For the sake of simplicity in this lab we'll use iBGP peering between our Berlin
 On the **Berlin VM** change to the lab_3/cilium directory and check out the contents
    ```
    cd ~/LTRMSI-3000/lab_3/cilium/
-   ls
+   ll
    ```
 
    The files we'll be working with are:
