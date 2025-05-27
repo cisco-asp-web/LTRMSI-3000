@@ -20,6 +20,8 @@ Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
     - [UI Topology Viewer](#ui-topology-viewer)
       - [Workload Scheduling Mode](#workload-scheduling-mode)
       - [SRv6 SID data](#srv6-sid-data)
+    - [A Homemade SRv6-FLB Scheduler App](#a-homemade-srv6-flb-scheduler-app)
+    - [Linux SRv6 test route](#linux-srv6-test-route)
     - [SRv6 route-add script](#srv6-route-add-script)
       - [Ping tests and Edgshark](#ping-tests-and-edgshark)
     - [Test flows with TRex tool](#test-flows-with-trex-tool)
@@ -150,9 +152,47 @@ Running multiple attempts (highlighting is still under construction)
 #### SRv6 SID data
 
 
-### SRv6 route-add script
+### A Homemade SRv6-FLB Scheduler App
+
+Rather than modifying NCCL itself (which would be complex), we created a PyTorch plugin that acts as a simple wrapper around the NCCL's distributed initialization that calls the Jalapeno API
+
+          API
+            |
+ frontend network nodes     <--- two or three layer CLOS using SONiC or other routers
+  |     |      |     |
+nccl00 nccl01 nccl02 nccl03  <--- should these be nvidia cuda docker containers with two veth interfaces?
+  |     |     |      |
+  backend network nodes     <--- two or three layer CLOS using SONiC or other routers
+
+
+NVIDIA CUDA containers with PyTorch + dual network interfaces
+
+We don't need actual GPUs for testing - PyTorch can run in CPU-only mode while still using the NCCL initialization code paths.
+
+### Linux SRv6 test route
 
 The linux route entries include SRv6 encapsulation instructions per the Linux kernel SRv6 implementation. For more info: https://segment-routing.org/
+
+```
+docker exec -it clab-sonic-host00 ip -6 route add 2001:db8:1003:fe06::/64 encap seg6 mode encap segs fc00:0:1200:1001:1203:: dev eth1
+```
+then
+```
+docker exec -it clab-sonic-host00 ip -6 route
+```
+
+ping test
+```
+docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3
+```
+
+```
+docker exec -it clab-sonic-host00 ip -6 route del 2001:db8:1003::/64
+```
+
+### SRv6 route-add script
+
+
 
 #### Ping tests and Edgshark
 
