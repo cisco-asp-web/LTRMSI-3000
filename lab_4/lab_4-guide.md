@@ -16,7 +16,7 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
     - [SONiC Docker Containers](#sonic-docker-containers)
   - [SONiC Configuration Files](#sonic-configuration-files)
-    - [config load, config reload, config save](#config-load-config-reload-config-save)
+    - [config load, config reload, config save,](#config-load-config-reload-config-save)
     - [Configure leaf00 from SONiC CLI](#configure-leaf00-from-sonic-cli)
   - [Fabric Config Automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
@@ -36,15 +36,44 @@ We will have achieved the following objectives upon completion of Lab 4:
 
 We'll return to the containerlab visual code extension to launch lab 4:
 
-**replace this diagram with screenshot of deploying lab 4**
-![connected visual code](../topo_drawings/lab1-launch-topology.png)
+![connected visual code](../topo_drawings/lab4-launch-topology.png)
 
-The icons should turn green to visually indicate that the topology has been successfully deployed in Containerlab.
 
-**replace this diagram with screenshot of deploying lab 4**
-![connected visual code](../topo_drawings/lab1-topology-launched.png)
+Right after launching the topology, the sonic icons will be yellow since the containers services will still boot up :
 
-**paste in some deploy output showing the sonic and host nodes**
+
+![connected visual code](../topo_drawings/lab4-topology-launching.png)
+
+After one minute, the icons should turn green to visually indicate that the topology has been successfully deployed in Containerlab.
+
+![connected visual code](../topo_drawings/lab4-topology-launched.png)
+
+Containerlab logs:
+
+```
+[containerlab] Running: containerlab deploy -r docker -t /home/cisco/LTRMSI-3000/lab_4/lab_4-topology.clab.yaml
+[stderr] 18:48:16 INFO Containerlab started version=0.67.0
+[stderr] 18:48:16 INFO Parsing & checking topology file=lab_4-topology.clab.yaml
+[stderr] 18:48:16 INFO Creating docker network name=mgt-net IPv4 subnet=172.20.6.0/24 IPv6 subnet="" MTU=0
+[stderr] 18:48:17 INFO Creating lab directory path=/home/cisco/LTRMSI-3000/lab_4/clab-sonic
+[stderr] 18:48:17 INFO Creating container name=leaf03
+[stderr] 18:48:17 INFO Creating container name=spine02
+[stderr] 18:48:17 INFO Creating container name=leaf00
+[stderr] 18:48:17 INFO Creating container name=host01
+[stderr] 18:48:17 INFO Creating container name=leaf02
+[stderr] 18:48:17 INFO Creating container name=host00
+[stderr] 18:48:17 INFO Creating container name=spine03
+[stderr] 18:48:17 INFO Creating container name=spine00
+[stderr] 18:48:17 INFO Creating container name=leaf01
+[stderr] 18:48:17 INFO Creating container name=host03
+[stderr] 18:48:17 INFO Creating container name=host02
+[stderr] 18:48:17 INFO Creating container name=spine01
+[stderr] 18:48:17 INFO Created link: leaf03:eth3 ▪┄┄▪ spine02:eth4
+[stderr] 18:48:18 INFO Created link: leaf01:eth1 ▪┄┄▪ spine00:eth2
+```
+
+
+
 
 ## SONiC: A Very Quick Tour
 
@@ -165,7 +194,7 @@ The *docker ps* output above included a container named **bgp**. In reality this
 ## SONiC Configuration Files
 Configuration state in SONiC is saved in two separate files. The first is the **/etc/sonic/config_db.json** file, which contains global configuration attributes such as hostname, interfaces, IP addresses, etc. The second is the FRR control plane configuration at **/etc/sonic/frr/bgpd.conf**.
 
-### config load, config reload, config save
+### config load, config reload, config save,
 
 **config load**
 
@@ -212,6 +241,39 @@ Usage: config [OPTIONS] COMMAND [ARGS]...
 
   SONiC command line - 'config' command
 ```
+
+**Visualize The configuration Through CLI**
+
+As network engineers, we still like to see the traditionnal "show run" on our devices. On SONiC, the show runningconfiguration command on SONiC displays the current active configuration of various system components. You can view specific parts such as BGP, interfaces, ports, or the full configuration using subcommands like show runningconfiguration all. This is useful for verifying what is currently applied without needing to inspect config files directly.
+
+```
+admin@sonic:~$ show runningconfiguration all
+{
+    "AUTO_TECHSUPPORT": {
+        "GLOBAL": {
+            "available_mem_threshold": "10.0",
+            "max_core_limit": "5.0",
+            "max_techsupport_limit": "10.0",
+            "min_available_mem": "200",
+            "rate_limit_interval": "180",
+            "since": "2 days ago",
+            "state": "enabled"
+        }
+    },
+    "AUTO_TECHSUPPORT_FEATURE": {
+        "bgp": {
+            "available_mem_threshold": "10.0",
+            "rate_limit_interval": "600",
+            "state": "enabled"
+        },
+        "database": {
+            "available_mem_threshold": "10.0",
+            "rate_limit_interval": "600",
+            "state": "enabled"
+        },
+        "dhcp_relay": {
+```
+
 
 ### Configure leaf00 from SONiC CLI
 
