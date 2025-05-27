@@ -28,8 +28,6 @@ https://cilium.io/labs/
     - [Verify Cilium advertised L3vpn prefixes are reaching remote xrd nodes](#verify-cilium-advertised-l3vpn-prefixes-are-reaching-remote-xrd-nodes)
     - [Run a ping test!](#run-a-ping-test)
     - [Optional - Traffic capture using Edgeshark](#optional---traffic-capture-using-edgeshark)
-  - [Optional: create a radish VRF and pod](#optional-create-a-radish-vrf-and-pod)
-    - [Optional - Traffic capture using Edgeshark](#optional---traffic-capture-using-edgeshark-1)
   - [Lab 3 Appendix](#lab-3-appendix)
   - [End of lab 3](#end-of-lab-3)
 
@@ -662,58 +660,6 @@ To capture traffic near the source:
 
 or use the containerlab extension to capture the traffic on Rome's eth2 interface as we previously executed in lab 1 and 2 
 
-
-## Optional: create a radish VRF and pod
-In lab 3 we created the *radish VRF* on *xrd07* and bound a loopback interface to it. Then we redistributed VRF radish's *connected* routes. Now we'll create a radish VRF and pod in Cilium.
-
-1. Exit from the carrots pod if you haven't already and apply the radish VRF yaml file:
-   [08-vrf-radish.yaml](cilium/08-vrf-radish.yaml)
-   ```
-   kubectl apply -f 08-vrf-radish.yaml
-   ```
-  
-   Expected output:
-   ```
-   isovalentbgpvrfconfig.isovalent.com/radish-config created
-   isovalentbgpadvertisement.isovalent.com/radish-adverts created
-   isovalentvrf.isovalent.com/radish created
-   pod/radish0 created
-   ```
-
-2. Verify the radish0 pod is running in the K8s veggies namespace:
-   ```
-   kubectl get pods -n veggies
-   ```
-
-   Expected output:
-   ```
-   NAME       READY   STATUS    RESTARTS   AGE
-   carrots0   1/1     Running   0          8m3s
-   carrots1   1/1     Running   0          8m3s
-   radish0    1/1     Running   0          103s
-   ```
-
-3. Let's exec into the radish0 pod and run a ping!
-
-    ```
-    kubectl exec -it -n veggies radish0 -- /bin/sh
-    ```
-    ```
-    ping 100.0.7.2 -i .4
-    ```
-
-    Expected output:
-    ```
-    cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ kubectl exec -it -n veggies radish0 -- /bin/sh
-    / # ping 100.0.7.2
-    PING 100.0.7.2 (100.0.7.2): 56 data bytes
-    64 bytes from 100.0.7.2: seq=0 ttl=253 time=4.373 ms
-    64 bytes from 100.0.7.2: seq=1 ttl=253 time=3.924 ms
-    ```
-
-### Optional - Traffic capture using Edgeshark
-
-Just as in the previous section, you can inspect the traffic either at the source (Linux bridge connected to containerlab) or at the destination (Rome's eth1 interface)
 
 
 > [!NOTE]
