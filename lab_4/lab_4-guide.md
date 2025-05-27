@@ -352,7 +352,12 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 * Copy and load FRR configs, which include BGP and SRv6 attributes, to each node; [Example spine00 frr.conf](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/spine00/frr.conf)
 
 
-1. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
+
+1. Launch a terminal on the topology host using the visual code containerlab extension:
+
+![terminal](../topo_drawings/lab4-terminal.png)
+
+2. cd into the lab_4 directory and execute the *sonic-playbook.yaml*
     ```
     cd ~/LTRMSI-3000/lab_4/ansible
 
@@ -375,7 +380,7 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 
 ### Verify SONiC BGP peering
 
-1. ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
+1. Using the visual code containerlab extension, ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
     ```
     ssh admin@clab-sonic-leaf00
     ssh admin@clab-sonic-leaf01
@@ -501,6 +506,10 @@ The containerlab topology file included a number of *`exec`* commands to be run 
 
     From the topology host execute *docker exec* commands to display the ip addresses and routing table of ubuntu-host00:
 
+    ![terminal](../topo_drawings/lab4-host00-ipaddr.png)
+
+
+
     ```
     docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
     ```
@@ -526,8 +535,16 @@ The containerlab topology file included a number of *`exec`* commands to be run 
 2. Ping test from *ubuntu-host00* to *ubuntu-host03*:
 
     ```
-    docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3 -c 4
+    docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3 -c 100
     ```
+
+    While the ping is running we can launch edgeshark using the visual code containerlab extension and inspect the traffic on the eth2 interface:
+
+    ![edgeshark-host00](../topo_drawings/lab4-host00-edgeshark.png)
+
+    Wireshark is launching and traffic is automatically intercepted.
+
+    ![edgeshark-host00](../topo_drawings/lab4-wireshark.png)
 
 ## End of lab 4
 Please proceed to [Lab 5: Host Based SRv6](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
