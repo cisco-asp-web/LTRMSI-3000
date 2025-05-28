@@ -57,7 +57,7 @@ show run interface GigabitEthernet 0/0/0/3
 
 ### Configure SRv6 L3VPN on xrd07
 
-We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback ips that the container-ips.sh script configured in lab_1). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
+We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback interfaces). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
 > All of the below commands are also available in the *`quick config doc`* [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
@@ -592,6 +592,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
    Now lets try the IPv6 bulk transport destination on *xrd01*
+
+   ```
+   ping fc00:0:40::1 -i .5
+   ```
+   
    
    ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
   

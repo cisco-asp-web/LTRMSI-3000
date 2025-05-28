@@ -651,10 +651,10 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
 Berlin is a virtual machine connected to the Containerlab topology via a Linux bridge. You can inspect traffic either at the source (on the bridge) or at the destination (Rome container’s eth2).
 
 To capture traffic near the source:
-	1.	Open Firefox
-	2.	Go to EdgeShark (http://198.18.133.100:5001/w)
-	3.	Click Refresh
-	4.	Select the desired interface to start the capture.
+   - Open Firefox
+   - Go to EdgeShark (http://198.18.133.100:5001/w)
+   - Click Refresh
+   - Select the desired interface to start the capture.
 
 ![Edgeshark on the linux bridge](../topo_drawings/lab33edgeshark-linux-bridge.png)
 

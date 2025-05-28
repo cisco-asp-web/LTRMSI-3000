@@ -19,7 +19,6 @@ https://containerlab.dev/
     - [Connect to the Topology Host and SSH to Containers.](#connect-to-the-topology-host-and-ssh-to-containers)
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
     - [Berlin VM](#berlin-vm)
-    - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -28,7 +27,6 @@ https://containerlab.dev/
     - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
     - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
   - [End-to-End Connectivity - Edgeshark](#end-to-end-connectivity---edgeshark)
-    - [IS-IS Packet Analysis](#is-is-packet-analysis)
     - [End of Lab 1](#end-of-lab-1)
   
 ## Lab Objectives
@@ -45,7 +43,9 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 ![Lab Topology](../topo_drawings/overview-topology-large.png)
 
-## Accessing the routers
+## Accessing the routers 
+
+⚠️⚠️⚠️  Note: This section is provided for reference only. We will walk through router access during the live demo. ⚠️⚠️⚠️ 
 
 Lab attendees can interact with the routers in multiple ways. They may choose to use the **topology host** VM as a jumpbox to:
 
@@ -95,11 +95,7 @@ All VMs, routers, etc. use the same user credentials:
 User: cisco, Password: cisco123
 ```
 
-**Management Network Topology**
 
-![Management Topology](/topo_drawings/management-network-medium.png)
-
-For full size image see [LINK](/topo_drawings/management-network.png)
 
 ## Launch and Validate XRD Topology
 
@@ -195,6 +191,13 @@ sudo containerlab inspect --all
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
+
+To SSH into a router, you can use the containerlab visual code extension
+
+![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
+
+
+
 ## Validate Attached Linux VMs and Containers
 
 ### Berlin VM
@@ -226,28 +229,11 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
     rtt min/avg/max/mdev = 1.203/1.242/1.282/0.039 ms
     ```
 
-Visual representation:
+    Visual representation:
 
-![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
+    ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
-
-### Amsterdam and Rome Containers
-
-**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are standard containers their network stack is blank except for the managment interface. So we'll run a script to add ip addresses to the containers' eth1 and eth2 interfaces and a set of routes.
-
-Everything is done using the docker exec command to run network config commands inside each container.
-
-
-1. Exit the Berlin VM and from the `topology-host` cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
-   ```
-   cd ~/LTRMSI-3000/lab_1/scripts/
-   ./container-ips.sh
-   ```
-
-   The script should output results of applying IP addresses, routes, and successful ping tests
-
-![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
+    You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
 
 
 ## Validate ISIS Topology
@@ -258,9 +244,7 @@ Our topology is running ISIS as its underlying IGP with basic settings pre-confi
 
 For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 
-To SSH into a router, you can use the containerlab visual code extension
 
-![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
 
 
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
@@ -269,7 +253,9 @@ To SSH into a router, you can use the containerlab visual code extension
 
     ```
     show isis topology
-    or
+    ```
+    or 
+    ```
     show isis database
     ```
     ```
@@ -317,9 +303,9 @@ To SSH into a router, you can use the containerlab visual code extension
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
    ```
    
-2. Run the `add-latency.sh` script:
+2. Run the `add-latency.sh` script from the topology-host:
    ```
-   ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
+   cisco@topology-host:~/LTRMSI-3000$    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
    Example partial output:
@@ -646,87 +632,9 @@ To launch EdgeShark and inspect traffic, simply click on the interface you want 
 
 Clicking on the interface will automatically launch wireshark and starts the capture.
 
-
-### IS-IS Packet Analysis
-
-Apply a filter in the wireshark filter tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
-
-```
-Wireshark Filter: "isis.lsp.lsp_id == 0000.0000.0001.00-00"
-```
-
-![Edgeshark isis filter](../topo_drawings/lab1-edgeshark-isis-filter.png)
-
-
-General IS-IS Information
-
-- LSP-ID: 0000.0000.0001.00-00 :
-  - Originating router System ID 0000.0000.0001, pseudonode 00, fragment 00.
-- IS Type: Level 2 (3):
-  - Operates as an IS-IS Level 2 Intermediate System.
-
-
-IS-IS TLVs:
-
-- Area Address (t=1): Defines IS-IS area (e.g., 49.0001)
-
-- Router ID (t=134): The IGP router identifier (e.g., 10.0.0.1) 
-
-- IPv4 Interface Address (t=132): IPv4 address used for routing; e.g., 10.0.0.1.
-
-- IPv6 Interface Address (t=232): E.g., fc00:0:1111::1, used to reach the node via IPv6
-
-- IS Type: Level 2 Intermediate System (IS type 3) — this router participates in inter-area routing.
-
-- Extended IS Reachability (t=22): Lists neighboring IS-IS nodes:
-  - 0000.0000.0002.00
-  - 0000.0000.0005.00
-
-Multi-Topology IS Reachability (t=222): Advertises neighbor reachability in topology ID 2 (IPv6):
-  - Same neighbors as above under an SRv6-aware topology.
-
-
-Extended IP Reachability (t=135): Lists IPv4 prefixes reachable through this router:
-  - 10.0.0.1/32
-  - 10.1.1.0/31
-
-
-SRv6 capabilities and Locator:
-
-SRv6 Capability (t=25): Indicates the router supports Segment Routing over IPv6 (SRv6).
-
-SR Algorithms (t=19): Indicates which path computation algorithms are supported:
-  - Algorithm 0 → Shortest Path First (SPF)
-  - Algorithm 1 → Strict SPF
-
-Node Maximum SID Depth (t=23): Specifies the maximum number of SIDs the node can push — here it’s 10.
-
-SRv6 Locator (t=27): Most critical TLV for SRv6 control-plane:
-  - Prefix: fc00:0:1111::/48
-  - Algorithm: 0 (SPF)
-  - Metric: 1 (cost to reach)
-  - Sub-TLVs:
-  - Prefix Attribute Flags (t=4): Flags not set (default behavior)
-  - End SID (t=5): fc00:0:1111:: → This is a Node SID (uN), meaning it represents the node itself and terminates the SRv6 path.
-
-
-![Edgeshark ISIS](../topo_drawings/lab1-edgeshark-isis-tlv.png)
-
-This IS-IS LSP confirms that:
-  - The router identified as xrd01 advertises both IPv4 and IPv6 reachability.
-  - It supports SRv6, advertising a locator (fc00:0:1111::/48) and a Node SID (fc00:0:1111::) using TLV 27.
-  - The node can push 10 SIDs, and supports Shortest Path First as well as Strict SPF algorithms.
-  - The router connects to other IS-IS nodes: 0000.0000.0002.00 and 0000.0000.0005.00.
-  - It advertises IPv4 prefixes (10.0.0.1/32, 10.1.1.0/31) and is reachable via IPv6 at fc00:0:1111::1.
-
-This LSP forms the foundation of the SRv6 control plane, enabling the steering of packets based on advertised SIDs in the data plane.
-
-
-
 ### End of Lab 1
 
 Lab 1 is completed, you can either: 
   - Perform the optional [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or
-
-
-Proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
+  - Perform the optional [Lab 1 SRv6 Control plane analysis with edge shark](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-edgeshark.md) or
+  - Proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
