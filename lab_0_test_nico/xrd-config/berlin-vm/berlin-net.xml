@@ -1,5 +1,0 @@
-<network>
-  <name>berlin-net</name>
-  <forward mode="bridge"/>
-  <bridge name="berlin-net"/>
-</network>

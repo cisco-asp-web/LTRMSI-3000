@@ -52,13 +52,17 @@ topology:
 
     amsterdam:
       kind: linux
-      image: amsterdam:latest
+      image: cl-amsterdam:latest
       mgmt-ipv4: 10.254.254.108
+      exec:
+        - sh /usr/local/bin/network-config.sh
 
     rome:
       kind: linux
-      image: rome:latest
+      image: cl-rome:latest
       mgmt-ipv4: 10.254.254.109
+      exec:
+        - sh /usr/local/bin/network-config.sh
 
     berlin-net:
       kind: bridge
