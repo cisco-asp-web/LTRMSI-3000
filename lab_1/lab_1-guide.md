@@ -19,7 +19,6 @@ https://containerlab.dev/
     - [Connect to the Topology Host and SSH to Containers.](#connect-to-the-topology-host-and-ssh-to-containers)
   - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
     - [Berlin VM](#berlin-vm)
-    - [Amsterdam and Rome Containers](#amsterdam-and-rome-containers)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -97,11 +96,7 @@ All VMs, routers, etc. use the same user credentials:
 User: cisco, Password: cisco123
 ```
 
-**Management Network Topology**
 
-![Management Topology](/topo_drawings/management-network-medium.png)
-
-For full size image see [LINK](/topo_drawings/management-network.png)
 
 ## Launch and Validate XRD Topology
 
@@ -197,6 +192,13 @@ sudo containerlab inspect --all
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
+
+To SSH into a router, you can use the containerlab visual code extension
+
+![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
+
+
+
 ## Validate Attached Linux VMs and Containers
 
 ### Berlin VM
@@ -228,28 +230,11 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
     rtt min/avg/max/mdev = 1.203/1.242/1.282/0.039 ms
     ```
 
-Visual representation:
+    Visual representation:
 
-![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
+    ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
-
-### Amsterdam and Rome Containers
-
-**Amsterdam** and **Rome** are Ubuntu Linux containers connected to **xrd01** and **xrd07** respectively. They are used to simulate customer or user endpoints connected to our network. Because they are standard containers their network stack is blank except for the managment interface. So we'll run a script to add ip addresses to the containers' eth1 and eth2 interfaces and a set of routes.
-
-Everything is done using the docker exec command to run network config commands inside each container.
-
-
-1. Exit the Berlin VM and from the `topology-host` cd into the [lab_1/scripts](./scripts/) directory and run the *container-ips.sh* shell script
-   ```
-   cd ~/LTRMSI-3000/lab_1/scripts/
-   ./container-ips.sh
-   ```
-
-   The script should output results of applying IP addresses, routes, and successful ping tests
-
-![Amsterdam-Rome networking stack](../topo_drawings/lab1-amsterdam-rome.png)
+    You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
 
 
 ## Validate ISIS Topology
@@ -260,9 +245,7 @@ Our topology is running ISIS as its underlying IGP with basic settings pre-confi
 
 For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 
-To SSH into a router, you can use the containerlab visual code extension
 
-![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
 
 
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
@@ -271,7 +254,9 @@ To SSH into a router, you can use the containerlab visual code extension
 
     ```
     show isis topology
-    or
+    ```
+    or 
+    ```
     show isis database
     ```
     ```
@@ -319,9 +304,9 @@ To SSH into a router, you can use the containerlab visual code extension
    Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
    ```
    
-2. Run the `add-latency.sh` script:
+2. Run the `add-latency.sh` script from the topology-host:
    ```
-   ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
+   cisco@topology-host:~/LTRMSI-3000$    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
    Example partial output:
