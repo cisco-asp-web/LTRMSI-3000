@@ -187,7 +187,6 @@ sudo containerlab inspect --all
 
 
 
-
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
@@ -215,7 +214,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ```
 
 ![berlin xrd02](../topo_drawings/lab1-berlin-xrd02.png)
-1. Check IPv6 connectivity from **Berlin** to **xrd02**
+2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
     ping fc00:0:8888::1 -c 2
     ```
@@ -234,7 +233,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
     ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-    You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
+    You can now logout of the Berlin VM and return to the SSH session on the topology host (still in visual code)
 
 
 ## Validate ISIS Topology
@@ -255,10 +254,8 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
     ```
     show isis topology
     ```
-    or 
-    ```
-    show isis database
-    ```
+
+    You should expect to see an entry for each xrd router 01 -> 07
     ```
     RP/0/RP0/CPU0:xrd01#show isis topology 
     Fri May  9 03:11:23.663 UTC
@@ -289,60 +286,13 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 ### Add Synthetic Latency to the Links
 
 > [!NOTE]
-> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' (traffic control) command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
-
-1. Optional: ping from **xrd01** to **xrd02** to see latency prior to applying the *add-latency.sh* script
-   ```
-   ping 10.1.1.1
-   ```
-
-   Example output:
-   ```
-   RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
-   Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
-   ```
+> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. 
    
-2. Run the `add-latency.sh` script from the topology-host:
+1. Run the `add-latency.sh` script from the topology-host:
    ```
    cisco@topology-host:~/LTRMSI-3000$    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
-   Example partial output:
-   ```
-    Latencies added. The following output applies in both directions, Ex: xrd01 -> xrd02 and xrd02 -> xrd01
-    xrd01 link latency: 
-    qdisc netem 800a: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 10.0ms
-    qdisc netem 800b: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 5.0ms
-   ```
-
-3. Ping from router **xrd01** to **xrd02** and note the latency time.
-   ```
-   ping 10.1.1.1
-   ```
-
-   Example:
-   ```
-   RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
-   Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 12/12/16 ms
-   ```
-   
-
-Script explanation - the script runs a *tc qdisc* command for each link in the topology. Example: 
-
-```
-sudo ip netns exec clab-clus25-xrd01 tc qdisc add dev Gi0-0-0-1 root netem delay 10000
-```
-
-- ip netns exec: runs a command inside the network namespace of the XRd container
-- tc qdisc add ... netem delay <value>:
-  - Adds a traffic control rule on the given interface
-  - netem is used to emulate network conditions (in this case, delay)
-  - Delay is in microseconds (e.g., 10000 = 10ms)
-
 
 ## Validate BGP Peering
 
