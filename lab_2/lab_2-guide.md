@@ -592,6 +592,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
    Now lets try the IPv6 bulk transport destination on *xrd01*
+
+   ```
+   ping fc00:0:40::1 -i .5
+   ```
+   
    
    ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
   
