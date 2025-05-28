@@ -46,7 +46,7 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 ## Accessing the routers 
 
-⚠️⚠️⚠️  Note: This section is provided for reference only. We will walk through router access during the live demo.
+⚠️⚠️⚠️  Note: This section is provided for reference only. We will walk through router access during the live demo. ⚠️⚠️⚠️ 
 
 Lab attendees can interact with the routers in multiple ways. They may choose to use the **topology host** VM as a jumpbox to:
 
