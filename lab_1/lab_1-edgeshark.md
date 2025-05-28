@@ -13,7 +13,7 @@ This is a supplemental lab guide designed to help you visualize traffic using Ed
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
   - [IS-IS Packet Analysis](#is-is-packet-analysis)
-  - [End of Lab 1 - Packet Walk](#end-of-lab-1---packet-walk)
+  - [End of Lab 1 - ISIS control plane and edgeshark](#end-of-lab-1---isis-control-plane-and-edgeshark)
   
 
 ## Lab Objectives
@@ -108,6 +108,6 @@ This LSP forms the foundation of the SRv6 control plane, enabling the steering o
 
 
 
-## End of Lab 1 - Packet Walk
+## End of Lab 1 - ISIS control plane and edgeshark
 
 Lab 1 is completed, please proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
