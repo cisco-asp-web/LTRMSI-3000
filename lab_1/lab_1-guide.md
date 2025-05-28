@@ -202,7 +202,7 @@ To SSH into a router, you can use the containerlab visual code extension
 
 ### Berlin VM
 
-In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
+In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router.
 
 
 1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
@@ -214,7 +214,8 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ssh cisco@192.168.122.100
    ```
 
-2. Check IPv6 connectivity from **Berlin** to **xrd02**
+![berlin xrd02](../topo_drawings/lab1-berlin-xrd02.png)
+1. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
     ping fc00:0:8888::1 -c 2
     ```
