@@ -291,7 +291,7 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
    
 1. Run the `add-latency.sh` script from the topology-host:
    ```
-   cisco@topology-host:~/LTRMSI-3000$    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
+   ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
 
