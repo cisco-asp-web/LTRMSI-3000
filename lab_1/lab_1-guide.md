@@ -214,6 +214,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ```
 
 ![berlin xrd02](../topo_drawings/lab1-berlin-xrd02.png)
+
 2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
     ping fc00:0:8888::1 -c 2
