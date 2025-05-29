@@ -201,11 +201,11 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
    ping vrf carrots fc00:0:40::1
    ping vrf carrots fc00:0:50::1
    ```
-   
-   > [!NOTE]
-   > If you run into issues with vpnv4 route advertisement or ping connectivty tests you can reference the below link which includes all the relevant configurations for **xrd01** and **xrd07** that you can copy and paste into the router.
-   > [Quick Config Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab2_quick_config.md)
-   >
+
+> [!NOTE]
+> If you run into issues with vpnv4 route advertisement or ping connectivty tests you can reference the below link which includes all the relevant configurations for **xrd01** and **xrd07** that you can copy and paste into the router.
+> [Quick Config Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab2_quick_config.md)
+> 
    
    Example validation for vpnv4 route
    ```diff
