@@ -61,7 +61,7 @@ show run interface GigabitEthernet 0/0/0/3
 We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback interfaces). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
-> All of the below commands are also available in the *`quick config doc`* [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
+> All of the below commands are also available in the *`quick config doc.`*. Be aware that the quick config document contains both the L3VPN configuration as well as the L3VPN TE configuration. [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
 
    
 1. **xrd07** vrf static route configuration
@@ -201,11 +201,6 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
    ping vrf carrots fc00:0:40::1
    ping vrf carrots fc00:0:50::1
    ```
-
-> [!NOTE]
-> If you run into issues with vpnv4 route advertisement or ping connectivty tests you can reference the below link which includes all the relevant configurations for **xrd01** and **xrd07** that you can copy and paste into the router.
-> [Quick Config Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab2_quick_config.md)
-> 
    
    Example validation for vpnv4 route
    ```diff
