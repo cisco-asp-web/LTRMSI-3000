@@ -17,7 +17,6 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
   - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
     - [Validate bulk traffic takes the non-shortest path: **xrd01 -\> 02 -\> 03 -\> 04 -\> 07**](#validate-bulk-traffic-takes-the-non-shortest-path-xrd01---02---03---04---07)
-  - [Insert EdgeShark stuff here](#insert-edgeshark-stuff-here)
       - [Validate low latency traffic takes the path: xrd01 -\> 05 -\> 06 -\> 07](#validate-low-latency-traffic-takes-the-path-xrd01---05---06---07)
     - [End of Lab 2](#end-of-lab-2)
 
@@ -65,7 +64,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
 > All of the below commands are also available in the *`quick config doc`* [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
 
    
-1. xrd07 vrf static route configuration
+1. **xrd07** vrf static route configuration
    SSH into xrd07 and type the following static routes:
    ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
    ```yaml
@@ -535,9 +534,6 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 ## Validate SRv6-TE steering of L3VPN traffic
 ### Validate bulk traffic takes the non-shortest path: **xrd01 -> 02 -> 03 -> 04 -> 07** 
 
-## Insert EdgeShark stuff here 
-
-
 1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
 
    ```
@@ -554,14 +550,14 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
+2. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
     ![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
     ```
     ping 40.0.0.1 -i .5
     ```
     
-2. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+3. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
    
    ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
    
@@ -592,11 +588,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 #### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
 
-1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
+4.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
-2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
+5.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
     ping 50.0.0.1 -i .5
     ```
