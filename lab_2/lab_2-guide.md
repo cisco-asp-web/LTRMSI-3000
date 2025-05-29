@@ -47,9 +47,9 @@ In this lab a BGP L3VPN SID will be allocated in per-VRF mode and provides End.D
 
 For more details on SRv6 network programming Endpoint Behavior functionality please see RFC 8986 [LINK](https://datatracker.ietf.org/doc/html/rfc8986#name-enddt6-decapsulation-and-sp)
 
-BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it MP-BGP peers. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
+BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it via it's MP-BGP peers. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
 
-The *carrots* and *radish* VRFs are setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
+The *carrots* VRFs is setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
 
 The VRF instances and their interfaces have been preconfigured, allowing us to focus on the SRv6 BGP configuration. 
 
@@ -118,7 +118,7 @@ SSH into xrd07 and type the following static routes:
    
     Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
-    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute connected`* to VRF *radish* and both *`redistribute connected`* and *`redistribute static`* for VRF *carrots*.
+    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute static`* for VRF *carrots*.
 
     **xrd07**  
     ```yaml
@@ -138,19 +138,6 @@ SSH into xrd07 and type the following static routes:
           locator MyLocator
           alloc mode per-vrf
           redistribute static
-          redistribute connected
-
-      vrf radish
-        rd auto
-        address-family ipv4 unicast
-          segment-routing srv6
-          locator MyLocator
-          alloc mode per-vrf
-          redistribute connected
-        address-family ipv6 unicast
-          segment-routing srv6
-          locator MyLocator
-          alloc mode per-vrf
           redistribute connected
       commit
       ```
