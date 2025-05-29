@@ -1,15 +1,16 @@
 # Lab 2: Configure SRv6 L3VPN and SRv6-TE [20 Min]
 
 ### Description
-In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
+In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport.  The *carrots* vrf will include Amsterdam and Rome containers connected to **xrd01** and **xrd07**.  
 
-Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix A will take a differnt path than traffic to Rome prefix B.
+Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix 40.0.0.0/24 will take a differnt path than traffic to Rome prefix 50.0.0.0/24.
 
 ## Contents
 - [Lab 2: Configure SRv6 L3VPN and SRv6-TE \[20 Min\]](#lab-2-configure-srv6-l3vpn-and-srv6-te-20-min)
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
+  - [Topology](#topology)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
     - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
@@ -27,6 +28,9 @@ We will have achieved the following objectives upon completion of Lab 2:
 
 * Configure and validate SRv6 L3VPN
 * Configuration and testing of SRv6 TE policy and traffic steering
+
+## Topology
+![L3VPN Topology](/topo_drawings/lab2-l3vpn-carrots.png)
 
 
 ## Configure SRv6 L3VPN
