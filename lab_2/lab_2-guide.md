@@ -13,8 +13,6 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
   - [Topology](#topology)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
-    - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
-    - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
   - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
@@ -68,27 +66,22 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
 
    
 1. xrd07 vrf static route configuration
-
-SSH into xrd07 and type the following static routes:
-
-![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
-
-
-```yaml
-    conf t
-    
-    router static
-      vrf carrots
-        address-family ipv4 unicast
-          40.0.0.0/24 10.107.2.2
-          50.0.0.0/24 10.107.2.2
-        address-family ipv6 unicast
-          fc00:0:40::/64 fc00:0:107:2::2
-          fc00:0:50::/64 fc00:0:107:2::2
-        commit
-```
-
-1. Verify **Rome** VRF prefix reachability  
+   SSH into xrd07 and type the following static routes:
+   ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
+   ```yaml
+      conf t
+      
+      router static
+        vrf carrots
+          address-family ipv4 unicast
+            40.0.0.0/24 10.107.2.2
+            50.0.0.0/24 10.107.2.2
+          address-family ipv6 unicast
+            fc00:0:40::/64 fc00:0:107:2::2
+            fc00:0:50::/64 fc00:0:107:2::2
+          commit
+    ```
+2. Verify **Rome** VRF prefix reachability  
     Ping check from xrd07 gi 0/0/0/3 to Rome's 2nd NIC:  
     ```
     ping vrf carrots 10.107.2.1
@@ -97,7 +90,7 @@ SSH into xrd07 and type the following static routes:
     ping vrf carrots fc00:0:107:2::2
     ```
 
-2. Enable BGP L3VPN on **xrd07**
+3. Enable BGP L3VPN on **xrd07**
    
      The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
 
@@ -114,9 +107,9 @@ SSH into xrd07 and type the following static routes:
       commit
     ```
 
-3. Enable SRv6 for VRF carrots and redistribute connected/static
+4. Enable SRv6 for VRF carrots and redistribute connected/static
    
-    Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
+    Next we add VRF *carrots* into BGP and enable SRv6 to the IPv4 and IPv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
     On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute static`* for VRF *carrots*.
 
