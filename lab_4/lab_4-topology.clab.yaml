@@ -50,7 +50,7 @@ topology:
     host00:
       kind: linux
       image: pytorch-srv6-demo:latest
-      mgmt-ipv4: 172.20.1.224
+      mgmt-ipv4: 172.20.6.224
       exec:
         - ip addr add 200.0.100.2/24 dev eth1
         - ip addr add 2001:db8:1000:0::2/64 dev eth1
