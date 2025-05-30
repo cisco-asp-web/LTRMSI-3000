@@ -1,24 +1,22 @@
 # Lab 2: Configure SRv6 L3VPN and SRv6-TE [20 Min]
 
 ### Description
-In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport and which will include the Amsterdam and Rome containers connected to **xrd01** and **xrd07**. We will also preconfigure VRF *`radish`* on **xrd07**, which we'll make use of in Lab 3. 
+In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport.  The *carrots* vrf will include Amsterdam and Rome containers connected to **xrd01** and **xrd07**.  
 
-Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix A will take a differnt path than traffic to Rome prefix B.
+Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix 40.0.0.0/24 will take a differnt path than traffic to Rome prefix 50.0.0.0/24.
 
 ## Contents
 - [Lab 2: Configure SRv6 L3VPN and SRv6-TE \[20 Min\]](#lab-2-configure-srv6-l3vpn-and-srv6-te-20-min)
     - [Description](#description)
   - [Contents](#contents)
   - [Lab Objectives](#lab-objectives)
+  - [Topology](#topology)
   - [Configure SRv6 L3VPN](#configure-srv6-l3vpn)
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
-    - [Configure SRv6 L3VPN on xrd01 and RR xrd05](#configure-srv6-l3vpn-on-xrd01-and-rr-xrd05)
-    - [Validate SRv6 L3VPN](#validate-srv6-l3vpn)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
   - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
     - [Validate bulk traffic takes the non-shortest path: **xrd01 -\> 02 -\> 03 -\> 04 -\> 07**](#validate-bulk-traffic-takes-the-non-shortest-path-xrd01---02---03---04---07)
-  - [Insert EdgeShark stuff here](#insert-edgeshark-stuff-here)
       - [Validate low latency traffic takes the path: xrd01 -\> 05 -\> 06 -\> 07](#validate-low-latency-traffic-takes-the-path-xrd01---05---06---07)
     - [End of Lab 2](#end-of-lab-2)
 
@@ -27,6 +25,9 @@ We will have achieved the following objectives upon completion of Lab 2:
 
 * Configure and validate SRv6 L3VPN
 * Configuration and testing of SRv6 TE policy and traffic steering
+
+## Topology
+![L3VPN Topology](/topo_drawings/lab2-l3vpn-carrots.png)
 
 
 ## Configure SRv6 L3VPN
@@ -43,9 +44,9 @@ In this lab a BGP L3VPN SID will be allocated in per-VRF mode and provides End.D
 
 For more details on SRv6 network programming Endpoint Behavior functionality please see RFC 8986 [LINK](https://datatracker.ietf.org/doc/html/rfc8986#name-enddt6-decapsulation-and-sp)
 
-BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it MP-BGP peers. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
+BGP encodes the SRv6 SID in the prefix-SID attribute of the IPv4/6 L3VPN Network Layer Reachability Information (NLRI) and advertises it via it's MP-BGP peers. The Ingress PE (provider edge) router encapsulates the VRF IPv4/6 traffic with the SRv6 VPN SID and sends it over the SRv6 network.
 
-The *carrots* and *radish* VRFs are setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
+The *carrots* VRFs is setup on the two edge routers in our SP network: **xrd01** and **xrd07**. Intermediate routers do not need to be VRF aware and are instead forwarding on the SRv6 data plane. (technically the intermediate routers don't need to be SRv6 aware and could simply perform IPv6 forwarding based on the outer IPv6 header).  
 
 The VRF instances and their interfaces have been preconfigured, allowing us to focus on the SRv6 BGP configuration. 
 
@@ -60,31 +61,26 @@ show run interface GigabitEthernet 0/0/0/3
 We'll start with **xrd07** as it will need a pair of static routes for reachability to **Rome's** "40" and "50" network prefixes (loopback interfaces). Later we'll create SRv6-TE steering policies for traffic to the "40" and "50" prefixes:  
 
 > [!NOTE]
-> All of the below commands are also available in the *`quick config doc`* [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
+> All of the below commands are also available in the *`quick config doc.`*. Be aware that the quick config document contains both the L3VPN configuration as well as the L3VPN TE configuration. [HERE](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2_quick_config.md) 
 
    
-1. xrd07 vrf static route configuration
-
-SSH into xrd07 and type the following static routes:
-
-![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
-
-
-```yaml
-    conf t
-    
-    router static
-      vrf carrots
-        address-family ipv4 unicast
-          40.0.0.0/24 10.107.2.2
-          50.0.0.0/24 10.107.2.2
-        address-family ipv6 unicast
-          fc00:0:40::/64 fc00:0:107:2::2
-          fc00:0:50::/64 fc00:0:107:2::2
-        commit
-```
-
-1. Verify **Rome** VRF prefix reachability  
+1. **xrd07** vrf static route configuration
+   SSH into xrd07 and type the following static routes:
+   ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
+   ```yaml
+      conf t
+      
+      router static
+        vrf carrots
+          address-family ipv4 unicast
+            40.0.0.0/24 10.107.2.2
+            50.0.0.0/24 10.107.2.2
+          address-family ipv6 unicast
+            fc00:0:40::/64 fc00:0:107:2::2
+            fc00:0:50::/64 fc00:0:107:2::2
+          commit
+    ```
+2. Verify **Rome** VRF prefix reachability  
     Ping check from xrd07 gi 0/0/0/3 to Rome's 2nd NIC:  
     ```
     ping vrf carrots 10.107.2.1
@@ -93,7 +89,7 @@ SSH into xrd07 and type the following static routes:
     ping vrf carrots fc00:0:107:2::2
     ```
 
-2. Enable BGP L3VPN on **xrd07**
+3. Enable BGP L3VPN on **xrd07**
    
      The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
 
@@ -110,11 +106,11 @@ SSH into xrd07 and type the following static routes:
       commit
     ```
 
-3. Enable SRv6 for VRF carrots and redistribute connected/static
+4. Enable SRv6 for VRF carrots and redistribute connected/static
    
-    Next we add VRF *carrots* into BGP and enable SRv6 to the ipv4 and ipv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
+    Next we add VRF *carrots* into BGP and enable SRv6 to the IPv4 and IPv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
-    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute connected`* to VRF *radish* and both *`redistribute connected`* and *`redistribute static`* for VRF *carrots*.
+    On **xrd07** we will need to redistribute both the connected and static routes to provide reachability to Rome and its additional prefixes. Therefore, we will add *`redistribute static`* for VRF *carrots*.
 
     **xrd07**  
     ```yaml
@@ -134,19 +130,6 @@ SSH into xrd07 and type the following static routes:
           locator MyLocator
           alloc mode per-vrf
           redistribute static
-          redistribute connected
-
-      vrf radish
-        rd auto
-        address-family ipv4 unicast
-          segment-routing srv6
-          locator MyLocator
-          alloc mode per-vrf
-          redistribute connected
-        address-family ipv6 unicast
-          segment-routing srv6
-          locator MyLocator
-          alloc mode per-vrf
           redistribute connected
       commit
       ```
@@ -269,7 +252,7 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
 
 We will use the below diagram for reference:
 
-![L3VPN Topology](/topo_drawings/l3vpn-slow-fast-path.png)
+![L3VPN Topology](/topo_drawings/lab2-l3vpn-policy.png)
 
 ### Create SRv6-TE steering policy
 For our SRv6-TE purposes we'll leverage the on-demand nexthop (ODN) feature set. Here is a nice example and explanation of ODN: [HERE](https://xrdocs.io/design/blogs/latest-converged-sdn-transport-ig)
@@ -551,9 +534,6 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 ## Validate SRv6-TE steering of L3VPN traffic
 ### Validate bulk traffic takes the non-shortest path: **xrd01 -> 02 -> 03 -> 04 -> 07** 
 
-## Insert EdgeShark stuff here 
-
-
 1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
 
    ```
@@ -570,14 +550,14 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
+2. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
     ![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
     ```
     ping 40.0.0.1 -i .5
     ```
     
-2. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+3. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
    
    ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
    
@@ -608,11 +588,11 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 #### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
 
-1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
+4.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
-2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
+5.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
     ping 50.0.0.1 -i .5
     ```

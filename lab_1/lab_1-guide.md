@@ -187,7 +187,6 @@ sudo containerlab inspect --all
 
 
 
-
 > [!IMPORTANT]
 > The XRd router instances should be available for SSH access about 2 minutes after spin up.
 
@@ -202,7 +201,7 @@ To SSH into a router, you can use the containerlab visual code extension
 
 ### Berlin VM
 
-In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router. 
+In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router.
 
 
 1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
@@ -213,6 +212,8 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ```
    ssh cisco@192.168.122.100
    ```
+
+![berlin xrd02](../topo_drawings/lab1-berlin-xrd02.png)
 
 2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
@@ -233,7 +234,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
     ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-    You can now exit the Berlin VM and return to the SSH session on the topology host (still in visual code)
+    You can now logout of the Berlin VM and return to the SSH session on the topology host (still in visual code)
 
 
 ## Validate ISIS Topology
@@ -254,10 +255,8 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
     ```
     show isis topology
     ```
-    or 
-    ```
-    show isis database
-    ```
+
+    You should expect to see an entry for each xrd router 01 -> 07
     ```
     RP/0/RP0/CPU0:xrd01#show isis topology 
     Fri May  9 03:11:23.663 UTC
@@ -288,60 +287,13 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 ### Add Synthetic Latency to the Links
 
 > [!NOTE]
-> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. The script uses the [netem](https://wiki.linuxfoundation.org/networking/netem) 'tc' (traffic control) command line tool and executes commands in the XRds' underlying network namespaces. After running the script you'll see a ping RTT of anywhere from ~10ms to ~150ms. This synthetic latency will allow us to really see the effect of later traffic steering execises.
-
-1. Optional: ping from **xrd01** to **xrd02** to see latency prior to applying the *add-latency.sh* script
+> Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. 
+   
+1. Run the `add-latency.sh` script from the topology-host:
    ```
-   ping 10.1.1.1
-   ```
-
-   Example output:
-   ```
-   RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
-   Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 1/2/4 ms
+   ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
-2. Run the `add-latency.sh` script from the topology-host:
-   ```
-   cisco@topology-host:~/LTRMSI-3000$    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
-   ```
-   
-   Example partial output:
-   ```
-    Latencies added. The following output applies in both directions, Ex: xrd01 -> xrd02 and xrd02 -> xrd01
-    xrd01 link latency: 
-    qdisc netem 800a: dev Gi0-0-0-1 root refcnt 13 limit 1000 delay 10.0ms
-    qdisc netem 800b: dev Gi0-0-0-2 root refcnt 13 limit 1000 delay 5.0ms
-   ```
-
-3. Ping from router **xrd01** to **xrd02** and note the latency time.
-   ```
-   ping 10.1.1.1
-   ```
-
-   Example:
-   ```
-   RP/0/RP0/CPU0:xrd01#ping 10.1.1.1
-   Sending 5, 100-byte ICMP Echos to 10.1.1.1 timeout is 2 seconds:
-   !!!!!
-   Success rate is 100 percent (5/5), round-trip min/avg/max = 12/12/16 ms
-   ```
-   
-
-Script explanation - the script runs a *tc qdisc* command for each link in the topology. Example: 
-
-```
-sudo ip netns exec clab-clus25-xrd01 tc qdisc add dev Gi0-0-0-1 root netem delay 10000
-```
-
-- ip netns exec: runs a command inside the network namespace of the XRd container
-- tc qdisc add ... netem delay <value>:
-  - Adds a traffic control rule on the given interface
-  - netem is used to emulate network conditions (in this case, delay)
-  - Delay is in microseconds (e.g., 10000 = 10ms)
-
 
 ## Validate BGP Peering
 
@@ -621,10 +573,12 @@ SRv6 uSID locator and source address information for nodes in the lab:
 ## End-to-End Connectivity - Edgeshark
 
 
-EdgeShark is a browser-based packet capture and analysis tool built into Containerlab. It integrates seamlessly with Docker containers and allows users to capture traffic directly from interfaces without requiring local tools like tcpdump or Wireshark. In our lab, EdgeShark is essential for inspecting SRv6 headers, including the outer IPv6 header with SRv6 uSIDs, directly from routers or container interfaces. It enables us to filter IPv6 traffic and visualize segment lists, encapsulation behavior, and forwarding decisions. This simplifies the debugging of network reachability issues, particularly in topologies using SRv6 policies. EdgeShark also lets us observe IS-IS or BGP update messages to verify the propagation of SRv6 SIDs and their associated behaviors. By capturing traffic on specific interfaces like Gi0/0/0/X, we can validate whether SRv6 policies are applied and enforced correctly in the data plane. It helps correlate control-plane routing decisions with real packet forwarding behavior. 
+EdgeShark is a browser-based packet capture and analysis tool built into Containerlab. Key features of Edgeshark for our lab.
+* Support for Docker containers
+* Integrated with Visual Studio Code through Containerlab extensions
+* Within Visual studeio Code you can highlight an XRD router link and launch directly
 
-EdgeShark can be launched directly from Visual Studio Code via the Containerlab extension or through the command line, offering convenience and flexibility. Ultimately, it gives us a real-time, non-intrusive method to verify SRv6 service chaining, path steering, and overall lab connectivity.
-
+We will use this tool within the labs to allow the students to see actual SRv6 packets on the wire.
 
 To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *XRD1*.
 

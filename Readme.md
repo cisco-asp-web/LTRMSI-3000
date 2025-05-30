@@ -2,7 +2,7 @@
 
 ## Introduction: 
 
-In this immersive hands-on lab, explore how next-generation AI networking fabrics can be designed and deployed using SRv6, Kubernetes-native SRv6 with Cilium, and open-source data center technologies. You’ll explore a new way to architect, program, and optimize traffic in high-performance compute environments using Cisco IOS-XR and SONiC. This session walks participants through a series of progressive tutorials and labs covering:
+In this immersive hands-on lab, explore how to build SRv6 WAN networks utilizing L3VPNs, next-generation AI networking fabrics using SRv6, Kubernetes-native SRv6 with Cilium, and open-source data center technologies. You’ll explore a new way to architect, program, and optimize traffic in high-performance compute environments using Cisco IOS-XR and SONiC. This lab session walks participants through a series of progressive tutorials and labs covering:
 
  - SRv6 fundamentals and foundational building blocks for SRv6 L3VPN and Traffic Engineering 
 
@@ -25,7 +25,7 @@ Participants will gain practical skills in deploying flexible, scalable, and pro
 
 
 ## Github Repository Overview
-Each of the labs is designed to be completed in the order presented. Lab 1 will launch our XRd topology with baseline configurations. In each subsequent lab (2-5) we'll add SRv6 configurations, make use of our SRv6 network and switch to SONIC to discover new uses cases and way to configure our network
+Each of the labs is designed to be completed in the order presented. Lab 1 will launch our XRd topology with baseline configurations. In each subsequent lab (2-3) we'll add SRv6 configurations on network and host devices. In lab 4-5 we switch to SONIC to discover new AI use cases for backend networks utilizing SRv6.
 
 ### Root Directory
 

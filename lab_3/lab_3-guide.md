@@ -212,8 +212,8 @@ In the next few steps we'll walk through applying the configuration one element 
             - name: "xrd05-rr"                 # must match the name of the peer in the cluster config
               localAddress: fc00:0:8888::2     # the source address to use for the peering session
    ```
-
-4. Apply the node override CRD:
+   
+3. Apply the node override CRD:
    ```
    kubectl apply -f 03-bgp-node-override.yaml
    ```
