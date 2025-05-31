@@ -14,7 +14,7 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
     - [SRv6 Linux Kernel Routes](#srv6-linux-kernel-routes)
       - [Adding Linux SRv6 Routes](#adding-linux-srv6-routes)
-    - [Topology as Graph](#topology-as-graph)
+    - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
     - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
     - [Linux SRv6 test route](#linux-srv6-test-route)
   - [PyTorch SRv6 Plugin: Network-Optimized Distributed Training](#pytorch-srv6-plugin-network-optimized-distributed-training)
@@ -49,13 +49,13 @@ Cisco doesn't currently have a host-based SRv6 controller product and the Hypers
 
 SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
 
-Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
+ - Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
 
-For more info on PyTorch: https://pytorch.org/
+ - For more info on PyTorch: https://pytorch.org/
 
-SRv6 Linux Kernel Implementation: https://segment-routing.org/
+ - SRv6 Linux Kernel Implementation: https://segment-routing.org/
 
-Insert diagram with PyTorch plugin + Jalapeno controller/API interaction
+*`Insert diagram with PyTorch plugin + Jalapeno controller/API interaction`*
 
 
 ### SRv6 Linux Kernel Routes
@@ -77,7 +77,7 @@ Linux host01 6.8.0-48-lowlatency #48.3~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Oc
 
 #### Adding Linux SRv6 Routes
 
-Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but does not yet support uSID. We can work with this, however, because our 2-tier fabric means we can 
+Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but does not yet support uSID. We can work with this because our SONiC nodes do support uSID and we'll simply construct the Linux SRv6 route with a single *segment* that happens to have our fabric uSIDs embedded in it.
 
 1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine03`* -> *`leaf02`*: 
 
@@ -131,14 +131,20 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
    docker exec -it clab-sonic-host00 ping 2001:db8:1002::2
    ```
 
-5. Optional: while the ping is running perform Wireshark capture(s) to see the encapsulated packets and shift-and-forward in action. Example:
-   
+5. Optional: while the ping is running perform Wireshark capture(s) to see the encapsulated packets and shift-and-forward in action. Recommended interfaces for Wireshark capture:
 
-### Topology as Graph
+ - clab-sonic-host00 eth1
+ - clab-sonic-spine03 eth1
+   
+This example packet capture is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*
+
+![Packet Capture](../topo_drawings/lab5-wireshark-linux-srh-spine03.png)
+
+### Jalapeno and Modeling Networks as Graphs
 
 We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. 
 
-After completing Lab 5 feel free to checkout the [Lab 5 Bonus Section](./lab_5-bonus.md) that explores the GraphDB, API, and UI in more detail.
+After completing **Lab 5** feel free to checkout the [Lab 5 Bonus Section](./lab_5-bonus.md) that explores the Jalapeno GraphDB, API, UI, and other host-based SRv6 scenarios in more detail.
 
 ### SRv6 PyTorch Plugin
 
