@@ -1,3 +1,71 @@
+## Jalapeno
+
+The Jalapeno package is preinstalled and running on the **Jalapeno** VM (198.18.128.101).
+
+1. SSH to the Jalapeno VM and display the running k8s pods. Those who are new to Kubernetes can reference this cheat sheet [HERE](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
+
+    ```
+    ssh cisco@198.18.128.101
+    ```
+    
+    Display k8s pods
+    ```
+    kubectl get pods -A
+    ```
+    Note that the Jalapeno VM is also using Cilium as its CNI, and that all of the Jalapeno pods/microservices are running in the **jalapeno** namespace.  Also, the Jalapeno K8s cluster is completely independent of the K8s cluster on the Berlin VM. In our simulation the Berlin VM is a consumer of services on our SRv6 network, which may include services that are accessed by interacting with Jalapeno.
+
+
+### Arango Graph Database
+At the heart of Jalapeno is the Arango Graph Database, which is used to model network topology and provide a graph-based data store for the network data collected via BMP or other sources. 
+
+1. Open the Arango web UI at:
+
+    ```
+    http://198.18.128.101:30852/
+    ```
+    
+    Login and select the "jalapeno" DB from the dropdown:
+    ```
+    user: root
+    password: jalapeno
+    DB: jalapeno
+    ```
+    Once logged in the UI will show you its *collections* view. If you like, take a moment to browse around the collections
+
+
+2. Optional or for reference: connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/cisco-asp-web/LTRMSI-3000/tree/main/lab_5/lab_5-arango-queries.md)
+
+## Jalapeno REST API
+
+The Jalapeno REST API is used to run queries against the ArangoDB and retrieve graph topology data or execute shortest path calculations. 
+
+1. Optional: test the Jalapeno REST API:
+   From the ssh session on the *jalapeno VM* or the *topology-host VM* (or the command line on your local machine) validate the Jalapeno REST API is running. We installed the *`jq`* tool on the *jalapeno VM* to help with improved JSON parsing:
+   ```
+   curl http://198.18.128.101:30800/api/v1/collections | jq | more
+   ```
+
+   The API has auto-generated documentation at: [http://198.18.128.101:30800/docs/](http://198.18.128.101:30800/docs/) 
+
+   The Jalapeno API github repo has a collection of example curl commands as well:
+
+   [Jalapeno API Github](https://github.com/jalapeno/jalapeno-api/blob/main/notes/curl-commands.md)
+
+
+### Jalapeno Web UI
+
+The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph. In fact, our SONiC *`fabric_graph`* data was simply uploaded from a json file. 
+
+Once the topology graphs are in place its not too difficult to conceive of building network services based on calls to the Jalapeno API and leveraging the SRv6 uSID stacks that are returned.
+
+The Jalapeno Web UI can be accessed at: [http://198.18.128.101:30700](http://198.18.128.101:30700). 
+
+On the left hand sidebar you will see that UI functionality is split into two sections:
+
+- **Data Collections**: explore raw object and graph data collected from the network.
+- **Topology Viewer**: explore the network topology graphs and perform path calculations.
+
+
 ## Rome VM: SRv6 on Linux
 
 The Rome VM is simulating a user host or endpoint and will use its Linux dataplane to perform SRv6 traffic encapsulation:

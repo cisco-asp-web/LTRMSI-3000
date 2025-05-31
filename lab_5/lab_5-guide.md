@@ -1,51 +1,33 @@
 # Lab 5: SRv6 for Intelligent Load Balancing of AI Workloads [20 Min]
 
 ### Description
-In Lab 5 we will explore the power of SRv6 as a truly end-to-end technology through host-based SRv6. In this lab our SONiC nodes and their attached Ubuntu containers are simulating an AI Training infrastructure. We don't have any GPUs, but have built a (*very*) simple demo controller that leverages the open-source Jalapeno platform as its backend data warehouse.
+In recent months a few Hyperscalers have expressed interest in running SRv6 over the AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. They would do this by offering the end-customer the ability to query an API and receive a set of SRv6 uSID encapsulations for a given set of source/destination GPU pairs. The customer could then program SRv6 routes right at the host or RDMA NIC: host-based SRv6.
 
-Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
+In Lab 5 we will explore this use case with our SONiC nodes and their attached Ubuntu containers simulating an AI Training infrastructure. 
 
 
 ## Contents
 - [Lab 5: SRv6 for Intelligent Load Balancing of AI Workloads \[20 Min\]](#lab-5-srv6-for-intelligent-load-balancing-of-ai-workloads-20-min)
     - [Description](#description)
   - [Contents](#contents)
-    - [Why host-based SRv6?](#why-host-based-srv6)
   - [Lab Objectives](#lab-objectives)
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
-  - [Jalapeno](#jalapeno)
-    - [Arango Graph Database](#arango-graph-database)
-  - [Jalapeno REST API](#jalapeno-rest-api)
-  - [Jalapeno Web UI](#jalapeno-web-ui)
-    - [UI Topology Viewer](#ui-topology-viewer)
-      - [Workload Scheduling Mode](#workload-scheduling-mode)
-      - [SRv6 SID data](#srv6-sid-data)
-    - [A Homemade SRv6-FLB Scheduler App](#a-homemade-srv6-flb-scheduler-app)
+    - [Topology as Graph](#topology-as-graph)
+    - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
     - [Linux SRv6 test route](#linux-srv6-test-route)
-    - [SRv6 route-add script](#srv6-route-add-script)
   - [PyTorch SRv6 Plugin: Network-Optimized Distributed Training](#pytorch-srv6-plugin-network-optimized-distributed-training)
       - [Ping tests and Edgshark](#ping-tests-and-edgshark)
     - [Test flows with TRex tool](#test-flows-with-trex-tool)
       - [Grafana Dashboard](#grafana-dashboard)
 
 
-### Why host-based SRv6? 
-
-* **Flexibility and Control**: We get tremendous control of the SRv6 SIDs and our encapsulation depth isn't subject to ASIC limitations
-
-* **Performance and Massive Scale**: With host-based SRv6 traffic reaches the transport network already encapsulated, thus the ingress PE or SRv6-TE headend doesn't need all the resource intense policy configuration; they just statelessly forward traffic per the SRv6 encapsulation or Network Program
-  
-* **SRv6 as Common E2E Architecture**: We could extend SRv6 into the Cloud! Or to IoT devices or other endpoints connected to the physical network...
- 
-We feel this ability to perform SRv6 operations at the host or other endpoint is a game changer which opens up enormous potential for innovation!
-
 ## Lab Objectives
-The student upon completion of Lab 5 should have achieved the following objectives:
+The student should have achieved the following objectives upon completion of Lab 5:
 
 * Understanding of the SRv6 Fabric Load Balancing use case
-* Understanding of the SRv6 stack available in Linux
+* Familiarity of the SRv6 stack available in Linux
 * Understanding of SONiC's SRv6 uSID shift-and-forward capabilities
-* Familiarity with the open-source Jalapeno project, its API, and UI
+* Bonus if time allows: Familiarity with the open-source Jalapeno project, its API, and UI
 
 ## Host-Based SRv6 for Intelligent Fabric Load Balancing
 
@@ -60,138 +42,95 @@ The solution: coordination of all senders source routing their traffic over disj
 
 In addition to basic Fabric Load Balancing we also envision the use of SRv6 to partition the network such that tenants' or customers' training jobs do not ever come into conflict across the fabric.
 
-While SRv6-based fabric load balancing seems quite useful for AI backend networks, to date SR/SRv6 have not really been deployed in traditional frontend DC fabrics as ECMP has generally been good enough. However, we do see potential for a similar kind of implementation for the frontend where large flows could load balanced across the fabric using source routing or host-based SRv6
+Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to simulate this capability in the lab we've built a demo PyTorch SRv6 plugin which leverages the open-source project Jalapeno as its backend data repository.
 
-Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to demonstrate this capability in the lab we'll leverage the open-source project Jalapeno.
+SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
 
-Insert diagram with Jalapeno controller/API interaction
+Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
 
+For more info on PyTorch: https://pytorch.org/
 
-## Jalapeno
+Insert diagram with PyTorch plugin + Jalapeno controller/API interaction
 
-The Jalapeno package is preinstalled and running on the **Jalapeno** VM (198.18.128.101).
+### Topology as Graph
 
-1. SSH to the Jalapeno VM and display the running k8s pods. Those who are new to Kubernetes can reference this cheat sheet [HERE](https://kubernetes.io/docs/reference/kubectl/cheatsheet/)  
+We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. 
 
-    ```
-    ssh cisco@198.18.128.101
-    ```
-    
-    Display k8s pods
-    ```
-    kubectl get pods -A
-    ```
-    Note that the Jalapeno VM is also using Cilium as its CNI, and that all of the Jalapeno pods/microservices are running in the **jalapeno** namespace.  Also, the Jalapeno K8s cluster is completely independent of the K8s cluster on the Berlin VM. In our simulation the Berlin VM is a consumer of services on our SRv6 network, which may include services that are accessed by interacting with Jalapeno.
+After completing Lab 5 feel free to checkout the [Lab 5 Bonus Section](./lab_5-bonus.md) that explores the GraphDB or API in more detail.
 
 
-### Arango Graph Database
-At the heart of Jalapeno is the Arango Graph Database, which is used to model network topology and provide a graph-based data store for the network data collected via BMP or other sources. 
+### SRv6 PyTorch Plugin
 
-1. Open the Arango web UI at:
+From https://pytorch.org/projects/pytorch/
 
-    ```
-    http://198.18.128.101:30852/
-    ```
-    
-    Login and select the "jalapeno" DB from the dropdown:
-    ```
-    user: root
-    password: jalapeno
-    DB: jalapeno
-    ```
-    Once logged in the UI will show you its *collections* view. If you like, take a moment to browse around the collections
+*PyTorch is an open source machine learning framework that accelerates the path from research prototyping to production deployment. Built to offer maximum flexibility and speed...its Pythonic design and deep integration with native Python tools make it an accessible and powerful platform for building and training deep learning models at scale.*
 
+PyTorch Distributed Training:
+When you start distributed training, PyTorch initializes a process group
+It uses a backend (like NCCL) for communication between nodes
+Each node gets a rank and knows about other nodes through the process group
+NVIDIA NCCL (NVIDIA Collective Communications Library):
+NCCL is the default backend for multi-GPU communication in PyTorch
+It handles all the collective operations (all-reduce, all-gather, etc.)
+It's optimized for NVIDIA GPUs and high-speed networks
+NCCL automatically selects the best network path for communication
+pytorch-srv6-plugin's Role:
+The plugin intercepts the NCCL initialization phase
+Before NCCL starts communicating, the plugin:
+Gets the list of nodes from the distributed setup
+Queries the Jalapeno API for optimized SRv6 paths between nodes
+Programs local SRv6 routes on each node
+This happens transparently to both PyTorch and NCCL
+NCCL then uses these optimized routes for its communication
+Here's a typical flow:
 
-We've preloaded our fabric topology and relevant SRv6 data in the Jalapeno/ArangoDB instance.
+```
+[PyTorch Training Script]
+        ↓
+[Initialize Distributed Training]
+        ↓
+[PyTorch calls NCCL backend]
+        ↓
+[SRv6 Plugin intercepts]
+        ↓
+[Programs SRv6 routes]
+        ↓
+[NCCL uses routes for communication]
+        ↓
+[Training continues normally]
+```
 
-1. Click on the *`fabric_graph`* collection, then select the `content` tab to see data from our topology graph
+The key point is that the plugin works at the network layer, below both PyTorch and NCCL. It ensures that when NCCL needs to communicate between nodes, it uses the optimized SRv6 paths we've programmed, but NCCL itself doesn't need to know about SRv6 - it just sees the network as being faster and more efficient.
 
-2. Optional or for reference: connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/cisco-asp-web/LTRMSI-3000/tree/main/lab_5/lab_5-arango-queries.md)
+The demo uses gloo as the backend instead of NCCL because:
+gloo is a CPU-based backend that doesn't require GPUs
+It's perfect for testing and demonstration purposes
+It still provides all the distributed training functionality we need
 
-## Jalapeno REST API
+The interaction is similar, but simpler:
 
-The Jalapeno REST API is used to run queries against the ArangoDB and retrieve graph topology data or execute shortest path calculations. 
+```
+[PyTorch Training Script]
+        ↓
+[Initialize Distributed Training with gloo backend]
+        ↓
+[SRv6 Plugin intercepts]
+        ↓
+[Programs SRv6 routes]
+        ↓
+[gloo uses routes for communication]
+        ↓
+[Training continues normally]
+```
 
-1. Optional: test the Jalapeno REST API:
-   From the ssh session on the *jalapeno VM* or the *topology-host VM* (or the command line on your local machine) validate the Jalapeno REST API is running. We installed the *`jq`* tool on the *jalapeno VM* to help with improved JSON parsing:
-   ```
-   curl http://198.18.128.101:30800/api/v1/collections | jq | more
-   ```
-
-   The API has auto-generated documentation at: [http://198.18.128.101:30800/docs/](http://198.18.128.101:30800/docs/) 
-
-   The Jalapeno API github repo has a collection of example curl commands as well:
-
-   [Jalapeno API Github](https://github.com/jalapeno/jalapeno-api/blob/main/notes/curl-commands.md)
-
-
-## Jalapeno Web UI
-
-The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph. In fact, our SONiC *`fabric_graph`* data was simply uploaded from a json file. 
-
-Once the topology graphs are in place its not too difficult to conceive of building network services based on calls to the Jalapeno API and leveraging the SRv6 uSID stacks that are returned.
-
-The Jalapeno Web UI can be accessed at: [http://198.18.128.101:30700](http://198.18.128.101:30700). 
-
-On the left hand sidebar you will see that UI functionality is split into two sections:
-
-- **Data Collections**: explore raw object and graph data collected from the network.
-- **Topology Viewer**: explore the network topology graphs and perform path calculations.
-
-
-### UI Topology Viewer
-
-Layouts
-Modes
-
-#### Workload Scheduling Mode
-
-Load balancing API calls
-Note the path highlights should be evenly spread
-Running multiple attempts (highlighting is still under construction)
-
-#### SRv6 SID data
-
-
-### A Homemade SRv6-FLB Scheduler App
-
-Rather than modifying NCCL itself (which would be complex), we created a PyTorch plugin that acts as a simple wrapper around the NCCL's distributed initialization that calls the Jalapeno API
-
-          API
-            |
- frontend network nodes     <--- two or three layer CLOS using SONiC or other routers
-  |     |      |     |
-nccl00 nccl01 nccl02 nccl03  <--- should these be nvidia cuda docker containers with two veth interfaces?
-  |     |     |      |
-  backend network nodes     <--- two or three layer CLOS using SONiC or other routers
-
-
-NVIDIA CUDA containers with PyTorch + dual network interfaces
-
-We don't need actual GPUs for testing - PyTorch can run in CPU-only mode while still using the NCCL initialization code paths.
+The key:
+The plugin intercepts the distributed initialization phase
+It programs the SRv6 routes before any communication starts
+It doesn't care which backend is being used for the actual communication
 
 ### Linux SRv6 test route
 
 The linux route entries include SRv6 encapsulation instructions per the Linux kernel SRv6 implementation. For more info: https://segment-routing.org/
-
-```
-docker exec -it clab-sonic-host00 ip -6 route add 2001:db8:1003:fe06::/64 encap seg6 mode encap segs fc00:0:1200:1001:1203:: dev eth1
-```
-then
-```
-docker exec -it clab-sonic-host00 ip -6 route
-```
-
-ping test
-```
-docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3
-```
-
-```
-docker exec -it clab-sonic-host00 ip -6 route del 2001:db8:1003::/64
-```
-
-### SRv6 route-add script
 
 
 ## PyTorch SRv6 Plugin: Network-Optimized Distributed Training
