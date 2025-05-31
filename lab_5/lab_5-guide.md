@@ -134,7 +134,7 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
    
 The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*
 
-![Packet Capture](../topo_drawings/lab5-wireshark-linux-srh-spine03.png)
+<img src="../topo_drawings/lab5-wireshark-linux-srh-spine03.png" width="800">
 
 ### Jalapeno and Modeling Networks as Graphs
 
