@@ -29,7 +29,7 @@ The student should have achieved the following objectives upon completion of Lab
 * Understand the SRv6 Fabric Load Balancing use case
 * Familiarity of the SRv6 stack available in Linux
 * Understanding of SONiC's SRv6 uSID shift-and-forward capabilities
-* Familiarity with the idea exposing SRv6 services to AI training frameworks and schedulers
+* Familiarity with the idea of exposing SRv6 steering services to AI training frameworks and schedulers
 * Bonus if time allows: familiarity with the open-source Jalapeno project, its API, and UI
 
 ## Host-Based SRv6 for Intelligent Fabric Load Balancing
@@ -100,11 +100,11 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
    2001:db8:1002::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1003:1202:fe06:: ] dev eth1 metric 1024 pref medium
    ```
 
-The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and then *`leaf02`*. uSID shift-and-forward at *leaf00*, *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  *leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
+The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and then *`leaf02`*. uSID shift-and-forward at *leaf00* and *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  *leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
 
 3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
   ```
-  ssh admin@clab-sonic-leaf03
+  ssh admin@clab-sonic-leaf02
   ```
   ```
   vtysh
@@ -116,9 +116,9 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
   segment-routing
   srv6
    static-sids
-    sid fc00:0:1203::/48 locator MAIN behavior uN
-    sid fc00:0:1203:fe04::/64 locator MAIN behavior uDT4 vrf default
-    sid fc00:0:1203:fe06::/64 locator MAIN behavior uDT6 vrf default
+    sid fc00:0:1202::/48 locator MAIN behavior uN
+    sid fc00:0:1202:fe04::/64 locator MAIN behavior uDT4 vrf default
+    sid fc00:0:1202:fe06::/64 locator MAIN behavior uDT6 vrf default
   exit
   ```
 
@@ -132,13 +132,15 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
  - clab-sonic-host00 eth1
  - clab-sonic-spine03 eth1
    
-This example packet capture is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*
+The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*
 
 ![Packet Capture](../topo_drawings/lab5-wireshark-linux-srh-spine03.png)
 
 ### Jalapeno and Modeling Networks as Graphs
 
 We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. 
+
+![Topology Graph](../topo_drawings/lab5-fabric-topology-graph.png)
 
 After completing **Lab 5** feel free to checkout the [Lab 5 Bonus Section](./lab_5-bonus.md) that explores the Jalapeno GraphDB, API, UI, and other host-based SRv6 scenarios in more detail.
 
