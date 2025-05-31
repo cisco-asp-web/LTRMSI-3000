@@ -132,13 +132,12 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
  - clab-sonic-host00 eth1
  - clab-sonic-spine03 eth1
    
-The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*
-
+The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*.
 <img src="../topo_drawings/lab5-wireshark-linux-srh-spine03.png" width="1200">
 
 ### Jalapeno and Modeling Networks as Graphs
 
-We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. 
+We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. Screenshot from Jalapeno UI:
 
 ![Topology Graph](../topo_drawings/lab5-fabric-topology-graph.png)
 
@@ -152,7 +151,7 @@ From https://pytorch.org/projects/pytorch/
 
 **PyTorch Distributed Training:**
 
-When you start distributed training, PyTorch initializes a process group. It uses a backend (like NCCL or Gloo) for communication between nodes. Each node gets a rank and knows about other nodes through the process group
+When you start a distributed training workload, PyTorch initializes a process group. It uses a backend like [NCCL](https://developer.nvidia.com/nccl) or [Gloo](https://github.com/pytorch/gloo) for communication between nodes. Each node gets a rank and knows about other nodes through the process group
 
 **pytorch-srv6-plugin's Workflow:**
 
