@@ -16,8 +16,6 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
       - [Adding Linux SRv6 Routes](#adding-linux-srv6-routes)
     - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
     - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
-    - [Linux SRv6 test route](#linux-srv6-test-route)
-  - [PyTorch SRv6 Plugin: Network-Optimized Distributed Training](#pytorch-srv6-plugin-network-optimized-distributed-training)
       - [Ping tests and Edgshark](#ping-tests-and-edgshark)
     - [Test flows with TRex tool](#test-flows-with-trex-tool)
       - [Grafana Dashboard](#grafana-dashboard)
@@ -187,76 +185,32 @@ Here's a typical flow:
 [Training continues normally]
 ```
 
-The plugin demo uses *`gloo`* as the backend instead of *NCCL* because *gloo* is a CPU-based backend that doesn't require GPUs and still provides the distributed training functionality we need
+**pytorch-srv6-plugin demo:**
 
-The interaction is similar, but simpler:
+The plugin includes a simple demo that uses a *`gloo`* backend because it doesn't require GPUs and still provides distributed training functionality. We'll run the demo on three of our four *host* containers:
 
-```
-[PyTorch Training Script]
-        ↓
-[Initialize Distributed Training with gloo backend]
-        ↓
-[SRv6 Plugin intercepts]
-        ↓
-[Programs SRv6 routes]
-        ↓
-[gloo uses routes for communication]
-        ↓
-[Training continues normally]
-```
+ - host00
+ - host01
+ - host03
 
-The key:
-The plugin intercepts the distributed initialization phase
-It programs the SRv6 routes before any communication starts
-It doesn't care which backend is being used for the actual communication
+Its most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. And in the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, but doesn't train anything, it just pings :)
 
-### Linux SRv6 test route
+1. Open three terminal sessions on *topology-host*
 
-The linux route entries include SRv6 encapsulation instructions per the Linux kernel SRv6 implementation. For more info: https://segment-routing.org/
+2. In the first terminal session initialize the test run on *host00*
+   ```
+   docker exec clab-sonic-host00 bash -c "RANK=0 python3 /app/test_plugin.py"
+   ```
 
+3. In the second terminal session initialize the test run on *host01*
+   ```
+   docker exec clab-sonic-host01 bash -c "RANK=1 python3 /app/test_plugin.py"
+   ```
 
-## PyTorch SRv6 Plugin: Network-Optimized Distributed Training
-
-The PyTorch SRv6 Plugin is a tool that leverages SRv6 to enhance distributed training. It optimizes network paths for distributed training workloads by dynamically programming SRv6 routes based on real-time network conditions.
-
-Key Features
-
-* Network-Aware Distributed Training: Automatically optimizes network paths for PyTorch distributed training sessions
-* SRv6 Route Programming: Programs optimal SRv6 routes using either Linux kernel or VPP (Vector Packet Processing)
-* Dynamic Path Selection: Uses Jalapeno API to determine the best network paths based on current network conditions
-* Multi-Platform Support: Works with both Linux and VPP platforms for route programming
-* Distributed Training Integration: Seamlessly integrates with PyTorch's distributed training framework
-
-How It Works
-Initialization: When a distributed training session starts, the plugin:
-Initializes the distributed environment
-Collects information about all participating nodes
-Establishes communication with the Jalapeno API
-Path Discovery: For each node pair:
-Queries the Jalapeno API for optimal paths
-Receives SRv6 path information including USIDs (Universal Segment Identifiers)
-Processes path information to determine optimal routes
-Route Programming: For each discovered path:
-Programs local SRv6 routes using the appropriate platform (Linux/VPP)
-Appends destination functions to USIDs
-Sets up encapsulation for optimal packet forwarding
-Distributed Training: After route programming:
-Enables distributed training communication
-Maintains optimized network paths throughout the training session
-Ensures efficient data transfer between nodes
-Use Cases
-Distributed Deep Learning: Optimize network paths for multi-node training
-Network-Aware Computing: Leverage SRv6 for intelligent packet routing
-High-Performance Computing: Improve communication efficiency in distributed systems
-Network Engineering Training: Demonstrate SRv6 capabilities in a practical setting
-Technical Requirements
-Python 3.8+
-PyTorch
-Linux kernel with SRv6 support (for Linux route programming)
-VPP (optional, for VPP-based route programming)
-Access to Jalapeno API
-Network infrastructure supporting SRv6
-This plugin serves as an excellent example of how modern networking technologies like SRv6 can be integrated with distributed computing frameworks to optimize performance and resource utilization.
+4. In the third terminal session initialize the test run on *host01*
+   ```
+   docker exec clab-sonic-host01 bash -c "RANK=1 python3 /app/test_plugin.py"
+   ```
 
 #### Ping tests and Edgshark
 
