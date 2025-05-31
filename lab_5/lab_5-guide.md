@@ -160,14 +160,14 @@ Before NCCL/Gloo starts communicating, the plugin will:
   - Get the list of nodes from the distributed workload setup
   - Query the Jalapeno API for a shortest-path (lowest *`load`* metric) for each *source/destination* pair
   - The API returns an SRv6 uSID encapsulation instruction for each *source/destination* pair that will pin traffic to a specific path in the fabric
-  - The *plugin* then programs local linux SRv6 routes on each node. 
+  - The *plugin* then programs local Linux SRv6 routes, similar to the route we manually programmed earlier, on each node. 
+  - The distributed workload's traffic is SRv6 encapsulated as it egresses the source *host*
+
+The effect is the workload's traffic is intelligently load balanced across the fabric and no longer subject to the potential imbalances and congestion associated with ECMP
 
 > [!Note]
 > If we had GPUs and RDMA NICs we would work to extend the plugin to program route + SRv6 encap entries on the NIC itself
 
-
-
-  - The distributed workload's traffic is SRv6 encapsulated as it egresses the source *host*
 
 Here's a typical flow:
 
@@ -176,23 +176,18 @@ Here's a typical flow:
         ↓
 [Initialize Distributed Training]
         ↓
-[PyTorch calls NCCL backend]
+[PyTorch calls NCCL or Gloo backend]
         ↓
 [SRv6 Plugin intercepts]
         ↓
 [Programs SRv6 routes]
         ↓
-[NCCL uses routes for communication]
+[NCCL/Gloo uses routes for communication]
         ↓
 [Training continues normally]
 ```
 
-The key point is that the plugin works at the network layer, below both PyTorch and NCCL. It ensures that when NCCL needs to communicate between nodes, it uses the optimized SRv6 paths we've programmed, but NCCL itself doesn't need to know about SRv6 - it just sees the network as being faster and more efficient.
-
-The demo uses gloo as the backend instead of NCCL because:
-gloo is a CPU-based backend that doesn't require GPUs
-It's perfect for testing and demonstration purposes
-It still provides all the distributed training functionality we need
+The plugin demo uses *`gloo`* as the backend instead of *NCCL* because *gloo* is a CPU-based backend that doesn't require GPUs and still provides the distributed training functionality we need
 
 The interaction is similar, but simpler:
 
