@@ -1,7 +1,7 @@
 # Lab 5: SRv6 for Intelligent Load Balancing of AI Workloads [20 Min]
 
 ### Description
-In recent months a few Hyperscalers have expressed interest in running SRv6 over the AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The SRv6 encapsulation would happen right at the host stack or RDMA NIC: host-based SRv6.
+In recent months a few Hyperscalers have expressed interest in running SRv6 over their AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The SRv6 encapsulation would happen right at the host stack or RDMA NIC: *`host-based SRv6`*.
 
 In Lab 5 we will explore this use case with our SONiC nodes and their attached Ubuntu containers simulating an AI Training infrastructure. 
 
@@ -29,6 +29,7 @@ The student should have achieved the following objectives upon completion of Lab
 * Understand the SRv6 Fabric Load Balancing use case
 * Familiarity of the SRv6 stack available in Linux
 * Understanding of SONiC's SRv6 uSID shift-and-forward capabilities
+* Familiarity with the idea exposing SRv6 services to AI training frameworks and schedulers
 * Bonus if time allows: familiarity with the open-source Jalapeno project, its API, and UI
 
 ## Host-Based SRv6 for Intelligent Fabric Load Balancing
@@ -45,15 +46,15 @@ The key problem to solve:
 
 The solution: coordination of all senders source routing their traffic over disjoint paths through the fabric.
 
-Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to simulate this capability in the lab we've built a *`demo PyTorch SRv6 plugin`* which programs linux (or VPP) SRv6 routes, andd which leverages the open-source *`project Jalapeno`* as its backend data repository.
+Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to simulate this capability in the lab we've built a *`demo PyTorch SRv6 plugin`* which programs Linux kernel (or VPP) SRv6 routes, and which leverages the open-source *`project Jalapeno`* as its backend data repository.
 
-SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
+ - SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
 
- - Project Jalapeno homepage: https://github.com/cisco-open/jalapeno
-
- - For more info on PyTorch: https://pytorch.org/
+ - PyTorch Homepage: https://pytorch.org/
 
  - SRv6 Linux Kernel Implementation: https://segment-routing.org/
+
+ - Project Jalapeno Homepage: https://github.com/cisco-open/jalapeno
 
 *`Insert diagram with PyTorch plugin + Jalapeno controller/API interaction`*
 
@@ -62,13 +63,8 @@ SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
    
 SRv6 has been available in the mainstream Linux kernel since version 4.10, and the Ubuntu 22.04 nodes in our lab are running Kernel 6.8, so there is no need to install packages or tune any sysctl or other parameters.
 
-Reference *docker exec command* to show the kernel version:
+Example *docker exec command* to show the kernel version:
 
-```
-docker exec -it clab-sonic-host01 uname -a
-```
-
-Expected output:
 ```
 $ docker exec -it clab-sonic-host01 uname -a
 
@@ -77,7 +73,7 @@ Linux host01 6.8.0-48-lowlatency #48.3~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Oc
 
 #### Adding Linux SRv6 Routes
 
-Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but does not yet support uSID. We can work with this because our SONiC nodes do support uSID and we'll simply construct the Linux SRv6 route with a single *segment* that happens to have our fabric uSIDs embedded in it.
+Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but does not yet support uSID. We can work with this because our SONiC nodes do support uSID and we'll simply construct the Linux SRv6 route with a single *segment* in the SRH that happens to have our fabric uSIDs embedded in it.
 
 1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine03`* -> *`leaf02`*: 
 
@@ -104,7 +100,7 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
    2001:db8:1002::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1003:1202:fe06:: ] dev eth1 metric 1024 pref medium
    ```
 
-The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and then *`leaf02`*. Upon reaching *`leaf02`* the outer ipv6 destination address will be **fc00:0:1202:fe06::** due to uSID shift-and-forward operations on leaf00 and spine03. *`leaf02`* recognizes itself in the destination address and that it has a SRv6 uDT6 entry *`fc06`*. leaf02 will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
+The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and then *`leaf02`*. uSID shift-and-forward at *leaf00*, *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  *leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
 
 3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
   ```
