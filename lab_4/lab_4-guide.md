@@ -140,7 +140,7 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from the Li
 
 If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
 
-SONiC leverages the open-source FRR [Free Range Routing](https://frrouting.org/) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
+SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
 
 The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
@@ -319,12 +319,17 @@ Configuring SONiC's BGP container can be done from the command line and is very 
    write mem
    ```
 
-6. Optional: run some *show* commands:
+6. Optional: run some *show* commands
    ```
    show run
    show bgp summary
    show interface brief
    ```   
+
+7. Exit FRR vtysh
+   ```
+   exit
+   ```
 
 You may have noticed in the FRR config or show command output that SONiC supports eBGP unnumbered peering over its Ethernet interfaces. This is a huge advantage for deploying, automating, and managing hyperscale fabrics, and we wanted to highlight it here. 
 
@@ -352,7 +357,7 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 
 
 
-1. Launch a terminal on the topology host using the visual code containerlab extension:
+1. Launch a terminal on the *topology host* using the visual code containerlab extension:
 
 ![terminal](../topo_drawings/lab4-terminal.png)
 
@@ -416,14 +421,22 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
     
 ### SONiC SRv6 configuration
 
-Keep your *vtysh* session open on any **leaf** router and:
+Our SONiC topology has now been configured for SRv6 uSID forwarding with each node assigned SRv6 locators as shown in the diagram:
+
+![Topology with Locators](../topo_drawings/lab5-topology-with-locators.png)
+
+If your *vtysh* session is on *leaf00* keep it open. If not, ssh to *leaf00* and invoke vtysh for the next few tasks:
+
+   ```
+   ssh admin@clab-sonic-leaf00
+   ```
 
 1. Check SONiC SRv6 configuration
    ```
    show run
    ```
 
-   Example SRv6 config output from leaf00:
+   Example SRv6 config output:
    ```
    segment-routing
     srv6
@@ -475,27 +488,64 @@ Keep your *vtysh* session open on any **leaf** router and:
           Configured: fc00:0:1200::1
     ```
 
-3. Exit the FRR/BGP container and take a look at the linux ipv6 routing table:
+3. Compare an FRR BGP route entry and its corresponding Linux route entry:
 
+    From the FRR vtysh session:
+    ```
+    show bgp ipv6 uni 2001:db8:1003::/64
+    ```
+
+    Expected output:
+    ```
+    leaf00# show bgp ipv6 uni 2001:db8:1003::/64
+    BGP routing table entry for 2001:db8:1003::/64, version 27
+    Paths: (4 available, best #1, table default)
+      Advertised to non peer-group peers:
+      Ethernet0 Ethernet4 Ethernet8 Ethernet12
+      65000 65203
+        fe80::20a3:c7ff:fe5e:5c58 from Ethernet0 (10.0.0.0)
+        (fe80::20a3:c7ff:fe5e:5c58) (prefer-global)
+          Origin IGP, valid, external, multipath, best (Older Path)
+          Last update: Sun Jun  1 03:17:37 2025
+      65001 65203
+        fe80::20dc:72ff:fe50:c026 from Ethernet4 (10.0.0.1)
+        (fe80::20dc:72ff:fe50:c026) (prefer-global)
+          Origin IGP, valid, external, multipath
+          Last update: Sun Jun  1 03:17:38 2025
+      65002 65203
+        fe80::20c8:3aff:fed9:1a10 from Ethernet8 (10.0.0.2)
+        (fe80::20c8:3aff:fed9:1a10) (prefer-global)
+          Origin IGP, valid, external, multipath
+          Last update: Sun Jun  1 03:17:38 2025
+      65003 65203
+        fe80::20f6:30ff:fe5c:9180 from Ethernet12 (10.0.0.3)
+        (fe80::20f6:30ff:fe5c:9180) (prefer-global)
+          Origin IGP, valid, external, multipath
+          Last update: Sun Jun  1 03:17:38 2025
+    ```
+
+    FRR's BGP show command output again resembles IOS output. The prefix is known via *leaf00's* 4 BGP unnumbered neighbors.
+
+    Exit vtysh and check the same route in the Linux table:
     ```
     exit
     ```
     ```
-    ip -6 route
-    ```
-
-    Note all the entries with `*proto bgp src*` - these are routes (including ECMP!) learned from BGP and installed in the linux routing table
-
-4. Run the ip -6 route command again and grep for the local routes for the node's locator:
-
-    ```
-    ip -6 route | grep seg6local
+    ip -6 route show 2001:db8:1003::/64
     ```
 
     Example output:
     ```
-    admin@leaf00:~$ ip -6 route | grep seg6local
-    fc00:0:1200::/48 nhid 63  encap seg6local action End flavors next-csid lblen 32 nflen 16 dev sr0 proto 196 metric 20 pref medium
+    $ ip -6 route show 2001:db8:1003::/64
+    2001:db8:1003::/64 nhid 81 proto bgp src fc00:0:1200::1 metric 20 pref medium
+	  nexthop via fe80::20a3:c7ff:fe5e:5c58 dev Ethernet0 weight 1 
+	  nexthop via fe80::20dc:72ff:fe50:c026 dev Ethernet4 weight 1 
+	  nexthop via fe80::20c8:3aff:fed9:1a10 dev Ethernet8 weight 1 
+	  nexthop via fe80::20f6:30ff:fe5c:9180 dev Ethernet12 weight 1 
+    ```
+
+    Note how the entry has the notation `*proto bgp src*` which indicates the route was learned from BGP. The route also has 4 ECMP paths via the BGP unnumbered / IPv6 link-local sessions.
+
 
 ### Verify Host IPs and Routes
 
@@ -506,7 +556,6 @@ The containerlab topology file included a number of *`exec`* commands to be run 
     From the topology host execute *docker exec* commands to display the ip addresses and routing table of ubuntu-host00:
 
     ![terminal](../topo_drawings/lab4-host00-ipaddr.png)
-
 
 
     ```
