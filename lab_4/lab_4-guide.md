@@ -173,7 +173,7 @@ Configuration state in SONiC is saved in two separate files. The first is the **
 
 **config load**
 
-The command *config load* is used to load a configuration following the JSON schema. This command loads the configuration from the input file, which defaults to */etc/sonic/config_db.json*, unless specified otherwise.The configuration present in the input file overwrites the already running configuration. This command does not flush the config DB before loading the new configuration, rather it performs a *diff* on the existing and applies the new. 
+The command *config load* is used to load a configuration from an input file; the default is */etc/sonic/config_db.json*, unless specified otherwise. This command does not flush the config DB before loading the new configuration, rather it performs a *diff* on the existing and applies the new. 
 
 - Usage:
 ```
@@ -188,9 +188,7 @@ Running command: /usr/local/bin/sonic-cfggen -j /etc/sonic/config_db.json --writ
 
 **config save**
 
-The command *config save* is used to save the redis CONFIG_DB into the user-specified filename or into the default /etc/sonic/config_db.json. This is analogous to the Cisco IOS command *copy run start*. 
-
-Saved files can be transferred to remote machines for debugging. If users wants to load the configuration from this new file at any point of time, they can use the *config load* command and provide this newly generated file as input. 
+*config save* is used to save the redis CONFIG_DB into the user-specified filename or into the default /*etc/sonic/config_db.json*. This is analogous to the Cisco IOS command *copy run start*. 
 
 - Usage:
 ```
@@ -219,7 +217,7 @@ Usage: config [OPTIONS] COMMAND [ARGS]...
 
 **Visualize The configuration Through CLI**
 
-As network engineers, we still like to see the traditionnal "show run" on our devices. On SONiC, the show runningconfiguration command on SONiC displays the current active configuration of various system components. You can view specific parts such as BGP, interfaces, ports, or the full configuration using subcommands like show runningconfiguration all. This is useful for verifying what is currently applied without needing to inspect config files directly.
+As network engineers, we still like to see the traditionnal "show run" on our devices. On SONiC, the *show runningconfiguration* command displays the current active configuration of various system components. You can view specific elements such as BGP, interfaces, ports, or the full configuration using subcommands like *show runningconfiguration all*. This is useful for verifying what is currently applied without needing to inspect config files directly.
 
 ```
 admin@sonic:~$ show runningconfiguration all

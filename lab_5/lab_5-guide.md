@@ -1,7 +1,7 @@
 # Lab 5: SRv6 for Intelligent Load Balancing of AI Workloads [20 Min]
 
 ### Description
-In recent months a few Hyperscalers have expressed interest in running SRv6 over their AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The SRv6 encapsulation would happen right at the host stack or RDMA NIC: *`host-based SRv6`*.
+In recent months a few Hyperscalers have expressed interest in running SRv6 over their AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The SRv6 encapsulation would happen right at the host stack or RDMA NIC: *`host-based SRv6!`*
 
 In Lab 5 we will explore this use case with our SONiC nodes and their attached Ubuntu containers simulating an AI Training infrastructure. 
 
@@ -42,9 +42,9 @@ The key problem to solve:
  - With AI training this can lead to delays or even job failures. 
  - Given the cost of running large GPU pools, delay or failure becomes very costly.
 
-The solution: coordination of all senders source routing their traffic over disjoint paths through the fabric.
+The solution: *coordination of all senders source routing their traffic over disjoint paths through the fabric.*
 
-Cisco doesn't currently have a host-based SRv6 controller product and the Hyperscalers build their own SDN control infrastructure, so to simulate this capability in the lab we've built a *`demo PyTorch SRv6 plugin`* which programs Linux kernel (or VPP) SRv6 routes, and which leverages the open-source *`project Jalapeno`* as its backend data repository.
+Cisco doesn't currently have a controller product for host-based SRv6 and the Hyperscalers build their own SDN control infrastructure, so to simulate this capability in the lab we've built a *`demo PyTorch SRv6 plugin`* which programs Linux kernel (or VPP) SRv6 routes, and which leverages the open-source *`project Jalapeno`* as its backend data repository.
 
  - SRv6 PyTorch plugin: https://github.com/segmentrouting/srv6-pytorch-plugin
 
@@ -75,17 +75,16 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
 
 1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine03`* -> *`leaf02`*: 
 
-  Option 1: exec into *`host00`* and run the ip route add command:
-  ```
-  docker exec -it clab-sonic-host00 bash
-  ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1003:1202:fe06:: dev eth1
-  ```
+   Option 1: exec into *`host00`* and run the ip route add command:
+   ```
+   docker exec -it clab-sonic-host00 bash
+   ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1003:1202:fe06:: dev eth1
+   ```
 
-  Option 2: execute the *route add* from the *topology-host* with *docker exec*:
-
-  ```
-  docker exec -it clab-sonic-host00 ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1003:1202:fe06:: dev eth1
-  ```
+   Option 2: execute the *route add* from the *topology-host* with *docker exec*:
+   ```
+   docker exec -it clab-sonic-host00 ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1003:1202:fe06:: dev eth1
+   ```
 
 2. Display the Linux route on *host00*:
    ```
