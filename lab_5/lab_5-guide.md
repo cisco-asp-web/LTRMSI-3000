@@ -244,7 +244,7 @@ Screenshot of output from *`host00`* with comments:
 
 4. Optional: check the Linux ipv6 routes on *hosts*:
     ```
-
+    docker exec -it clab-sonic-host00 ip -6 route
     ```
 
     *host00* output (note the route to *host02* that we manually added earlier in lab 5 is still in place):
