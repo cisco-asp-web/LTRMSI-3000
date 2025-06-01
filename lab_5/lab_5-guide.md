@@ -16,9 +16,6 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
       - [Adding Linux SRv6 Routes](#adding-linux-srv6-routes)
     - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
     - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
-      - [Ping tests and Edgshark](#ping-tests-and-edgshark)
-    - [Test flows with TRex tool](#test-flows-with-trex-tool)
-      - [Grafana Dashboard](#grafana-dashboard)
 
 
 ## Lab Objectives
@@ -241,68 +238,31 @@ As the PyTorch job initializes the srv6-plugin takes action. It should create SR
 
 The "job" completes with some pings from each host to each host.
 
-Expected output from *`host00`* with comments:
-```yaml
-$ docker exec clab-sonic-host00 bash -c "RANK=0 MASTER_PORT=29500 python3 /app/test_plugin.py"
-INFO:dist_setup:  Initializing distributed training:
-INFO:dist_setup:  Rank: 0
-INFO:dist_setup:  World Size: 3
-INFO:dist_setup:  Master Address: 2001:db8:1000::2
-INFO:dist_setup:  Master Port: 29500
-INFO:dist_setup:  Using init_method: tcp://[2001:db8:1000::2]:29500
-INFO:dist_setup:  Initializing PyTorch distributed process group...
-INFO:srv6_plugin: Getting node information...
-INFO:controller:  Route to 2001:db8:1001:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1001::', 'fc00:0:1201::'], 'srv6_usid': 'fc00:0:1200:1001:1201::'}
-INFO:controller:  Route to 2001:db8:1003:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1003::', 'fc00:0:1203::'], 'srv6_usid': 'fc00:0:1200:1003:1203::'}
-INFO:srv6_plugin: Initialization completed successfully
-INFO:controller:  Route to 2001:db8:1001:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1002::', 'fc00:0:1201::'], 'srv6_usid': 'fc00:0:1200:1002:1201::'}
-INFO:controller:  Route to 2001:db8:1003:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1000::', 'fc00:0:1203::'], 'srv6_usid': 'fc00:0:1200:1000:1203::'}
+Screenshot of output from *`host00`* with comments:
 
-Deleted existing route to 2001:db8:1001::/64 in table 254
-Adding route to 2001:db8:1001::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1001:1201:fe06::']} to table 254
+![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
 
-Deleted existing route to 2001:db8:1003::/64 in table 254
-Adding route to 2001:db8:1003::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1003:1203:fe06::']} to table 254
+4. Optional: check the Linux ipv6 routes on *hosts*:
+    ```
 
-Deleted existing route to 2001:db8:1001::/64 in table 254
-Adding route to 2001:db8:1001::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1002:1201:fe06::']} to table 254
+    ```
 
-Deleted existing route to 2001:db8:1003::/64 in table 254
-Adding route to 2001:db8:1003::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1000:1203:fe06::']} to table 254
+    *host00* output (note the route to *host02* that we manually added earlier in lab 5 is still in place):
+    ```
+    $ docker exec -it clab-sonic-host00 ip -6 route
+    2001:db8:1000::/64 dev eth1 proto kernel metric 256 pref medium
+    2001:db8:1001::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1000:1201:fe06:: ] dev eth1 proto static metric 1024 pref medium
+    2001:db8:1002::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1001:1202:fe06:: ] dev eth1 metric 1024 pref medium
+    2001:db8:1003::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1002:1203:fe06:: ] dev eth1 proto static metric 1024 pref medium
+    2001:db8::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
+    fc00::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
+    fe80::/64 dev eth1 proto kernel metric 256 pref medium
+    fe80::/64 dev eth2 proto kernel metric 256 pref medium
+    ```
 
-Testing connectivity from host00 to host01...
-Pinging 2001:db8:1001:0::2
-PING 2001:db8:1001:0::2(2001:db8:1001::2) 56 data bytes
-64 bytes from 2001:db8:1001::2: icmp_seq=1 ttl=63 time=1.07 ms
-64 bytes from 2001:db8:1001::2: icmp_seq=2 ttl=63 time=1.27 ms
-64 bytes from 2001:db8:1001::2: icmp_seq=3 ttl=63 time=1.07 ms
-64 bytes from 2001:db8:1001::2: icmp_seq=4 ttl=63 time=0.999 ms
+**should we run or re-run pytorch with an Edgshark capture?**
 
---- 2001:db8:1001:0::2 ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3003ms
-rtt min/avg/max/mdev = 0.999/1.101/1.272/0.102 ms
-
-Testing connectivity from host00 to host03...
-Pinging 2001:db8:1003:0::2
-PING 2001:db8:1003:0::2(2001:db8:1003::2) 56 data bytes
-64 bytes from 2001:db8:1003::2: icmp_seq=1 ttl=63 time=0.853 ms
-64 bytes from 2001:db8:1003::2: icmp_seq=2 ttl=63 time=0.930 ms
-64 bytes from 2001:db8:1003::2: icmp_seq=3 ttl=63 time=1442 ms
-64 bytes from 2001:db8:1003::2: icmp_seq=4 ttl=63 time=394 ms
-
---- 2001:db8:1003:0::2 ping statistics ---
-4 packets transmitted, 4 received, 0% packet loss, time 3094ms
-rtt min/avg/max/mdev = 0.853/459.407/1441.995/589.544 ms, pipe 2
-
-Test completed successfully!
-
-```
-
-#### Ping tests and Edgshark
-
-### Test flows with TRex tool
-
-#### Grafana Dashboard
+**should we build a Grafana Dashboard, or call it good?**
 
 
 
