@@ -506,19 +506,16 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
    ```
    NAME      READY   STATUS    RESTARTS   AGE
    carrots0   1/1     Running   0          10s
-   carrots1   1/1     Running   0          10s
    ``` 
 
 3. Let's get the pods' IP addresses as we'll need them in a few more steps:
    ```
    kubectl get pod -n veggies carrots0 -o jsonpath="{.status.podIPs}" && echo
-   kubectl get pod -n veggies carrots1 -o jsonpath="{.status.podIPs}" && echo
    ```
 
    Expected output should look something like:
    ```
    [{"ip":"10.200.0.242"},{"ip":"2001:db8:42::2131"}]
-   [{"ip":"10.200.0.3"},{"ip":"2001:db8:42::dad9"}]
    ```
 
 4. Next we'll verify Cilium has allocated the carrots VRF a SRv6 L3VPN uDT4 SID on Berlin:
