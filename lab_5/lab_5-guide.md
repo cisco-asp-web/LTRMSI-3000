@@ -97,7 +97,7 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
    2001:db8:1002::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1003:1202:fe06:: ] dev eth1 metric 1024 pref medium
    ```
 
-The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and *`leaf02`*. uSID shift-and-forward at *leaf00* and *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  
+The SRv6 uSID combination in the above will route traffic to *`host02`* via *`leaf00`*, *`spine03`*, and *`leaf02`*. The uSID shift-and-forward at *leaf00* and *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  
 
 ![Linux SRv6 Route](../topo_drawings/lab5-linux-usid-route.png)
 
