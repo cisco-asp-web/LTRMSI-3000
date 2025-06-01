@@ -201,7 +201,7 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
 
 Its most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. 
 
-In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. Where the demo lacks in training functionality it makes up for in pings! 
+In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. But where the demo lacks in training functionality it makes up for in pings! 
 
 1. Open three terminal sessions on *topology-host*
 
