@@ -139,7 +139,7 @@ The example packet capture below is taken from *spine01* eth1. As you can see th
 
 ### Jalapeno and Modeling Networks as Graphs
 
-Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to *`PyTorch`* (or other SDN applications) via Jalapeno's API. Screenshot from <a href="http://198.18.128.101:30700" target="_blank" rel="noopener noreferrer">Jalapeno UI</a>:
+Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to *`PyTorch`* (or other SDN applications) via Jalapeno's API. Screenshot from [Jalapeno UI](http://198.18.128.101:30700){:target="_blank"}:
 
 ![Topology Graph](../topo_drawings/lab5-fabric-topology-graph.png)
 
