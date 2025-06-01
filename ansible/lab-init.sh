@@ -21,3 +21,8 @@ brctl show
 ifconfig berlin-net
 sudo iptables -t nat --list | grep MASQUERADE
 virsh list --all
+
+cd LTRMSI-3000/lab_5/scripts/xrd-network/
+python3 add_meta_data.py
+cd ~/
+
