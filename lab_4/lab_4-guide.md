@@ -423,7 +423,7 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 
 Our SONiC topology has now been configured for SRv6 uSID forwarding with each node assigned SRv6 locators as shown in the diagram:
 
-![Topology with Locators](../topo_drawings/lab5-topology-with-locators.png)
+![Topology with Locators](../topo_drawings/lab4-topology-with-locators.png)
 
 If your *vtysh* session is on *leaf00* keep it open. If not, ssh to *leaf00* and invoke vtysh for the next few tasks:
 
