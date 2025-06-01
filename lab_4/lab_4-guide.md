@@ -72,7 +72,8 @@ Containerlab logs:
 [stderr] 18:48:18 INFO Created link: leaf01:eth1 ▪┄┄▪ spine00:eth2
 ```
 
-
+Once deployed our ML Training Fabric topology looks like this:
+![Lab 4 Topology](../topo_drawings/lab4-topology-diagram.png)
 
 
 ## SONiC: A Very Quick Tour
