@@ -234,13 +234,15 @@ B. Open three terminal sessions on *topology-host*
 As the PyTorch job initializes the srv6-plugin takes action. It should create SRv6 routes for each *host* to each other *host* participating in the workload. 
 
 *`host00`* --> *`host01`* and *`host03`*
+
 *`host01`* --> *`host00`* and *`host03`*
+
 *`host03`* --> *`host00`* and *`host01`*
 
 The "job" completes with some pings from each host to each host.
 
 Expected output from *`host00`* with comments:
-```diff
+```yaml
 $ docker exec clab-sonic-host00 bash -c "RANK=0 MASTER_PORT=29500 python3 /app/test_plugin.py"
 INFO:dist_setup:  Initializing distributed training:
 INFO:dist_setup:  Rank: 0
