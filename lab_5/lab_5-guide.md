@@ -97,7 +97,11 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
    2001:db8:1002::/64  encap seg6 mode encap segs 1 [ fc00:0:1200:1003:1202:fe06:: ] dev eth1 metric 1024 pref medium
    ```
 
-The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and then *`leaf02`*. uSID shift-and-forward at *leaf00* and *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  *leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
+The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf00`*, *`spine03`*, and *`leaf02`*. uSID shift-and-forward at *leaf00* and *spine03* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  
+
+![Linux SRv6 Route](../topo_drawings/lab5-linux-usid-route.png)
+
+*leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64** and forward the traffic to *`host02`*
 
 3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
   ```
@@ -129,12 +133,13 @@ The SRv6 uSID combination in the above will route traffic to *host02* via *`leaf
  - clab-sonic-host00 eth1
  - clab-sonic-spine03 eth1
    
-The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and decapsulate the entire thing, and forward the inner packet to *host02*.
+The example packet capture below is taken from *spine03* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and will decapsulate the entire outer header and do a lookup on the inner IPv6 destination address. *Leaf02* will then forward the inner packet to *host02*.
+
 <img src="../topo_drawings/lab5-wireshark-linux-srh-spine03.png" width="1200">
 
 ### Jalapeno and Modeling Networks as Graphs
 
-We've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. Screenshot from Jalapeno UI:
+Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to PyTorch (or other SDN applications) via Jalapeno's API. Screenshot from Jalapeno UI:
 
 ![Topology Graph](../topo_drawings/lab5-fabric-topology-graph.png)
 
