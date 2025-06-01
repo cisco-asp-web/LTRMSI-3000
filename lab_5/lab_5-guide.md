@@ -141,7 +141,7 @@ The example packet capture below is taken from *spine01* eth1. As you can see th
 
 Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to *`PyTorch`* (or other SDN applications) via Jalapeno's API. 
 
-Screenshot from <a href="http://198.18.128.101:30700" target="_blank">Jalapeno UI</a>
+Screenshot from [Jalapeno UI](http://198.18.128.101:30700) - right click or CTRL-click to open in new tab, select "Topology Viewer" then "fabric graph". From the "layout" dropdown select "Clos"
 
 ![Topology Graph](../topo_drawings/lab5-fabric-topology-graph.png)
 
@@ -159,7 +159,7 @@ When you start a distributed training workload, PyTorch initializes a process gr
 
 **pytorch-srv6-plugin's Workflow:**
 
-Before NCCL/Gloo starts communicating, the plugin will:
+Before NCCL/Gloo starts communicating, the SRv6 plugin will:
 
   - Get the list of nodes from the distributed workload setup
   - Query the Jalapeno API for a shortest-path (lowest *`load`* metric) for each *source/destination* pair
@@ -199,9 +199,13 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
  - host01
  - host03
 
-Its most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. And in the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, but doesn't train anything, it just pings :)
+Its most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. 
+
+In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. Where the demo lacks in training functionality it makes up for in pings! 
 
 1. Open three terminal sessions on *topology-host*
+
+![terminal sessions](../topo_drawings/lab5-terminal-sessions.png)
 
 2. In the first terminal session initialize the test run on *host00*
    ```
