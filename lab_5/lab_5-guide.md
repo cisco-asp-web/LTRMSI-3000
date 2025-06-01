@@ -212,6 +212,11 @@ Its most effective to run the plugin-demo from three separate terminal sessions 
    docker exec clab-sonic-host01 bash -c "RANK=1 python3 /app/test_plugin.py"
    ```
 
+Expected output from *`host00`*:
+```
+
+```
+
 #### Ping tests and Edgshark
 
 ### Test flows with TRex tool
