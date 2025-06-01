@@ -191,7 +191,7 @@ Here's a typical flow:
 [Training continues normally]
 ```
 
-**pytorch-srv6-plugin demo:**
+**pytorch-srv6-plugin demo**
 
 The plugin includes a simple demo that uses a *`gloo`* backend because it doesn't require GPUs and still provides distributed training functionality. We'll run the demo on three of our four *host* containers:
 
@@ -199,7 +199,7 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
  - host01
  - host03
 
-1. Copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
+A. Copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
    
    *hopefully this step won't be necessary because we took care of it the night before the lab*
 
@@ -208,31 +208,91 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
    ./copy-files.sh
    ```
 
-Its most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. 
+It is most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. 
 
 In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. But where the demo lacks in training functionality it makes up for in pings! 
 
-1. Open three terminal sessions on *topology-host*
+B. Open three terminal sessions on *topology-host*
 
 ![terminal sessions](../topo_drawings/lab5-terminal-sessions.png)
 
-2. In the first terminal session initialize the test run on *host00*
+1. In the first terminal session initialize the test run on *host00*
    ```
-   docker exec clab-sonic-host00 bash -c "RANK=0 python3 /app/test_plugin.py"
-   ```
-
-3. In the second terminal session initialize the test run on *host01*
-   ```
-   docker exec clab-sonic-host01 bash -c "RANK=1 python3 /app/test_plugin.py"
+   docker exec clab-sonic-host00 bash -c "RANK=0 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-4. In the third terminal session initialize the test run on *host01*
+2. In the second terminal session initialize the test run on *host01*
    ```
-   docker exec clab-sonic-host01 bash -c "RANK=1 python3 /app/test_plugin.py"
+   docker exec clab-sonic-host01 bash -c "RANK=1 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-Expected output from *`host00`*:
-```
+3. In the third terminal session initialize the test run on *host01*
+   ```
+   docker exec clab-sonic-host03 bash -c "RANK=2 MASTER_PORT=29500 python3 /app/test_plugin.py"
+   ```
+
+As the PyTorch job initializes the srv6-plugin takes action. It should create SRv6 routes for each *host* to each other *host* participating in the workload. 
+
+*`host00`* --> *`host01`* and *`host03`*
+*`host01`* --> *`host00`* and *`host03`*
+*`host03`* --> *`host00`* and *`host01`*
+
+The "job" completes with some pings from each host to each host.
+
+Expected output from *`host00`* with comments:
+```diff
+$ docker exec clab-sonic-host00 bash -c "RANK=0 MASTER_PORT=29500 python3 /app/test_plugin.py"
+INFO:dist_setup:  Initializing distributed training:
+INFO:dist_setup:  Rank: 0
+INFO:dist_setup:  World Size: 3
+INFO:dist_setup:  Master Address: 2001:db8:1000::2
+INFO:dist_setup:  Master Port: 29500
+INFO:dist_setup:  Using init_method: tcp://[2001:db8:1000::2]:29500
+INFO:dist_setup:  Initializing PyTorch distributed process group...
+INFO:srv6_plugin: Getting node information...
+INFO:controller:  Route to 2001:db8:1001:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1001::', 'fc00:0:1201::'], 'srv6_usid': 'fc00:0:1200:1001:1201::'}
+INFO:controller:  Route to 2001:db8:1003:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1003::', 'fc00:0:1203::'], 'srv6_usid': 'fc00:0:1200:1003:1203::'}
+INFO:srv6_plugin: Initialization completed successfully
+INFO:controller:  Route to 2001:db8:1001:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1002::', 'fc00:0:1201::'], 'srv6_usid': 'fc00:0:1200:1002:1201::'}
+INFO:controller:  Route to 2001:db8:1003:0::/64, SRv6 data: {'srv6_sid_list': ['fc00:0:1200::', 'fc00:0:1000::', 'fc00:0:1203::'], 'srv6_usid': 'fc00:0:1200:1000:1203::'}
+
+Deleted existing route to 2001:db8:1001::/64 in table 254
+Adding route to 2001:db8:1001::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1001:1201:fe06::']} to table 254
+
+Deleted existing route to 2001:db8:1003::/64 in table 254
+Adding route to 2001:db8:1003::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1003:1203:fe06::']} to table 254
+
+Deleted existing route to 2001:db8:1001::/64 in table 254
+Adding route to 2001:db8:1001::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1002:1201:fe06::']} to table 254
+
+Deleted existing route to 2001:db8:1003::/64 in table 254
+Adding route to 2001:db8:1003::/64 with encap: {'type': 'seg6', 'mode': 'encap', 'segs': ['fc00:0:1200:1000:1203:fe06::']} to table 254
+
+Testing connectivity from host00 to host01...
+Pinging 2001:db8:1001:0::2
+PING 2001:db8:1001:0::2(2001:db8:1001::2) 56 data bytes
+64 bytes from 2001:db8:1001::2: icmp_seq=1 ttl=63 time=1.07 ms
+64 bytes from 2001:db8:1001::2: icmp_seq=2 ttl=63 time=1.27 ms
+64 bytes from 2001:db8:1001::2: icmp_seq=3 ttl=63 time=1.07 ms
+64 bytes from 2001:db8:1001::2: icmp_seq=4 ttl=63 time=0.999 ms
+
+--- 2001:db8:1001:0::2 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3003ms
+rtt min/avg/max/mdev = 0.999/1.101/1.272/0.102 ms
+
+Testing connectivity from host00 to host03...
+Pinging 2001:db8:1003:0::2
+PING 2001:db8:1003:0::2(2001:db8:1003::2) 56 data bytes
+64 bytes from 2001:db8:1003::2: icmp_seq=1 ttl=63 time=0.853 ms
+64 bytes from 2001:db8:1003::2: icmp_seq=2 ttl=63 time=0.930 ms
+64 bytes from 2001:db8:1003::2: icmp_seq=3 ttl=63 time=1442 ms
+64 bytes from 2001:db8:1003::2: icmp_seq=4 ttl=63 time=394 ms
+
+--- 2001:db8:1003:0::2 ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3094ms
+rtt min/avg/max/mdev = 0.853/459.407/1441.995/589.544 ms, pipe 2
+
+Test completed successfully!
 
 ```
 
