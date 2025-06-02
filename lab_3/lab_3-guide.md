@@ -164,7 +164,7 @@ In the next few steps we'll walk through applying the configuration one element 
 
 ### Establish the Cilium BGP global and peer configurations
 
-![Cilium SRv6 L3VPN](/topo_drawings/cilium-l3vpn-topology.png)
+![Cilium SRv6 L3VPN](/topo_drawings/lab3-cilium-l3vpn-topology.png)
 
 1. On the **Berlin** VM cd into the Lab 3 cilium directory and apply the *Cilium BGP Cluster Config CRD*. BGP Cluster config establishes our Cilium Node's BGP ASN and base BGP peering with the route reflectors **xrd05** and **xrd06**.
    ```
