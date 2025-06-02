@@ -1,6 +1,7 @@
 # SONiC Quick Reference Guide for CLI Commands
 ## Description: 
-This page is to help those new to SONiC have a quick reference guide for CLI commands. 
+
+A short reference guide for SONiC CLI commands. This guide does not cover the complete SONiC CLI
 
 ## Contents
 - [SONiC Quick Reference Guide for CLI Commands](#sonic-quick-reference-guide-for-cli-commands)

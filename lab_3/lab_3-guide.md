@@ -172,6 +172,11 @@ In the next few steps we'll walk through applying the configuration one element 
    kubectl apply -f 01-bgp-cluster.yaml
    ```
 
+   Expected output:
+   ```
+   isovalentbgpclusterconfig.isovalent.com/cilium-bgp created
+   ```
+
    Next: The *BGP Peer Config CRD* is where we control address families and other BGP peering or route policies on a per peer or peer-group basis.
    Here is a portion of the BGP Peer Config CRD with notes:
    ```yaml
@@ -193,11 +198,11 @@ In the next few steps we'll walk through applying the configuration one element 
    kubectl apply -f 02-bgp-peer.yaml
    ```
 
-   Expected output for steps #1 and #2:
+   Expected output:
    ```
-   isovalentbgpclusterconfig.isovalent.com/cilium-bgp created
    isovalentbgppeeringpolicy.isovalent.com/cilium-peer created
    ```
+   
    At this point our peer sessions are not yet established. Next we'll apply the *`localAddress`* parameter which tells Cilium which source address to use for its BGP peering sessions. This knob is comparable to IOS-XR's `update-source` parameter.
 
    Here is a portion of the node override CRD with notes:

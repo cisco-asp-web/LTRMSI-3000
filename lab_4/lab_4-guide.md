@@ -574,7 +574,7 @@ The containerlab topology file included a number of *`exec`* commands to be run 
 
     cisco@topology-host:$ docker exec -it clab-sonic-host00 ip -6 route
     2001:db8:1000::/64 dev eth1 proto kernel metric 256 pref medium
-    2001:db8:1024::/64 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium   <--- v6 test route to ubuntu-host24
+    2001:db8:1003::/64 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium   <--- v6 test route to ubuntu-host24
     fc00::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
     fe80::/64 dev eth1 proto kernel metric 256 pref medium
     fe80::/64 dev eth2 proto kernel metric 256 pref medium

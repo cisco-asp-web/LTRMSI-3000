@@ -223,7 +223,7 @@ B. Open three terminal sessions on *topology-host*
    docker exec clab-sonic-host01 bash -c "RANK=1 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-3. In the third terminal session initialize the test run on *host01*
+3. In the third terminal session initialize the test run on *host03*
    ```
    docker exec clab-sonic-host03 bash -c "RANK=2 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
