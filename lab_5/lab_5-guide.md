@@ -184,7 +184,7 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
  - host01
  - host03
 
-A. Copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
+1. Copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
    
    *hopefully this step won't be necessary because we took care of it the night before the lab*
 
@@ -197,21 +197,21 @@ It is most effective to run the plugin-demo from three separate terminal session
 
 In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. But where the demo lacks in training functionality it makes up for in pings! 
 
-B. Open three terminal sessions on *topology-host*
+2. Open three terminal sessions on *topology-host*
 
 ![terminal sessions](../topo_drawings/lab5-terminal-sessions.png)
 
-1. In the first terminal session initialize the test run on *host00*
+3. In the first terminal session initialize the test run on *host00*
    ```
    docker exec clab-sonic-host00 bash -c "RANK=0 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-2. In the second terminal session initialize the test run on *host01*
+4. In the second terminal session initialize the test run on *host01*
    ```
    docker exec clab-sonic-host01 bash -c "RANK=1 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-3. In the third terminal session initialize the test run on *host03*
+5. In the third terminal session initialize the test run on *host03*
    ```
    docker exec clab-sonic-host03 bash -c "RANK=2 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
@@ -230,7 +230,7 @@ Screenshot of output from *`host00`* with comments:
 
 ![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
 
-4. Optional: check the Linux ipv6 routes on *hosts*:
+6. Optional: check the Linux ipv6 routes on *hosts*:
     ```
     docker exec -it clab-sonic-host00 ip -6 route
     ```
@@ -247,10 +247,6 @@ Screenshot of output from *`host00`* with comments:
     fe80::/64 dev eth1 proto kernel metric 256 pref medium
     fe80::/64 dev eth2 proto kernel metric 256 pref medium
     ```
-
-**should we run or re-run pytorch with an Edgshark capture?**
-
-**should we build a Grafana Dashboard, or call it good?**
 
 
 
