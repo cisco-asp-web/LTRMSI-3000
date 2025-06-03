@@ -63,6 +63,7 @@ Cisco doesn't currently have a controller product for host-based SRv6 and the Hy
 
 Our SONiC nodes support uSID and we'll simply construct the Linux SRv6 route with a single *segment* in the SRH that happens to have our fabric uSIDs embedded in it. This SRv6 route will then be programmed at the host level.
 
+
 1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine01`* -> *`leaf02`*: 
 
 
