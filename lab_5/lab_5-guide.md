@@ -29,7 +29,7 @@ The student should have achieved the following objectives upon completion of Lab
 
 ## Host-Based SRv6 for Intelligent Fabric Load Balancing
 
-Recently at the EMEA OCP summit Guohan Lu from Microsoft explained how they build Source Routed AI Backend Networks with SRv6:
+Recently at the EMEA OCP summit, Guohan Lu from Microsoft explained how they build Source Routed AI Backend Networks with SRv6:
 
 https://www.segment-routing.net/conferences/2025-ocp-emea-microsoft-srv6-ai-backend/
 
