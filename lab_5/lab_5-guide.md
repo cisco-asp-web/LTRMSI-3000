@@ -143,7 +143,7 @@ From https://pytorch.org/projects/pytorch/
 
 When you start a distributed training workload, PyTorch initializes a process group. It uses a backend like [NCCL](https://developer.nvidia.com/nccl) or [Gloo](https://github.com/pytorch/gloo) for communication between nodes. Each node gets a rank and knows about other nodes through the process group
 
-**pytorch-srv6-plugin's Workflow:**
+**Pytorch-srv6-plugin's Workflow:**
 
 Before NCCL/Gloo starts communicating, the SRv6 plugin will:
 
