@@ -51,8 +51,6 @@ Cisco doesn't currently have a controller product for host-based SRv6 and the Hy
 
  - Project Jalapeno Homepage: https://github.com/cisco-open/jalapeno
 
-*`Insert diagram with PyTorch plugin + Jalapeno controller/API interaction`*
-
 
 ### SRv6 Linux Kernel Routes
 > [!NOTE]
@@ -177,7 +175,7 @@ Here's a typical flow:
 [Training continues normally]
 ```
 
-**pytorch-srv6-plugin demo**
+**Pytorch-srv6-plugin demo**
 
 The plugin includes a simple demo that uses a *`gloo`* backend because it doesn't require GPUs and still provides distributed training functionality. We'll run the demo on three of our four *host* containers:
 
