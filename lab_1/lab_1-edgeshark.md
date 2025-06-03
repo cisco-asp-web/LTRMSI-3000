@@ -31,6 +31,12 @@ The student upon completion of the Lab 1 packet walk should have achieved the fo
 
 ## IS-IS Packet Analysis
 
+To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *XRD1*.
+
+![Edgeshark launch](../topo_drawings/lab1-edgeshark-launch.png)
+
+Clicking on the interface will automatically launch wireshark and starts the capture.
+
 Apply a filter in the wireshark filter tab and we will be able to inspect the different ISIS TLV to validate our segment routing configuration.
 
 ```
