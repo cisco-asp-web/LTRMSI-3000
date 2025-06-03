@@ -33,7 +33,6 @@ Each of the labs is designed to be completed in the order presented. Lab 1 will 
 |:---------------|:--------------------------------------------------------------------|
 | ansible        | Ansible scripts to update the lab at bootup                         |
 | topo_drawings  | Lab diagrams folder                                                 |
-| util           | Utility scripts                                                     |
 | lab_1 -> lab_5 | Individual lab folders                                              |
 
 
