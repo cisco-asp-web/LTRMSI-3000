@@ -56,7 +56,7 @@ Cisco doesn't currently have a controller product for host-based SRv6 and the Hy
 
 ### SRv6 Linux Kernel Routes
 > [!NOTE]
-> SRv6 has been available in the mainstream Linux kernel since version 4.10, and the Ubuntu 22.04 nodes in our lab are running Kernel 6.8, so there is no need to install packages or tune any sysctl or other parameters.
+> SRv6 has been available in the mainstream Linux kernel since version 4.10 and uSID since version 5.6. For our Ubuntu hosts there is no need to install packages or tune any sysctl or other parameters.
 
 
 #### Adding Linux SRv6 Routes
