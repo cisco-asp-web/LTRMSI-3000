@@ -113,7 +113,7 @@ The SRv6 uSID combination in the above will route traffic to *`host02`* via *`le
    docker exec -it clab-sonic-host00 ping 2001:db8:1002::2
    ```
 
-5. Optional: while the ping is running perform Wireshark capture(s) to see the encapsulated packets and shift-and-forward in action. Recommended interfaces for Wireshark capture:
+5. Optional: while the ping is running perform Edgeshark capture(s) to see the encapsulated packets and shift-and-forward in action. Recommended interfaces for Wireshark capture:
 
  - clab-sonic-host00 eth1
  - clab-sonic-spine01 eth1
