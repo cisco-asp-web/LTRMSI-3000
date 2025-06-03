@@ -66,7 +66,7 @@ The following diagram shows the dCloud VM topology that will be used for this la
 
 This lab environment provides a hands-on experience with modern, programmable network infrastructures using modular technologies: SONiC, XRd, Containerlab, Edgeshark, and Jalapeno.
 
-To support this, we are using four virtual machines, each with a specific role. Here’s what each VM is responsible for:
+To support this, we are using three virtual machines, each with a specific role. Here’s what each VM is responsible for:
 
 
 ## 💻 Lab Virtual Machines Summary
