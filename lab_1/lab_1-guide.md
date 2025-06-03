@@ -215,10 +215,13 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
    ```
    ssh cisco@192.168.122.100
    ```
+   ![berlin ssh](../topo_drawings/lab1-ssh-berlin.png)
+   
+   
+2. Check IPv6 connectivity from **Berlin** to **xrd02**
 
 ![berlin xrd02](../topo_drawings/lab1-berlin-xrd02.png)
 
-2. Check IPv6 connectivity from **Berlin** to **xrd02**
     ```
     ping fc00:0:8888::1 -c 2
     ```
