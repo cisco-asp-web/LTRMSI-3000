@@ -84,7 +84,7 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
 
 The SRv6 uSID combination in the above will route traffic to *`host02`* via *`leaf00`*, *`spine01`*, and *`leaf02`*. The uSID shift-and-forward at *leaf00* and *spine01* will result in an ipv6 destination address of **fc00:0:1202:fe06::** when the packet arrives at *leaf02*.  
 
-![Linux SRv6 Route](../topo_drawings/lab5-linux-usid-route.png)
+![Linux SRv6 Route](../topo_drawings/lab5-host00-host02-static-route.png)
 
 *leaf02* recognizes itself and its local uDT6 entry *`fc06`* in the destination address and will proceed to pop the outer IPv6 header and do a lookup on the inner destination address **2001:db8:1002::/64**. *leaf02* will then forward the traffic to *`host02`*
 
