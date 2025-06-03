@@ -368,7 +368,8 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
     ansible-playbook -i hosts sonic-playbook.yaml -e "ansible_user=admin ansible_ssh_pass=admin ansible_sudo_pass=admin" -vv
     ```
 
-    The sonic playbook produces a lot of console output. Don't worry about errors on the *vrf sysctl* task as those come from *spine* nodes where no VRFs are configured. By the time the playbook completes we expect to see something like this:
+> [!CAUTION] 
+> The sonic playbook produces a lot of console output. Don't worry about errors on the *vrf sysctl* task as those come from *spine* nodes where no VRFs are configured. By the time the playbook completes we expect to see something like this:
 
     ```
     PLAY RECAP *************************************************************************************
