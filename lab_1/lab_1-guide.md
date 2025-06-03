@@ -196,6 +196,9 @@ To SSH into a router, you can use the containerlab visual code extension
 ![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
 
 
+To get terminal access into a host, you can use the containerlab visual code extension but click on "Attach Shell"
+
+![Attach terminal](../topo_drawings/lab1-attach-terminal.png)
 
 ## Validate Attached Linux VMs and Containers
 
