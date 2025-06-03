@@ -55,16 +55,9 @@ Cisco doesn't currently have a controller product for host-based SRv6 and the Hy
 
 
 ### SRv6 Linux Kernel Routes
-   
-SRv6 has been available in the mainstream Linux kernel since version 4.10, and the Ubuntu 22.04 nodes in our lab are running Kernel 6.8, so there is no need to install packages or tune any sysctl or other parameters.
+> [!NOTE]
+> SRv6 has been available in the mainstream Linux kernel since version 4.10, and the Ubuntu 22.04 nodes in our lab are running Kernel 6.8, so there is no need to install packages or tune any sysctl or other parameters.
 
-Example *docker exec command* to show the kernel version:
-
-```
-$ docker exec -it clab-sonic-host01 uname -a
-
-Linux host01 6.8.0-48-lowlatency #48.3~22.04.1-Ubuntu SMP PREEMPT_DYNAMIC Thu Oct 17 14:07:24 UTC x86_64 x86_64 x86_64 GNU/Linux
-```
 
 #### Adding Linux SRv6 Routes
 
@@ -72,13 +65,8 @@ Currently the Linux Kernel implementation supports SRv6 SRH encapsulation, but d
 
 1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine01`* -> *`leaf02`*: 
 
-   Option 1: exec into *`host00`* and run the ip route add command:
-   ```
-   docker exec -it clab-sonic-host00 bash
-   ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1001:1202:fe06:: dev eth1
-   ```
 
-   Option 2: execute the *route add* from the *topology-host* with *docker exec*:
+   Execute the *route add* from the *topology-host* with *docker exec*:
    ```
    docker exec -it clab-sonic-host00 ip -6 route add 2001:db8:1002::/64 encap seg6 mode encap segs fc00:0:1200:1001:1202:fe06:: dev eth1
    ```
