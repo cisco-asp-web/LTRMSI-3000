@@ -1,7 +1,7 @@
 # Lab 5: SRv6 for Intelligent Load Balancing of AI Workloads [20 Min]
 
 ### Description
-In recent months a few Hyperscalers have expressed interest in running SRv6 over their AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The SRv6 encapsulation would happen right at the host stack or RDMA NIC: *`host-based SRv6!`*
+In recent months a few Hyperscalers have expressed interest in running SRv6 over their AI training fabrics. The idea would be to offer their customers the ability to do intelligent and deterministic load balancing of large, long-lived flows, by pinning them to specific paths thru the fabric. The goal is for SRv6 encapsulation right at the host stack or RDMA NIC: *`host-based SRv6!`*
 
 In Lab 5 we will explore this use case with our SONiC nodes and their attached Ubuntu containers simulating an AI Training infrastructure. 
 
