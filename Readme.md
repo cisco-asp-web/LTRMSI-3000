@@ -83,8 +83,8 @@ To support this, we are using three virtual machines, each with a specific role.
 | VM Name               | Username   | Password       |
 |-----------------------|------------|----------------|
 | **Windows Management**| `admin`    | `C1sco12345`   | 
-| **Topology Host**     | `cisco`    | `cisco123  `   | 
-| **Jalapeno Host**     | `cisco`    | `cisco123`   | 
+| **Topology Host**     | `cisco`    | `cisco123`     | 
+| **Jalapeno Host**     | `cisco`    | `cisco123`     | 
 
 
 ## Navigate through the labs.
