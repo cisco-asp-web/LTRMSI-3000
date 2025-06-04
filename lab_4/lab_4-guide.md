@@ -123,8 +123,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
     5459d7bc624a   docker-eventd:latest                 "/usr/local/bin/supe…"   6 minutes ago   Up 6 minutes             eventd
     bab374f5a2b5   docker-database:latest               "/usr/local/bin/dock…"   6 minutes ago   Up 6 minutes             database
     ```
-
-In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
+    In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
 
 3. Try some SONiC CLI commands:
     ```
