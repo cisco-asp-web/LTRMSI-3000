@@ -85,9 +85,6 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 
 1. ssh to leaf00 in our topology using the visual code extenstion  (note: password is *`admin`*)
 
-![ssh into leaf 00](../topo_drawings/lab4-ssh-leaf00.png)
-
-
 ### SONiC Docker Containers
 
 | Docker Container Name| Description                                                      |
@@ -104,7 +101,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 | TeamD                | Runs open-source implementation of LAG protocol |
 | GNMI                 | SONiC gnmi/telemetry service |
 
-1. List SONiC's docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 docker containers to come up. 
+2. List SONiC's docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 docker containers to come up. 
     ```
     docker ps
     ```
