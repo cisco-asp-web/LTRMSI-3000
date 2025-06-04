@@ -571,21 +571,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    - Source IPv6: fc00:0:1111::1 
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
-   Now lets try the IPv6 bulk transport destination on *xrd01*
-
-   ```
-   ping fc00:0:40::1 -i .5
-   ```
-   
-   
-   ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-ipv6.png) 
   
-   We can witness here that the same SRv6 uSID is being used for our ipv6 traffic as well.
-   Source IPv6: fc00:0:1111::1
-   Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
-
-
-
 #### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
 
 4.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
