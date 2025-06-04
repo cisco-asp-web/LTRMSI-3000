@@ -134,14 +134,11 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from the Li
     show ipv6 interfaces
     show version
     ```
+    If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
+   SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
+   The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
-If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
-
-SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well. 
-
-The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
-
-1. Access **leaf00's** FRR/BGP container via *vtysh*
+4. Access **leaf00's** FRR/BGP container via *vtysh*
     ```
     vtysh
     ```
@@ -157,7 +154,7 @@ The *docker ps* output above included a container named **bgp**. In reality this
     sonic# 
     ```
 
-2. FRR looks a whole lot like classic IOS:
+5. FRR looks a whole lot like classic IOS:
     ```
     show run
     show interface brief
