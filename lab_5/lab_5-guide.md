@@ -13,9 +13,8 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
   - [Lab Objectives](#lab-objectives)
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
     - [SRv6 Linux Kernel Routes](#srv6-linux-kernel-routes)
-      - [Example packet capture at Spine01](#example-packet-capture-at-spine01)
     - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
-    - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
+  - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
 
 
 ## Lab Objectives
@@ -111,7 +110,7 @@ The SRv6 uSID combination in the above will route traffic to *`host02`* via *`le
    - clab-sonic-host00 eth1
    - clab-sonic-spine01 eth1
 
-#### Example packet capture at Spine01
+**Example packet capture at Spine01**
 
 The example packet capture below is taken from *spine01* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and will decapsulate the entire outer header and do a lookup on the inner IPv6 destination address. *Leaf02* will then forward the inner packet to *host02*.
 
@@ -127,7 +126,7 @@ Use this link to open the [Jalapeno UI](http://198.18.128.101:30700) into a new 
 
 After completing **Lab 5** feel free to checkout the [Lab 5 Bonus Section](./lab_5-bonus.md) that explores the Jalapeno GraphDB, API, UI, and other host-based SRv6 scenarios in more detail.
 
-### SRv6 PyTorch Plugin
+## SRv6 PyTorch Plugin
 
 From https://pytorch.org/projects/pytorch/
 
