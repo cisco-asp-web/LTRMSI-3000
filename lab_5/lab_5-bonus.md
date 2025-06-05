@@ -1,8 +1,6 @@
 ## Bonus: Project Jalapeno and Host-Based SRv6
 
-### Host Based SRv6
-
-## Why host-based SRv6? 
+### Why host-based SRv6? 
 
 * **Flexibility and Control**: We get tremendous control of the SRv6 SIDs and our encapsulation depth isn't subject to ASIC limitations
 
@@ -12,15 +10,10 @@
  
 We feel this ability to perform SRv6 operations at the host or other endpoint is a game changer which opens up enormous potential for innovation!
 
-## srctl command line tool
-**srctl** is an experimental command line tool that we've developed and which allows us to access SRv6 network services by programing SRv6 routes on Linux hosts or [VPP](https://fd.io/). It is modeled after *kubectl*, and as such it generally expects to be fed a *yaml* file defining the source and destination prefixes or endpionts for which we want a specific SRv6 network service. When the user runs the command, **srctl** will call the Jalapeno API and pass the yaml file data. Jalapeno will perform its path calculations and will return a set of SRv6 instructions. **srctl** will then program the SRv6 routes on the Linux host or VPP.
+## Project Jalapeno
 
- **srctl's** currently supported network services are: 
+https://github.com/cisco-open/jalapeno
 
- - Low Latency Path
- - Least Utilized Path
- - Data Sovereignty Path
- - Get All Paths (informational only)
 
 The Jalapeno package is preinstalled and running on the **Jalapeno** VM (198.18.128.101).
 
@@ -57,12 +50,35 @@ At the heart of Jalapeno is the Arango Graph Database, which is used to model ne
 
 2. Optional or for reference: connect to the DB and try some of the queries in the [lab_5-arango-queries.md doc](https://github.com/cisco-asp-web/LTRMSI-3000/tree/main/lab_5/lab_5-arango-queries.md)
 
-## Jalapeno REST API
+3. Run the *add-meta-data.py* script to upload some synthetic network performance data to the ipv4 and ipv6 graphs that represent the XRd topology from labs 1-3:
+
+   From a terminal session on *topology-host* ssh to the Jalapeno VM (pw = cisco123):
+   ```
+   ssh -oHostKeyAlgorithms=+ssh-rsa cisco@198.18.128.101
+   ```
+
+   ```
+   cd LTRMSI-3000/lab_5/jalapeno/xrd-network/
+   python3 add_meta_data.py 
+   ```
+
+   Expected output:
+   ```
+   cisco@jalapeno:~/LTRMSI-3000/lab_5/jalapeno/xrd-network$ python3 add_meta_data.py 
+   adding hosts, addresses, country codes, and synthetic latency data to the graph
+   adding location, country codes, latency, and link utilization data
+   meta data added
+   Successfully inserted/updated 3 hosts records
+   Successfully inserted/updated 4 IPv4 edge records
+   Successfully inserted/updated 6 IPv6 edge records
+   ```
+
+### Jalapeno REST API
 
 The Jalapeno REST API is used to run queries against the ArangoDB and retrieve graph topology data or execute shortest path calculations. 
 
-1. Optional: test the Jalapeno REST API:
-   From the ssh session on the *jalapeno VM* or the *topology-host VM* (or the command line on your local machine) validate the Jalapeno REST API is running. We installed the *`jq`* tool on the *jalapeno VM* to help with improved JSON parsing:
+1. Tet the Jalapeno REST API:
+   From the ssh session on the *jalapeno VM* or the *topology-host VM* give the Jalapeno REST API a try. We installed the *`jq`* tool on the *jalapeno VM* to help with improved JSON parsing:
    ```
    curl http://198.18.128.101:30800/api/v1/collections | jq | more
    ```
@@ -76,7 +92,7 @@ The Jalapeno REST API is used to run queries against the ArangoDB and retrieve g
 
 ### Jalapeno Web UI
 
-The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph. In fact, our SONiC *`fabric_graph`* data was simply uploaded from a json file. 
+The Jalapeno UI is a demo or proof-of-concept meant to illustrate the potential use cases for extending SRv6 services beyond traditional network elements and into the server, host, VM, k8s, or other workloads. Once Jalapeno has programmatically collected data from the network and built its topology graphs, the network operator has complete flexibility to add data or augment the graph. In fact, our SONiC *`fabric_graph`* data was simply uploaded from a set of json files. 
 
 Once the topology graphs are in place its not too difficult to conceive of building network services based on calls to the Jalapeno API and leveraging the SRv6 uSID stacks that are returned.
 
@@ -87,6 +103,27 @@ On the left hand sidebar you will see that UI functionality is split into two se
 - **Data Collections**: explore raw object and graph data collected from the network.
 - **Topology Viewer**: explore the network topology graphs and perform path calculations.
 
+In *Topology Viewer* mode you get a dropdown of all the known *graphs* in the DB. When you select a graph it'll render in the visual pane. From there you can explore different visual representations of the topology with the *layouts* dropdown. You can also perform path calculation operations by clicking on elements in the topology and then selecting a constraint from from the *path constraint* dropdown.
+
+1. Run a path calculation in the UI:
+
+ - Click *Topology Viewer*
+ - Select either *ipv4 graph* or *ipv6 graph* from the dropdown
+ - In the visual pane click on two of the green nodes (Amsterdam & Rome or Berlin and Rome are a good choice)
+ - Once the endpoints are highlighted select a constraint from the *path constraint* dropdown
+
+As you complete the workflow the UI calls the API and feeds it the source/destination pair and constraint. The backend performs a shortest-path calculation based on the selected constraint (leveraging the synthetic meta data we added earlier) and returns a path highlighted in the UI and SID info in a popup.
+
+### Jalaepno *srctl* command line tool
+
+**srctl** is an experimental command line tool that we've developed and which allows us to access SRv6 network services by programing SRv6 routes on Linux hosts or [VPP](https://fd.io/). It is modeled after *kubectl*, and as such it generally expects to be fed a *yaml* file defining the source and destination prefixes or endpionts for which we want a specific SRv6 network service. When the user runs the command, **srctl** will call the Jalapeno API and pass the yaml file data. Jalapeno will perform its path calculations and will return a set of SRv6 instructions. **srctl** will then program the SRv6 routes on the Linux host or VPP.
+
+ **srctl's** currently supported network services are: 
+
+ - Low Latency Path
+ - Least Utilized Path
+ - Data Sovereignty Path
+ - Get All Paths (informational only)
 
 ## Rome VM: SRv6 on Linux
 
