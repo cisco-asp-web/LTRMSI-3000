@@ -310,7 +310,7 @@ For full size image see [LINK](../topo_drawings/bgp-topology-large.png)
     Processed 2 prefixes, 4 paths
     ```
 
-3. Verify that router **xrd01** has received route ```fc00:0:107:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
+3. Verify that router **xrd01** has received route ```fc00:0:107:1::/64``` from the route reflectors **xrd05** and **xrd06**. Look for ```Paths: (2 available)```
     ```
     show bgp ipv6 unicast fc00:0:107:1::/64
     ```
