@@ -192,9 +192,6 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
     ```
     ssh cisco@berlin
     ```
-
-    ![berlin ssh](../topo_drawings/lab1-ssh-berlin.png)
-   
    
 2. Check IPv6 connectivity from **Berlin** to **xrd02**
 
