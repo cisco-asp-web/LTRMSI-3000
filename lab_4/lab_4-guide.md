@@ -112,9 +112,10 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from the Li
     show version
     ```
     If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
-    
-   SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
-   The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
+
+**Control Plane**: SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
+   
+The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
 4. Access **leaf00's** FRR/BGP container via *vtysh*
     ```
@@ -232,6 +233,9 @@ Before we proceed with applying full fabric configurations via Ansible, we wante
    sudo config interface ip add Loopback0 10.0.0.200/32
    sudo config interface ip add Loopback0 fc00:0:1200::1/128
    ```
+
+> [!NOTE]
+> Logout and log back in to *leaf00* to see the hostname change take effect
 
 Our SONiC fabric will use IPv6 link local addresses for the BGP underlay, so we only need to configure IPs for the host-facing interface Ethernet16.
 
@@ -559,7 +563,7 @@ The containerlab topology file included a number of *`exec`* commands to be run 
     docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3 -c 100
     ```
 
-    While the ping is running we can launch edgeshark using the visual code containerlab extension and inspect the traffic on the eth2 interface:
+    While the ping is running we can launch edgeshark using the visual code containerlab extension and inspect the traffic on the eth2 interface. Note the traffic is not SRv6 encapsulated at this time:
 
     ![edgeshark-host00](../topo_drawings/lab4-host00-edgeshark.png)
 
