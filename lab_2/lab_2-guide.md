@@ -63,7 +63,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
 
    
 1. **xrd07** vrf static route configuration
-   SSH into xrd07 and type the following static routes:
+   SSH into xrd07 and copy/paste the static route config below the image:
    ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
    ```yaml
       conf t
@@ -215,14 +215,14 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
      Not advertised to any peer
      Local
    +    fc00:0:7777::1 (metric 3) from fc00:0:5555::1 (10.0.0.7)   <--------- SOURCE xrd07
-         Received Label 0xe0040
+   +      Received Label 0xe0040     <-------- SRv6 Function "e004"
          Origin incomplete, metric 0, localpref 100, valid, internal, best, group-best, import-candidate, not-in-vrf
          Received Path ID 0, Local Path ID 1, version 5
          Extended community: RT:9:9 
    +      Originator: 10.0.0.7, Cluster list: 10.0.0.5             <------- FROM RR xrd05
          PSID-Type:L3, SubTLV Count:1
          SubTLV:
-           T:1(Sid information), Sid:fc00:0:7777::, Behavior:63, SS-TLV Count:1
+   +        T:1(Sid information), Sid:fc00:0:7777::, Behavior:63, SS-TLV Count:1   <-- SRv6 Locator for source node
            SubSubTLV:
              T:1(Sid structure):
      Path #2: Received by speaker 0
@@ -294,9 +294,8 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
       
 2. On **xrd07** configure ext-comms, route-policies, and BGP such that *xrd07* advertises Rome's "40" and "50" prefixes with their respective color extended communities:
    
-   **xrd07**
 
-  Using the visual code extension, SSH into xrd07 and type the following commands:
+  Using the visual code extension, SSH into xrd07 and paste the following commands:
 
    ```yaml
    conf t
@@ -334,11 +333,10 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    commit
    ```
 
-3. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
+1. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
    
-   **xrd01**
 
-   Using the visual code extension, SSH into xrd01 and type the following commands:
+   Using the visual code extension, SSH into xrd01 and paste the following commands:
 
 
    ```
@@ -376,7 +374,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
          Source AFI: VPNv4 Unicast, Source VRF: default, Source Route Distinguisher: 10.0.0.7:1
    ```
 
-4. On **xrd01** configure a pair of SRv6-TE segment lists for steering traffic over these specific paths through the network: 
+2. On **xrd01** configure a pair of SRv6-TE segment lists for steering traffic over these specific paths through the network: 
     - Segment list *xrd2347* will execute the explicit path: xrd01 -> 02 -> 03 -> 04 -> 07
     - Segment list *xrd567* will execute the explicit path: xrd01 -> 05 -> 06 -> 07
 
@@ -402,7 +400,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
      commit
    ```
 
-5. On **xrd01** configure our bulk transport and low latency SRv6 steering policies. Low latency traffic will be forced over the *xrd01-05-06-07* path, and bulk transport traffic will take the longer *xrd01-02-03-04-07* path:
+3. On **xrd01** configure our bulk transport and low latency SRv6 steering policies. Low latency traffic will be forced over the *xrd01-05-06-07* path, and bulk transport traffic will take the longer *xrd01-02-03-04-07* path:
   
    **xrd01**
    ```yaml
@@ -429,13 +427,16 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
      commit
    ```
 
-6. Validate **xrd01's** SRv6-TE SID policy is enabled and up:
+4. Validate **xrd01's** SRv6-TE SID policy is enabled and up:
    ```
     show segment-routing srv6 sid
+   ```
+   ```
     show segment-routing traffic-eng policy
+   ```
+   ```
     show bgp vpnv4 uni vrf carrots 40.0.0.0/24 
    ```
-   
    
    Example output, note the additional uDT VRF carrots and SRv6-TE **uB6 Insert.Red** SIDs added to the list:
    ```yaml
@@ -533,7 +534,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 **Validate bulk traffic takes the non-shortest path: xrd01 -> 02 -> 03 -> 04 -> 07** 
 
-1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
+1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy reflected in the actual SRv6 packet header. So the TE bulk policy configured was:
 
    ```
       segment-list xrd2347
@@ -542,21 +543,21 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
         index 20 sid fc00:0:3333::
         index 30 sid fc00:0:4444::
    ```
-   And we expect to see in the packet header the follow tag order shown below in the tcpdump output:
+   And we expect to see in the packet header the follow tag order shown below in the capture output:
    ```
    2222:3333:7777
    ```
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-2. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 and IPv6 addresses on Rome.
+1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 address on Rome.
     ![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
     ```
     ping 40.0.0.1 -i .5
     ```
     
-3. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+2. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
    
    ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
    
@@ -568,7 +569,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 
    - Source IPv6: fc00:0:1111::1 
-   - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
+   - Destination IPv6: fc00:0:2222:3333:7777:e009:: which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
   
 **Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07**
@@ -577,13 +578,12 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
-2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
+2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping **Rome's** low latency IPv4 destination:
     ```
     ping 50.0.0.1 -i .5
     ```
 
     ![Amsterdam Capture](../topo_drawings/lab2-xrd-edgeshark-pcap-fast.png) 
-
 
 
     Note the explicit segment-list we configured for our low latency policy:
@@ -602,7 +602,6 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
     ```
     ping fc00:0:50::1 -i .5
     ```
-
 
 ## End of Lab 2
 Please proceed to [Lab 3](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
