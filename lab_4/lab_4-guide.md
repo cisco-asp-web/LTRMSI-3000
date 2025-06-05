@@ -48,29 +48,6 @@ After one minute, the icons should turn green to visually indicate that the topo
 
 ![connected visual code](../topo_drawings/lab4-topology-launched.png)
 
-Containerlab logs:
-
-```
-[containerlab] Running: containerlab deploy -r docker -t /home/cisco/LTRMSI-3000/lab_4/lab_4-topology.clab.yaml
-[stderr] 18:48:16 INFO Containerlab started version=0.67.0
-[stderr] 18:48:16 INFO Parsing & checking topology file=lab_4-topology.clab.yaml
-[stderr] 18:48:16 INFO Creating docker network name=mgt-net IPv4 subnet=172.20.6.0/24 IPv6 subnet="" MTU=0
-[stderr] 18:48:17 INFO Creating lab directory path=/home/cisco/LTRMSI-3000/lab_4/clab-sonic
-[stderr] 18:48:17 INFO Creating container name=leaf03
-[stderr] 18:48:17 INFO Creating container name=spine02
-[stderr] 18:48:17 INFO Creating container name=leaf00
-[stderr] 18:48:17 INFO Creating container name=host01
-[stderr] 18:48:17 INFO Creating container name=leaf02
-[stderr] 18:48:17 INFO Creating container name=host00
-[stderr] 18:48:17 INFO Creating container name=spine03
-[stderr] 18:48:17 INFO Creating container name=spine00
-[stderr] 18:48:17 INFO Creating container name=leaf01
-[stderr] 18:48:17 INFO Creating container name=host03
-[stderr] 18:48:17 INFO Creating container name=host02
-[stderr] 18:48:17 INFO Creating container name=spine01
-[stderr] 18:48:17 INFO Created link: leaf03:eth3 ▪┄┄▪ spine02:eth4
-[stderr] 18:48:18 INFO Created link: leaf01:eth1 ▪┄┄▪ spine00:eth2
-```
 
 Once deployed our ML Training Fabric topology looks like this:
 ![Lab 4 Topology](../topo_drawings/lab4-topology-diagram.png)
@@ -84,22 +61,6 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 
 
 1. ssh to leaf00 in our topology using the visual code extenstion  (note: password is *`admin`*)
-
-### SONiC Docker Containers
-
-| Docker Container Name| Description                                                      |
-|:---------------------|:-----------------------------------------------------------------|
-| BGP                  | Runs FRR [Free Range Routing](https://frrouting.org/) |
-| Database             | Hosts the redis-database engine|
-| LLDP                 | Hosts LLDP. Includes 3 process *llpd*, *LLDP-syncd*, *LLDPmgr* |
-| MGMT-Framework       | North Bound Interfaces (NBIs) for  managing configuration and status|
-| PMON                 | Runs *sensord* daemon used to log and alert sensor data |
-| RADV                 | Hosts *radv* daemon and handles IPv6 router solicitations / router advertisements |
-| SNMP                 | Hosts SNMP feature. *SNMPD* and *SNMP-Agent* |
-| SWSS                 | Collection of tools to allow communication among all SONiC modules |
-| SYNCD                | Synchronization of the switch's network state with the switch's actual hardware/ASIC |
-| TeamD                | Runs open-source implementation of LAG protocol |
-| GNMI                 | SONiC gnmi/telemetry service |
 
 2. List SONiC's docker containers. Note, it takes 2-3 minutes from topology deployment for all 12 docker containers to come up. 
     ```
@@ -123,7 +84,24 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
     5459d7bc624a   docker-eventd:latest                 "/usr/local/bin/supe…"   6 minutes ago   Up 6 minutes             eventd
     bab374f5a2b5   docker-database:latest               "/usr/local/bin/dock…"   6 minutes ago   Up 6 minutes             database
     ```
-    In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
+
+  ### SONiC Docker Containers
+
+| Docker Container Name| Description                                                      |
+|:---------------------|:-----------------------------------------------------------------|
+| BGP                  | Runs FRR [Free Range Routing](https://frrouting.org/) |
+| Database             | Hosts the redis-database engine|
+| LLDP                 | Hosts LLDP. Includes 3 process *llpd*, *LLDP-syncd*, *LLDPmgr* |
+| MGMT-Framework       | North Bound Interfaces (NBIs) for  managing configuration and status|
+| PMON                 | Runs *sensord* daemon used to log and alert sensor data |
+| RADV                 | Hosts *radv* daemon and handles IPv6 router solicitations / router advertisements |
+| SNMP                 | Hosts SNMP feature. *SNMPD* and *SNMP-Agent* |
+| SWSS                 | Collection of tools to allow communication among all SONiC modules |
+| SYNCD                | Synchronization of the switch's network state with the switch's actual hardware/ASIC |
+| TeamD                | Runs open-source implementation of LAG protocol |
+| GNMI                 | SONiC gnmi/telemetry service |
+
+In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
 
 3. Try some SONiC CLI commands:
     ```
@@ -134,6 +112,7 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
     show version
     ```
     If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
+    
    SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
    The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
