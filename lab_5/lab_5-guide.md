@@ -13,8 +13,9 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
   - [Lab Objectives](#lab-objectives)
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
     - [SRv6 Linux Kernel Routes](#srv6-linux-kernel-routes)
-    - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
+  - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
   - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
+  - [End of lab 5](#end-of-lab-5)
 
 
 ## Lab Objectives
@@ -116,7 +117,7 @@ The example packet capture below is taken from *spine01* eth1. As you can see th
 
 <img src="../topo_drawings/lab5-wireshark-linux-srh-spine01.png" width="1200">
 
-### Jalapeno and Modeling Networks as Graphs
+## Jalapeno and Modeling Networks as Graphs
 
 Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to *`PyTorch`* (or other SDN applications) via Jalapeno's API. 
 
@@ -161,7 +162,7 @@ Here's a typical flow:
         ↓
 [PyTorch calls NCCL or Gloo backend]
         ↓
-[SRv6 Plugin intercepts]
+[SRv6 Plugin intercepts, calls Jalapeno API]
         ↓
 [Programs SRv6 routes]
         ↓
@@ -178,7 +179,7 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
  - host01
  - host03
 
-1. Copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
+1. From a *topology-host* terminal session copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
    
    *hopefully this step won't be necessary because we took care of it the night before the lab*
 
@@ -220,7 +221,7 @@ As the PyTorch job initializes the srv6-plugin takes action. It should create SR
 
 The "job" completes with some pings from each host to each host.
 
-Screenshot of output from *`host00`* with comments:
+Screenshot of output from *`host00`* with comments (each terminal should have similar output):
 
 ![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
 
@@ -242,6 +243,10 @@ Screenshot of output from *`host00`* with comments:
     fe80::/64 dev eth2 proto kernel metric 256 pref medium
     ```
 
+**Congratulations, you have reached the end of Cisco Live Lab LTRMSI-3000, hurray!!**
+
+## End of lab 5
+If you would like to explore host-based SRv6 some more feel free to try [Lab 5 Bonus Section](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-bonus.md)
 
 
 
