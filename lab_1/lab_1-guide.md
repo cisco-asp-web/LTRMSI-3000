@@ -502,7 +502,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
 ### Validate SRv6 configuration and reachability
 
-1. Validation commands
+1. On **xrd01** run validation commands
     ```
     show segment-routing srv6 sid
     ```
