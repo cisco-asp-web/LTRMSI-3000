@@ -4,7 +4,7 @@
 Now that we've established SRv6 L3VPNs across our network, we're going to transition from **router-based SRv6** to **host-based SRv6**. Our first step will be to enable SRv6 L3VPN for Kubernetes. The Berlin VM has Kubernetes pre-installed and is running the *Cilium CNI* (Container Network Interface). In this lab we'll review some basic Kubernetes commands (kubectl) and then we'll setup Cilium BGP peering with our XRd route reflectors. After that we'll configure Cilium SRv6 SID manager and Locator pool. Finally we'll add a couple containers to our Berlin K8s cluster and join them to the carrots VRF.
 
 > [!NOTE]
-> This portion of the lab makes use of Cilium Enterprise, which is a licensed set of features. The Cilium SRv6 feature set is in Beta is not available in the open source version. If you are interested in SRv6 on Cilium or other Enterprise features, please contact the relevant Cisco Isovalent sales team.  
+> This portion of the lab makes use of Cilium Enterprise as the SRv6 features are not available in the open source version. If you are interested in SRv6 on Cilium or other Enterprise features, please contact the relevant Cisco Isovalent sales team.  
 
 Isovalent has also published a number of labs covering a wide range of Cilium, Hubble, and Tetragon features here:
 
@@ -44,11 +44,10 @@ We will have achieved the following objectives upon completion of Lab 3:
 
 Kubernetes and Cilium Enterprise are pre-installed on the **Berlin** VM. All of the following steps are to be performed on the **Berlin** VM unless otherwise specified.
 
-1. From the **topology-host** SSH into the **Berlin VM** and cd into the lab_3/cilium directory
+1. From a **topology-host** terminal session SSH into the **Berlin VM** and cd into the lab_3/cilium directory
    ```
    ssh cisco@berlin
-   or
-   ssh cisco@192.168.122.100
+
    ```
    ```
    cd ~/LTRMSI-3000/lab_3/cilium/
@@ -232,7 +231,6 @@ In the next few steps we'll walk through applying the configuration one element 
 
 1. Verify Cilium BGP has successfully established peering sessions with **xrd05** and **xrd06** with the following cilium CLI. Note, it may take a few seconds for the peering sessions to establish.
    
-   We will be using the below command to interact with the Cilium BGP process.
    ```
    cilium bgp peers
    ```
@@ -248,11 +246,7 @@ In the next few steps we'll walk through applying the configuration one element 
             65000      65000     fc00:0:6666::1   established     24s      ipv6/unicast    5          0    
                                                                            ipv4/mpls_vpn   5          0  
    ```
-   
-   To list the additional cli options we will use the -h flag
-   ```
-   cilium bgp peers -h
-   ```
+
    
 ### Cilium BGP prefix advertisement
 
@@ -286,9 +280,9 @@ Here is a portion of the prefix advertisement CRD with notes:
    cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ cilium bgp peers
    Node     Local AS   Peer AS   Peer Address     Session State   Uptime   Family          Received   Advertised
    +berlin   65000      65000     fc00:0:5555::1   established     11m48s   ipv6/unicast    6          1
-                                                                            ipv4/mpls_vpn   5          0
+                                                                            ipv4/mpls_vpn   4          0
    +         65000      65000     fc00:0:6666::1   established     11m49s   ipv6/unicast    6          1
-                                                                            ipv4/mpls_vpn   5          0
+                                                                            ipv4/mpls_vpn   4          0
    ```                                                                         
 
 3. Let's get a little more detail on advertised prefixes with the `cilium bgp routes` command. Let's first add a -h flag to see our options
@@ -635,7 +629,7 @@ You'll note that the pod is in the *carrots VRF* and the K8s namespace *veggies*
 
 ### Run a ping test!
 
-1. On the Berlin VM exec into one of the carrotspod containers and ping Rome's interface in the carrots VRF:
+1. On the Berlin VM exec into one of the carrots pods and ping Rome's interface in the carrots VRF:
     ```
     kubectl exec -it -n veggies carrots0 -- sh
     ```
