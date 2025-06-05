@@ -13,7 +13,7 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
   - [Lab Objectives](#lab-objectives)
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
     - [SRv6 Linux Kernel Routes](#srv6-linux-kernel-routes)
-      - [Adding Linux SRv6 Routes](#adding-linux-srv6-routes)
+      - [Example packet capture at Spine01](#example-packet-capture-at-spine01)
     - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
     - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
 
@@ -54,15 +54,11 @@ Cisco doesn't currently have a controller product for host-based SRv6 and the Hy
 
 ### SRv6 Linux Kernel Routes
 > [!NOTE]
-> SRv6 has been available in the mainstream Linux kernel since version 4.10 and uSID since version 5.6. For our Ubuntu hosts there is no need to install packages or tune any sysctl or other parameters.
+> The below section uses the original Linux kernel SRv6 implementation which was based on SRH. Linux supports SRv6 uSID today and future versions of this lab will be adapted to use Linux uSID. For now having the end *host* impose an SRH encapsulation works just fine as the SONiC uSID fabric will only be operating on the outer destination address anyway.
 
+Before we get into PyTorch and automation, let's manually add a Linux route with SRv6 encapsulation:
 
-#### Adding Linux SRv6 Routes
-
-Our SONiC nodes support uSID and we'll simply construct the Linux SRv6 route with a single *segment* in the SRH that happens to have our fabric uSIDs embedded in it. This SRv6 route will then be programmed at the host level.
-
-
-1. Manually add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine01`* -> *`leaf02`*: 
+1. Add a Linux SRv6 route on *`host00`* to *`host02`* to take the path *`leaf00`* -> *`spine01`* -> *`leaf02`*: 
 
 
    Execute the *route add* from the *topology-host* with *docker exec*:
