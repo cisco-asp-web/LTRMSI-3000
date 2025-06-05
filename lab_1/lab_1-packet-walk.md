@@ -41,8 +41,11 @@ Log into the Amsterdam container and start a continous ping to the Rome Containe
 
 ![Amsterdam login](../topo_drawings/lab1-packet-walk-amsterdam.png)
 
+```
+ping 20.0.0.1 -i .5
+```
 
-
+Example Output
    ```
    # ping 20.0.0.1 -i .5
    PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
