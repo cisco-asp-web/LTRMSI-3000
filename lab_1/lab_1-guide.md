@@ -1,6 +1,6 @@
 # Lab 1 Guide: Deploy XRd Topology and apply SRv6 configurations [20 Min]
 
-The Cisco Live LTRMSI-3000 lab makes heavy use of containerlab to orchestrate our dockerized IOS-XR router known as XRd. If you wish to explore XRd and its uses beyond the scope of this lab the xrdocs team has posted a number of tutorials here: 
+We use of containerlab to orchestrate the XRd and SONiC virtual network topologies in this lab. If you wish to explore XRd and its uses beyond the scope of this lab the xrdocs team has posted a number of tutorials here: 
 
 https://xrdocs.io/virtual-routing/tags/#xrd-tutorial-series
 
@@ -17,8 +17,7 @@ https://containerlab.dev/
   - [Accessing the routers](#accessing-the-routers)
   - [Launch and Validate XRD Topology](#launch-and-validate-xrd-topology)
     - [Connect to the Topology Host and SSH to Containers.](#connect-to-the-topology-host-and-ssh-to-containers)
-  - [Validate Attached Linux VMs and Containers](#validate-attached-linux-vms-and-containers)
-    - [Berlin VM](#berlin-vm)
+    - [Accessing Berlin VM](#accessing-berlin-vm)
   - [Validate ISIS Topology](#validate-isis-topology)
     - [Add Synthetic Latency to the Links](#add-synthetic-latency-to-the-links)
   - [Validate BGP Peering](#validate-bgp-peering)
@@ -27,7 +26,7 @@ https://containerlab.dev/
     - [Configure SRv6 on xrd07](#configure-srv6-on-xrd07)
     - [Validate SRv6 configuration and reachability](#validate-srv6-configuration-and-reachability)
   - [End-to-End Connectivity - Edgeshark](#end-to-end-connectivity---edgeshark)
-    - [End of Lab 1](#end-of-lab-1)
+  - [End of Lab 1](#end-of-lab-1)
   
 ## Lab Objectives
 We will have achieved the following objectives upon completion of Lab 1:
@@ -41,6 +40,7 @@ We will have achieved the following objectives upon completion of Lab 1:
 
 ## Topology 
 
+For Labs 1 - 3 we will use the topology shown below. In the topology we have 7 XRd routers providing SRv6 transport services to a pair of Ubuntu containers (Amsterdam and Rome) and an Ubuntu VM (Berlin).
 ![Lab Topology](../topo_drawings/overview-topology-large.png)
 
 ## Accessing the routers 
@@ -71,7 +71,7 @@ This setup simplifies lab operations and significantly enhances usability.
 
 RDP to the Windows Virtual machine from the lab attendee laptop:
 
-The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 (admin / C1sco12345)
+The lab can be accessed using a Remote Desktop connection to the windows management hosts at 198.18.128.102 **(admin / C1sco12345)**
 
 ![windows-rdp](.././topo_drawings/windows-rdp.png)
 
@@ -111,26 +111,6 @@ We can also verify the containerlab logs in the visual code output window. Trunc
 
 ```
 [DEBUG] Containerlab extension activated.
-[INFO] Checking "which containerlab" to verify installation...
-[INFO] containerlab is already installed.
-[INFO] Running "containerlab version check".
-[INFO] User is in "clab_admins". Running without sudo: containerlab version check
-🎉 A newer containerlab version (0.68.0) is available!
-Release notes: https://containerlab.dev/rn/0.68/
-Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for installation options.
-
-[containerlab] Running: containerlab deploy -r docker -t /home/cisco/LTRMSI-3000/lab_1/lab_1-topology.clab.yaml
-[stderr] 16:41:26 INFO Containerlab started version=0.67.0
-[stderr] 16:41:26 INFO Parsing & checking topology file=lab_1-topology.clab.yaml
-[stderr] 16:41:26 INFO Creating docker network name=mgt-network IPv4 subnet=10.254.254.0/24 IPv6 subnet="" MTU=0
-[stderr] 16:41:26 INFO Creating lab directory path=/home/cisco/LTRMSI-3000/lab_1/clab-clus25
-[stderr] 16:41:26 INFO Creating container name=amsterdam
-[stderr] 16:41:26 INFO Creating container name=rome
-[stderr] 16:41:26 INFO Creating container name=xrd03
-[stderr] 16:41:26 INFO Creating container name=xrd02
-<snip>
-[stderr] 16:41:28 INFO Running postdeploy actions for Cisco XRd 'xrd06' node
-[stderr] 16:41:28 INFO Created link: xrd01:Gi0-0-0-3 ▪┄┄▪ amsterdam:eth2
 [stderr] 16:41:28 INFO Created link: xrd07:Gi0-0-0-3 ▪┄┄▪ rome:eth2
 [stderr] 16:41:28 INFO Adding host entries path=/etc/hosts
 [stderr] 16:41:28 INFO Adding SSH config for nodes path=/etc/ssh/ssh_config.d/clab-clus25.conf
@@ -169,6 +149,7 @@ Run 'sudo clab version upgrade' or see https://containerlab.dev/install/ for ins
 
 > [!NOTE]
 > All *containerlab* commands can be abbreviated to *clab*. Example: *sudo clab deploy -t lab_1-topology.clab.yaml*
+
 If the terminal is not visible in VScode, please launch a new terminal using the terminal / New terminal tabs. that way, you will be directly connected to the topology host using SSH.
 
 
@@ -178,6 +159,7 @@ The entire lab is doable from visual code, you should launch a terminal and it w
 
 ![terminal visual code](../topo_drawings/lab1-visual-code-terminal.png)
 
+Run a couple commands to verify the docker/router containers are up
 ```
 docker ps -a
 sudo containerlab inspect --all
@@ -196,25 +178,21 @@ To SSH into a router, you can use the containerlab visual code extension
 ![ssh into xrd01](../topo_drawings/lab1-ssh-xrd01.png)
 
 
-To get terminal access into a host, you can use the containerlab visual code extension and click on "Attach Shell" instead of "SSH"
+To get terminal access into the Amsterdam or Rome containers, you can use the containerlab visual code extension and click on "Attach Shell" instead of "SSH"
 
 ![Attach terminal](../topo_drawings/lab1-attach-terminal.png)
 
-## Validate Attached Linux VMs and Containers
 
-### Berlin VM
+### Accessing Berlin VM
 
 In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium** Container Network Interface (CNI) and connected to the **xrd02** router.
 
 
-1. SSH to *Berlin VM* from the *topology-host VM* (using the visual code terminal output)
+1. From a Visual Code terminal SSH to *Berlin VM* 
     ```
     ssh cisco@berlin
     ```
-    or
-    ```
-    ssh cisco@192.168.122.100
-    ```
+
     ![berlin ssh](../topo_drawings/lab1-ssh-berlin.png)
    
    
@@ -240,7 +218,7 @@ In our lab the **Berlin VM** is an Ubuntu Kubernetes node running the **Cilium**
 
     ![berlin connectivity](../topo_drawings/lab1-berlin-connectivity.png)
 
-    You can now logout of the Berlin VM and return to the SSH session on the topology host (still in visual code)
+    You can now logout of the Berlin VM 
 
 
 ## Validate ISIS Topology
@@ -252,10 +230,7 @@ Our topology is running ISIS as its underlying IGP with basic settings pre-confi
 For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 
 
-
-
 1. SSH into any router and verify that ISIS is up and running and all seven nodes are accounted for in the topology database
-
 
 
     ```
@@ -295,12 +270,11 @@ For full size image see [LINK](../topo_drawings/isis-topology-large.png)
 > [!NOTE]
 > Normally pinging xrd-to-xrd in this dockerized environment would result in ping times of ~1-3ms. However, we wanted to simulate something a little more real-world so we built a shell script to add synthetic latency to the underlying Linux links. 
    
-1. Run the `add-latency.sh` script from the topology-host:
+1. From a *topology-host* terminal session run the `add-latency.sh` script:
    ```
    ~/LTRMSI-3000/lab_1/scripts/add-latency.sh
    ```
    
-
 ## Validate BGP Peering
 
 In the topology we are running a single ASN 65000 with BGP running on **xrd01**, **xrd05**, **xrd06**, **xrd07**.  Routers **xrd05** and **xrd06** are functioning as route reflectors and **xrd01** and **xrd07** are clients. 
@@ -369,7 +343,7 @@ For full size image see [LINK](../topo_drawings/bgp-topology-large.png)
         Originator: 10.0.0.7, Cluster list: 10.0.0.6                          <------ route reflector xrd06
     ```
 
-4. Verify that router xrd07 has received route ```fc00:0:101:1::/64``` from the route reflectors **xrd05** and **xrd07**. Look for ```Paths: (2 available)```
+4. SSH to **xrd07** an verify it has received route ```fc00:0:101:1::/64``` from the route reflectors **xrd05** and **xrd06**. Look for ```Paths: (2 available)```
     ```
     show bgp ipv6 unicast fc00:0:101:1::/64
     ```
@@ -401,9 +375,7 @@ For full size image see [LINK](../topo_drawings/bgp-topology-large.png)
 
 ## Configure and Validate SRv6
 
-SRv6 introduces the Network Programming framework that enables a network operator or an application to specify a packet processing program by encoding a sequence of instructions in the IPv6 packet header. Each instruction is implemented on one or several nodes in the network and identified by an SRv6 Segment Identifier (SID) in the packet. 
-
-In SRv6, the IPv6 destination address represents a set of one or more instructions. In our lab we will use SRv6 "micro segment" (SRv6 uSID or just "uSID" for short) instead of the full SRH. SRv6 uSID is a straightforward extension of the SRv6 Network Programming model.
+In SRv6, the IPv6 destination address represents a set of one or more instructions. In our lab we will use SRv6 "micro segment" (SRv6 uSID or just "uSID" for short) instead of the full SRH. 
 
 With SRv6 uSID:
 
@@ -554,9 +526,9 @@ SRv6 uSID locator and source address information for nodes in the lab:
     +fc00:0:1111:e005::         uDT6              'default'                         bgp-65000           InUse  Y
     ```
 > [!NOTE]
-> The bottom two entries. These SIDs belong to BGP and represent End.DT behaviors. Any packet arriving with either of these SIDs as the outer IPv6 destination address will be decapsulated and then an LPM lookup in the global/default routing table will be performed on the inner destination address. More on this later in the *`SRv6 Packet Walk`* section.
+> The bottom two entries. These SIDs belong to BGP and represent End.DT behaviors. Any packet arriving with either of these SIDs as the outer IPv6 destination address will be decapsulated and then an LPM lookup in the global/default routing table will be performed on the inner destination address. 
 
-2. Validate the SRv6 prefix-SID configuration. As example for xrd01 look for *SID value: fc00:0000:1111::*
+1. Validate the SRv6 prefix-SID configuration. As example for xrd01 look for *SID value: fc00:0000:1111::*
     ```
     show isis segment-routing srv6 locators detail 
     ```
@@ -582,17 +554,17 @@ SRv6 uSID locator and source address information for nodes in the lab:
 EdgeShark is a browser-based packet capture and analysis tool built into Containerlab. Key features of Edgeshark for our lab.
 * Support for Docker containers
 * Integrated with Visual Studio Code through Containerlab extensions
-* Within Visual studeio Code you can highlight an XRD router link and launch directly
+* Within Visual Studio Code you can highlight an XRd router link and launch directly
 
 We will use this tool within the labs to allow the students to see actual SRv6 packets on the wire.
 
-To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *XRD1*.
+To launch EdgeShark and inspect traffic, simply click on the interface you want to capture packets from in the Containerlab tab within Visual Studio Code. In this case, we want to capture traffic on interface Gi0/0/0/0 of *xrd01*.
 
 ![Edgeshark launch](../topo_drawings/lab1-edgeshark-launch.png)
 
 Clicking on the interface will automatically launch wireshark and starts the capture.
 
-### End of Lab 1
+## End of Lab 1
 
 Lab 1 is completed, you can either: 
   - Perform the optional [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or

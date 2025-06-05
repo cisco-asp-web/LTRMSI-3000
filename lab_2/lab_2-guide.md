@@ -1,7 +1,7 @@
 # Lab 2: Configure SRv6 L3VPN and SRv6-TE [20 Min]
 
 ### Description
-In Lab 2 we will establish a Layer-3 VPN named *`carrots`* which will use SRv6 transport.  The *carrots* vrf will include Amsterdam and Rome containers connected to **xrd01** and **xrd07**.  
+In Lab 2 we will establish an SRv6 Layer-3 VPN named *`carrots`*.  The *carrots* vrf will include Amsterdam and Rome containers connected to **xrd01** and **xrd07**.  
 
 Once the L3VPN is established we will then setup SRv6-TE traffic steering from Amsterdam such that traffic to Rome prefix 40.0.0.0/24 will take a differnt path than traffic to Rome prefix 50.0.0.0/24.
 
@@ -15,10 +15,8 @@ Once the L3VPN is established we will then setup SRv6-TE traffic steering from A
     - [Configure SRv6 L3VPN on xrd07](#configure-srv6-l3vpn-on-xrd07)
   - [Configure SRv6-TE steering for L3VPN](#configure-srv6-te-steering-for-l3vpn)
     - [Create SRv6-TE steering policy](#create-srv6-te-steering-policy)
-  - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
-    - [Validate bulk traffic takes the non-shortest path: **xrd01 -\> 02 -\> 03 -\> 04 -\> 07**](#validate-bulk-traffic-takes-the-non-shortest-path-xrd01---02---03---04---07)
-      - [Validate low latency traffic takes the path: xrd01 -\> 05 -\> 06 -\> 07](#validate-low-latency-traffic-takes-the-path-xrd01---05---06---07)
-    - [End of Lab 2](#end-of-lab-2)
+    - [Validate SRv6-TE steering of L3VPN traffic](#validate-srv6-te-steering-of-l3vpn-traffic)
+  - [End of Lab 2](#end-of-lab-2)
 
 ## Lab Objectives
 We will have achieved the following objectives upon completion of Lab 2:
@@ -531,8 +529,9 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
              T:1(Sid structure):
          Source AFI: VPNv4 Unicast, Source VRF: default, Source Route Distinguisher: 10.0.0.7:1
    ```
-## Validate SRv6-TE steering of L3VPN traffic
-### Validate bulk traffic takes the non-shortest path: **xrd01 -> 02 -> 03 -> 04 -> 07** 
+### Validate SRv6-TE steering of L3VPN traffic
+
+**Validate bulk traffic takes the non-shortest path: xrd01 -> 02 -> 03 -> 04 -> 07** 
 
 1. Lets now tie the SRv6 TE policy configured to what we expect to see in the Edgeshark output. What you're looking for in the below output is the translation of the previously configured SRv6 TE policy below translated into the actual SRv6 packet header. So the TE bulk policy configured was:
 
@@ -572,13 +571,13 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    - Destination IPv6: fc00:0:2222:3333:7777::e009 which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
   
-#### Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07 
+**Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07**
 
-4.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
+1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
-5.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
+2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping to **Rome's** to the low latency destination using both the IPv4 and IPv6 addresses:
     ```
     ping 50.0.0.1 -i .5
     ```
@@ -605,5 +604,5 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
     ```
 
 
-### End of Lab 2
+## End of Lab 2
 Please proceed to [Lab 3](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_3/lab_3-guide.md)
