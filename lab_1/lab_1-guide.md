@@ -400,7 +400,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 > We've preconfigured SRv6 on **xrd02** thru **xrd06**, so you'll only need to configure **xrd01** and **xrd07**
 
 ### Configure SRv6 on xrd01
-1. Using the Visual Code extension, SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
+1. SSH to **xrd01** and enable SRv6 globally and define SRv6 locator and source address for outbound encapsulation 
 
 
     ```
