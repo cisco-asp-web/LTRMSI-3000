@@ -569,7 +569,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
 
    - Source IPv6: fc00:0:1111::1 
-   - Destination IPv6: fc00:0:2222:3333:7777:e009:: which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
+   - Destination IPv6: fc00:0:2222:3333:7777:e006:: which defines the SRv6 segment created earlier for traffic steering accross xrd02, xrd03, xrd04 and xrd07
     
   
 **Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07**
