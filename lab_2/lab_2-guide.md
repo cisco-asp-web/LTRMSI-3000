@@ -578,7 +578,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
-2.  Lets test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping **Rome's** low latency IPv4 destination:
+2.  Let's test and validate that our SRv6 TE policy is applied on **xrd01**. From **Amsterdam** we will ping **Rome's** low latency IPv4 destination:
     ```
     ping 50.0.0.1 -i .5
     ```
