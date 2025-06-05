@@ -2,7 +2,7 @@
 
 ## Introduction: 
 
-In this immersive hands-on lab, explore how to build SRv6 WAN networks utilizing L3VPNs, next-generation AI networking fabrics using SRv6, Kubernetes-native SRv6 with Cilium, and open-source data center technologies. You’ll explore a new way to architect, program, and optimize traffic in high-performance compute environments using Cisco IOS-XR and SONiC. This lab session walks participants through a series of progressive tutorials and labs covering:
+In this immersive hands-on lab we will explore how to build SRv6 WAN networks utilizing L3VPNs, next-generation AI fabric load balancing using SRv6, and Kubernetes-native SRv6 with Cilium. This lab session walks participants through a series of progressive tutorials and labs covering:
 
  - SRv6 fundamentals and foundational building blocks for SRv6 L3VPN and Traffic Engineering 
 
@@ -12,7 +12,7 @@ In this immersive hands-on lab, explore how to build SRv6 WAN networks utilizing
   
  - Programmatic traffic control using custom SRv6 mappings and intelligent automation 
   
-Participants will gain practical skills in deploying flexible, scalable, and programmable infrastructure purpose-built for AI, HPC, or cloud-native workloads. Whether you’re a network engineer, cloud architect, or AI infrastructure specialist, this session bridges the gap between architecture and hands-on implementation.
+Participants will gain practical skills in deploying flexible, scalable, and programmable infrastructure purpose-built for AI, HPC, or cloud-native workloads.
 
 ## Contents
 * Repository Overview [LINK](#github-repository-overview)
@@ -43,7 +43,7 @@ Within each lab directory you should see several files of importance:
 | File Name                | Description                                                  |
 |:-------------------------|:-------------------------------------------------------------|
 | cleanup-lab_X.sh         | Cleans up the containerlab topology and files                |
-| lab_X-topology.yaml       | YAML input file for containerlab to create the topology      |
+| lab_X-topology.clab.yaml | YAML input file for containerlab to create the topology      |
 | lab_X-guide.md           | User guide for this lab                                      |
 
 
@@ -64,16 +64,14 @@ The following diagram shows the dCloud VM topology that will be used for this la
 
 ![dCloud Topology](./topo_drawings/dcloud-topology.png)
 
-This lab environment provides a hands-on experience with modern, programmable network infrastructures using modular technologies: SONiC, XRd, Containerlab, Edgeshark, and Jalapeno.
-
-To support this, we are using three virtual machines, each with a specific role. Here’s what each VM is responsible for:
+This lab environment consists of three virtual machines, each with a specific role. Here’s what each VM is responsible for:
 
 
 ## 💻 Lab Virtual Machines Summary
 
 | VM Name              | IP Address       | Role / Description                                                                                                     | Key Tools / Use Cases                                                                                          |
 |----------------------|------------------|------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|
-| **Topology Host**    | `198.18.133.100` | Core lab environment host that runs network topologies using SONiC and XRd via Containerlab                           | - `Containerlab` to define and deploy topologies (`*.clab.yaml`)<br>- `Edgeshark` for in-container packet captures |
+| **Topology Host**    | `198.18.133.100` | Primary VM that hosts our SONiC and XRd networks deployed via Containerlab                        | - `Containerlab` to define and deploy topologies (`*.clab.yaml`)<br>- `Edgeshark` for in-container packet captures |
 | **Jalapeno Host**    | `198.18.128.101` | Hosts **Project Jalapeno**, an SDN controller framework focused on tunnel-based and graph-driven control planes       | - SDN automation & path computation<br>- Real-time topology modeling<br>- Graph database ingestion              |
 | **Windows Management** | `198.18.128.102` | RDP-accessible Windows VM for student interaction with the lab                                                        | - Lab documentation access<br>- VS Code with SSH and extensions:<br> &nbsp;&nbsp;• Start/stop topologies<br> &nbsp;&nbsp;• Capture traffic<br> &nbsp;&nbsp;• Access containers and Linux hosts |
 
