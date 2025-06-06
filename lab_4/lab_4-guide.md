@@ -289,9 +289,9 @@ Configuring SONiC's BGP container can be done from the command line and is very 
    no router bgp 65100
    ```
 
-4. Copy **leaf00's** FRR config [LINK](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/frr.conf) and paste it into the terminal
+4. Copy **leaf00's** FRR config [LINK](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic-config/leaf00/frr.conf) and paste it into the terminal.
 
-5. Save the config
+5. Exit out of config mode and save the config
    ```
    write mem
    ```
