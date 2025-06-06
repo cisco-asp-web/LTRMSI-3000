@@ -208,9 +208,9 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
 
    As the PyTorch job initializes the srv6-plugin takes action. It should create SRv6 routes for each *host* to each other *host* participating in the workload.
 
-   *`host00`* --> *`host01`* and *`host03`*
-   *`host01`* --> *`host00`* and *`host03`*
-   *`host03`* --> *`host00`* and *`host01`*
+   - *`host00`* --> *`host01`* and *`host03`*
+   - *'host01`* --> *`host00`* and *`host03`*
+   - *`host03`* --> *`host00`* and *`host01`*
 
    The "job" completes with some pings from each host to each host.
 
@@ -218,7 +218,7 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
 
    ![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
 
-6. Optional: check the Linux ipv6 routes on *hosts*:
+7. Optional: check the Linux ipv6 routes on *hosts*:
     ```
     docker exec -it clab-sonic-host00 ip -6 route
     ```
