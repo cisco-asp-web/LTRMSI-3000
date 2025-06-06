@@ -188,7 +188,7 @@ Validation command output examples can be found at this [LINK](/lab_2/validation
 > [!NOTE]
 > It can take 1-2 minutes on configuration of the L3VPN config before you see routes populate through the network and be visible in the routing tables.
 
-> [!NOTE]
+> [!IMPORTANT]
 > **xrd01** and **xrd07** are configured to use dynamic RD allocation, so the L3VPN RD+prefix combination shown in the lab guide may differ from the one you see in your environment. For example, **xrd07** might advertise the 40.0.0.0/24 prefix with rd 10.0.0.7:0 or it might be rd 10.0.0.7:1
 > 
 1. From **xrd01** run the following set of validation commands (for the sake of time you can paste them in as a group, or spot check some subset of commands):
