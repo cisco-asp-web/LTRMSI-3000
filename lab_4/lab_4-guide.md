@@ -361,15 +361,12 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 
 ### Verify SONiC BGP peering
 
-1. Using the visual code containerlab extension, ssh to one or more SONiC nodes and spot check BGP peering (user: admin, pw: admin)
-    ```
-    ssh admin@clab-sonic-leaf00
-    ssh admin@clab-sonic-leaf01
+1. Using the visual code containerlab extension, ssh to one or more SONiC nodes and spot check BGP peering . You can SSH into any SONiC container.  (user: admin, pw: admin)
 
-    ssh admin@clab-sonic-spine00
-    ssh admin@clab-sonic-spine01
-    etc.
-    ```
+
+   ![Lab 4 Topology](../topo_drawings/lab4-ssh-sonic.png)
+
+   
 
     ```
     vtysh
@@ -402,13 +399,10 @@ Our SONiC topology has now been configured for SRv6 uSID forwarding with each no
 
 ![Topology with Locators](../topo_drawings/lab4-topology-with-locators.png)
 
-If your *vtysh* session is on *leaf00* keep it open. If not, ssh to *leaf00* and invoke vtysh for the next few tasks:
+If your *vtysh* session is on *leaf00* keep it open. If not, ssh to *leaf00* using the visual code containerlab extension and invoke vtysh for the next few tasks:
 
-   ```
-   ssh admin@clab-sonic-leaf00
-   ```
 
-1. Check SONiC SRv6 configuration
+1. Check SONiC SRv6 configuration on *leaf00*
    ```
    show run
    ```
