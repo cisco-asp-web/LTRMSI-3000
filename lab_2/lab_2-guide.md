@@ -65,6 +65,8 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
 1. **xrd07** vrf static route configuration
    SSH into xrd07 and copy/paste the static route config below the image:
    ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
+
+**xrd07**
    ```yaml
       conf t
       
@@ -78,7 +80,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
             fc00:0:50::/64 fc00:0:107:2::2
           commit
     ```
-2. Verify **Rome** VRF prefix reachability  
+3. Verify **Rome** VRF prefix reachability  
     Ping check from xrd07 gi 0/0/0/3 to Rome's 2nd NIC:  
     ```
     ping vrf carrots 10.107.2.1
@@ -87,7 +89,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ping vrf carrots fc00:0:107:2::2
     ```
 
-3. Enable BGP L3VPN on **xrd07**
+4. Enable BGP L3VPN on **xrd07**
    
      The *carrots* L3VPN is dual-stack so we will be adding both vpnv4 and vpnv6 address-families to the BGP neighbor-group for ipv6 peers. For example you will enable L3VPN in the neighbor-group template by issuing the *address-family vpnv4/6 unicast* command. 
 
@@ -104,7 +106,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
       commit
     ```
 
-4. Enable SRv6 for VRF carrots and redistribute connected/static
+5. Enable SRv6 for VRF carrots and redistribute connected/static
    
     Next we add VRF *carrots* into BGP and enable SRv6 to the IPv4 and IPv6 address family with the command *`segment-routing srv6`*. In addition we will tie the VRF to the SRv6 locator *`MyLocator`* configured in Lab 1.
 
