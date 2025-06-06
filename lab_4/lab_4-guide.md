@@ -101,6 +101,11 @@ For a deep dive on SONiC architecture and containers please see: https://sonicfo
 | TeamD                | Runs open-source implementation of LAG protocol |
 | GNMI                 | SONiC gnmi/telemetry service |
 
+> [!NOTE]
+> **Control Plane**: SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
+> 
+> The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
+
 In addition to normal Linux CLI, SONiC has its own CLI that operates from the Linux shell:
 
 3. Try some SONiC CLI commands:
@@ -112,10 +117,6 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from the Li
     show version
     ```
     If you would like to explore more we've included a short [SONiC CLI command reference](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_4/sonic_cli_reference.md)
-
-   **Control Plane**: SONiC leverages the open-source [Free Range Routing](https://frrouting.org/)(FRR) routing stack for its Control Plane. Currently the only supported routing protocol is BGP, however, FRR supports ISIS and OSPF, so someday in the future we could see SONiC incorporating those protocols as well.
-
-   The *docker ps* output above included a container named **bgp**. In reality this is FRR running as a container.
 
 5. Access **leaf00's** FRR/BGP container via *vtysh*
     ```
