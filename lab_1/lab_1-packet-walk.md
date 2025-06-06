@@ -68,11 +68,8 @@ Launch Edgesharek and add in *icmp* into the filter bar.
 
 ![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-capture-wireshark.png)
 
-if you expand one of the ICMP request packets, you will see the following :
-![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
-  
-
-We can see here that we have an IPv6 outer header with an embedeed IPv4/ICMP packet:
+Now lets expand one of the ICMP packets so we can gather more details.
+We can see in the Edgeshark screen shot below that we have an IPv6 outer header with an embedeed IPv4/ICMP packet:
    - IPv6 Source is: fc00:0:1111::1 : This is the ingress SRv6 node that inserted the outer header
    - IPv6 Destination is: fc00:0:7777:e004: This is a Segment Identifier (SID) that encodes a specific function or destination. => In our case:  End.DT4 Endpoint with decapsulation and IPv4 table lookup IPv4 L3VPN use (equivalent of a per-VRF VPN label) (For more information: https://www.segment-routing.net/images/201901-SRv6.pdf)
    - Next IP Header: 4 (IPIP)
@@ -80,6 +77,9 @@ We can see here that we have an IPv6 outer header with an embedeed IPv4/ICMP pac
    - IPv4 Destination is: 20.0.0.1, which is the IP Address configured on the Rome container as a loopback inteface.
 
 
+
+![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
+  
 
 > [!NOTE]
 > If you prefer to inspect the traffic using the cli you can connect to the topology host and type the following commands:
