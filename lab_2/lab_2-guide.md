@@ -553,14 +553,14 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
 > [!IMPORTANT]
 > Notice that the above that the above SID stack the last hop xrd04 (4444). As mentioned in the lecture XR looks at the penultimate hop and does a calculation using the ISIS topology table and determines that **xrd03's** best forwarding path to **xrd07** (7777) is through **xrd04**. Therefore for efficiency it drops the penultimate hop off the SID stack.
 
-1. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 address on Rome.
+2. Using the Visual Code extension, attach to the Amsterdam container's shell and run a ping to the bulk transport destination IPv4 address on Rome.
     ![Amsterdam ping](../topo_drawings/lab2-amsterdam-ping.png)
 
     ```
     ping 40.0.0.1 -i .5
     ```
     
-2. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
+3. Launch an edgeshark capture on container xrd01 interface Gig0/0/0/1 to inspect the traffic.
    
    ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g0.png) 
    
