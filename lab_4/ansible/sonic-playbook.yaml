@@ -109,6 +109,6 @@
            ╚═════╝╚═╝╚══════╝ ╚═════╝ ╚═════╝               ╚══════╝╚═╝  ╚═╝  ╚═══╝   ╚═════╝               ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝ ╚═════╝
 
           Welcome to the SRv6 Lab! 🚀
-          Giv/show this SID to your instructor: fc00:congrats:on:th3:csco:b00k | Node ID: spine00 | "Hope you have fun !"
+          Give/show this SID to Nicolas: fc00:congrats:on:th3:csco:b00k | Node ID: spine00 | "Hope you have fun !"
         dest: /etc/motd
         mode: '0644'
