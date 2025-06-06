@@ -362,12 +362,13 @@ We'll use Ansible and execute the [sonic-playbook.yaml](https://github.com/cisco
 
 ### Verify SONiC BGP peering
 
+With BGP now configured on our DC fabric we will check to make sure that BGP peering was established. Use the below diagram as a reference to the ASN configured in the prior steps.
+
+![Lab 4 Topology](../topo_drawings/lab4-fabric-asn-topology.png)
+
 1. Using the visual code containerlab extension, ssh to one or more SONiC nodes and spot check BGP peering . You can SSH into any SONiC container.  (user: admin, pw: admin)
 
-
    ![Lab 4 Topology](../topo_drawings/lab4-ssh-sonic.png)
-
-   
 
     ```
     vtysh
