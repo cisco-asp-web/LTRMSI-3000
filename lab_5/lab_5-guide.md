@@ -81,10 +81,9 @@ Before we get into PyTorch and automation, let's manually add a Linux route with
    ![Linux SRv6 Route](../topo_drawings/lab5-host00-host02-static-route.png)
 
 
-3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
-   ```
-   ssh admin@clab-sonic-leaf02
-   ```
+3. Using the visual code containerlab extension, connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
+   
+   **leaf02**
    ```
    vtysh
    show run
@@ -100,13 +99,40 @@ Before we get into PyTorch and automation, let's manually add a Linux route with
       sid fc00:0:1202:fe06::/64 locator MAIN behavior uDT6 vrf default
    exit
    ```
+> [!NOTE]
+> To inspect specific parts of the configuration, you can also run the following command from the shell (outside of vtysh mode):
+>
+> sudo vtysh -c "show running-config" | grep -A 10 "segment-routing"
+>
+> This filters and displays the Segment Routing configuration along with the 10 lines that follow.
+```
+admin@leaf02:~$ sudo vtysh -c "show running-config" | grep -A 10 "segment-routing"
+segment-routing
+ srv6
+  static-sids
+   sid fc00:0:1202::/48 locator MAIN behavior uN
+   sid fc00:0:1202:fe04::/64 locator MAIN behavior uDT4 vrf default
+   sid fc00:0:1202:fe06::/64 locator MAIN behavior uDT6 vrf default
+  exit
+  !
+ exit
+ !
+ srv6
+ ```
 
-4. Run a ping from *host00* to *host02*
+
+1. Using the visual code containerlab extension, attach to **clab-sonic-host00** shell and run a ping from *host00* to *host02*
+
+   ![host00-ping](../topo_drawings/lab5-host00-attach-ping.png)
+   
    ```
-   docker exec -it clab-sonic-host00 ping 2001:db8:1002::2
+   # ping 2001:db8:1002::2
+   PING 2001:db8:1002::2(2001:db8:1002::2) 56 data bytes
+   64 bytes from 2001:db8:1002::2: icmp_seq=2 ttl=61 time=2.62 ms
+   64 bytes from 2001:db8:1002::2: icmp_seq=3 ttl=61 time=0.920 ms
    ```
 
-5. Optional: while the ping is running perform Edgeshark capture(s) to see the encapsulated packets and shift-and-forward in action. Recommended interfaces for Wireshark capture:
+2. Optional: while the ping is running perform Edgeshark capture(s) to see the encapsulated packets and shift-and-forward in action. Recommended interfaces for Wireshark capture:
    - clab-sonic-host00 eth1
    - clab-sonic-spine01 eth1
    **Example packet capture at Spine01**
