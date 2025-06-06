@@ -297,9 +297,8 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    ```
       
 2. On **xrd07** configure ext-comms, route-policies, and BGP such that *xrd07* advertises Rome's "40" and "50" prefixes with their respective color extended communities:
-   
 
-  Using the visual code extension, SSH into xrd07 and paste the following commands:
+   Using the visual code extension, SSH into xrd07 and paste the following commands:
 
    ```yaml
    conf t
@@ -337,7 +336,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    commit
    ```
 
-3. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
+4. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
    
 
    Using the visual code extension, SSH into xrd01 and paste the following commands:
