@@ -564,6 +564,5 @@ Clicking on the interface will automatically launch wireshark and starts the cap
 ## End of Lab 1
 
 Lab 1 is completed, you can either: 
-  - Perform the optional [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md) or
-  - Perform the optional [Lab 1 SRv6 Control plane analysis with edge shark](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-edgeshark.md) or
+  - Perform the optional [Lab 1 packet walk](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_1/lab_1-packet-walk.md)
   - Proceed to [Lab 2](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_2/lab_2-guide.md)
