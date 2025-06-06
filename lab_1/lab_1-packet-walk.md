@@ -54,12 +54,9 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
    64 bytes from 20.0.0.1: icmp_seq=3 ttl=62 time=4.92 ms
    64 bytes from 20.0.0.1: icmp_seq=4 ttl=62 time=4.67 ms
    ```
-2. Lets capture the traffic using EdgeShark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces:
+2. Lets capture the traffic using EdgeShark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces. Below is an example capture for G0/0/0/1:
 
 ![XRD01 Capture 01 ](../topo_drawings/lab1-packet-walk-capture-xrd01-1.png)
-and 
-
-![XRD01 Capture 02 ](../topo_drawings/lab1-packet-walk-capture-xrd01-2.png)
 
 
 By filtering only on ICMP packets, we should be able to see the traffic that is interesting to us.
