@@ -66,7 +66,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
    SSH into xrd07 and copy/paste the static route config below the image:
    ![ssh into xrd07](../topo_drawings/lab1-ssh-xrd07.png)
 
-**xrd07**
+   **xrd07**
    ```yaml
       conf t
       
