@@ -558,7 +558,7 @@ The containerlab topology file included a number of *`exec`* commands to be run 
     docker exec -it clab-sonic-host00 ping 2001:db8:1003::2 -i .3 -c 100
     ```
 
-    While the ping is running we can launch edgeshark using the visual code containerlab extension and inspect the traffic on the eth2 interface. Note the traffic is not SRv6 encapsulated at this time:
+    While the ping is running we can launch edgeshark using the visual code containerlab extension and inspect the traffic on the eth1 interface. Note the traffic is not SRv6 encapsulated at this time:
 
     ![edgeshark-host00](../topo_drawings/lab4-host00-edgeshark.png)
 
