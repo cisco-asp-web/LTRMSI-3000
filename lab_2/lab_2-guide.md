@@ -337,7 +337,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
    commit
    ```
 
-1. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
+3. Validate vpnv4 and v6 prefixes are received at **xrd01** and that they have their color extcomms:
    
 
    Using the visual code extension, SSH into xrd01 and paste the following commands:
