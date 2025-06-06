@@ -82,24 +82,24 @@ Before we get into PyTorch and automation, let's manually add a Linux route with
 
 
 3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
-  ```
-  ssh admin@clab-sonic-leaf02
-  ```
-  ```
-  vtysh
-  show run
-  ```
+   ```
+   ssh admin@clab-sonic-leaf02
+   ```
+   ```
+   vtysh
+   show run
+   ```
 
-  Partial output:
-  ```
-  segment-routing
-  srv6
-   static-sids
-    sid fc00:0:1202::/48 locator MAIN behavior uN
-    sid fc00:0:1202:fe04::/64 locator MAIN behavior uDT4 vrf default
-    sid fc00:0:1202:fe06::/64 locator MAIN behavior uDT6 vrf default
-  exit
-  ```
+   Partial output:
+   ```
+   segment-routing
+   srv6
+     static-sids
+      sid fc00:0:1202::/48 locator MAIN behavior uN
+      sid fc00:0:1202:fe04::/64 locator MAIN behavior uDT4 vrf default
+      sid fc00:0:1202:fe06::/64 locator MAIN behavior uDT6 vrf default
+   exit
+   ```
 
 4. Run a ping from *host00* to *host02*
    ```
