@@ -577,7 +577,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
   
 **Validate low latency traffic takes the path: xrd01 -> 05 -> 06 -> 07**
 
-1.  Start a new edgeshark capture  **xrd01's** outbound interface to **xrd05** (Gi0-0-0-2):
+1.  Start a new edgeshark capture  **xrd01's** outbound interface (Gi0-0-0-2) to **xrd05**:
 
     ![Amsterdam edgeshark](../topo_drawings/lab2-xrd-edgeshark-g2.png) 
 
