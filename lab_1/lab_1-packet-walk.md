@@ -25,6 +25,7 @@ The student upon completion of the Lab 1 packet walk should have achieved the fo
 
 ## Packet Walk Results for traffic from Amsterdam to Rome over SRv6
 
+### Generate IPv4 Traffic and Capture on XRD01
 The expected results of a packet capture on **xrd01** is to see ICMP IPv4 traffic sourced from **Amsterdam (10.101.1.2)** to a loopback interface on **Rome (20.0.0.1)** use SRv6 encapsulation across the network.
 
 See results below and notice both the ICMP echo and ICMP echo reply packets with SRv6 encapsulation. 
@@ -60,39 +61,30 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
    Launch Edgesharek and add in *icmp* into the filter bar.
 
    ![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-capture-wireshark.png)
-
-Now lets expand one of the ICMP packets so we can gather more details.
-We can see in the Edgeshark screen shot below that we have an IPv6 outer header with an embedeed IPv4/ICMP packet:
+3. Now lets pause the capture and expand one of the ICMP packets so we can gather more details.
+   We can see in the Edgeshark screen shot below that we have an IPv6 outer header with an embedeed IPv4/ICMP packet:
    - IPv6 Source is: fc00:0:1111::1 : This is the ingress SRv6 node that inserted the outer header
    - IPv6 Destination is: fc00:0:7777:e004: This is a Segment Identifier (SID) that encodes a specific function or destination. => In our case:  End.DT4 Endpoint with decapsulation and IPv4 table lookup IPv4 L3VPN use (equivalent of a per-VRF VPN label) (For more information: https://www.segment-routing.net/images/201901-SRv6.pdf)
    - Next IP Header: 4 (IPIP)
    - IPv4 Source is: 10.101.1.2 Which is the IP Address configured on the Amsterdam Eth1 interface.
    - IPv4 Destination is: 20.0.0.1, which is the IP Address configured on the Rome container as a loopback inteface.
 
-
-
 ![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
   
+4. **OPTIONAL** If you prefer to inspect the traffic using the cli you can connect to the topology host and type the following commands:
+   ```
+   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
+   ```
 
-> [!NOTE]
-> If you prefer to inspect the traffic using the cli you can connect to the topology host and type the following commands:
-> 
->   ```
->   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
->   sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-2
->   ```
-
->
->   Example output:
->   ```
->   cisco@xrd:~/LTRMSI-3000/lab_2$ sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
->   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
->   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
->   01:54:41.418301 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 11, length
->   01:54:41.421606 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 11, length 64
->   01:54:41.818159 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 12, length 64
->   01:54:41.821777 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 12, length 64
->   ```
+   Example output:
+   ```
+   cisco@topology-host:~/LTRMSI-3000/lab_2$ sudo ip netns exec clab-clus25-xrd01 tcpdump -lni Gi0-0-0-1
+   tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+   listening on Gi0-0-0-1, link-type EN10MB (Ethernet), capture size 262144 bytes
+   01:54:41.418301 IP6 fc00:0:1111::1 > fc00:0:7777:e005::: IP 10.101.2.1 > 20.0.0.1: ICMP echo request, id 4, seq 11, length
+   01:54:41.421606 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 11, length 64
+   ```
 
 
 To see the encapsulated traffic further in the network, feel free to capture traffic using the visual code extension as previously shown. Or you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
