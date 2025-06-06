@@ -206,19 +206,17 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
    docker exec clab-sonic-host03 bash -c "RANK=2 MASTER_PORT=29500 python3 /app/test_plugin.py"
    ```
 
-As the PyTorch job initializes the srv6-plugin takes action. It should create SRv6 routes for each *host* to each other *host* participating in the workload. 
+   As the PyTorch job initializes the srv6-plugin takes action. It should create SRv6 routes for each *host* to each other *host* participating in the workload.
 
-*`host00`* --> *`host01`* and *`host03`*
+   *`host00`* --> *`host01`* and *`host03`*
+   *`host01`* --> *`host00`* and *`host03`*
+   *`host03`* --> *`host00`* and *`host01`*
 
-*`host01`* --> *`host00`* and *`host03`*
+   The "job" completes with some pings from each host to each host.
 
-*`host03`* --> *`host00`* and *`host01`*
+   Screenshot of output from *`host00`* with comments (each terminal should have similar output):
 
-The "job" completes with some pings from each host to each host.
-
-Screenshot of output from *`host00`* with comments (each terminal should have similar output):
-
-![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
+   ![host00 pytorch](../topo_drawings/lab5-pytorch-output.png)
 
 6. Optional: check the Linux ipv6 routes on *hosts*:
     ```
