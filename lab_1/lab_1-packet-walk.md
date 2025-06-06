@@ -37,15 +37,15 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
 
 
 
-Log into the Amsterdam container and start a continous ping to the Rome Container.
+1. Log into the Amsterdam container and start a continous ping to the Rome Container.
 
-![Amsterdam login](../topo_drawings/lab1-packet-walk-amsterdam.png)
+   ![Amsterdam login](../topo_drawings/lab1-packet-walk-amsterdam.png)
 
-```
-ping 20.0.0.1 -i .5
-```
+   ```
+   ping 20.0.0.1 -i .5
+   ```
 
-Example Output
+   Example Output
    ```
    # ping 20.0.0.1 -i .5
    PING 20.0.0.1 (20.0.0.1) 56(84) bytes of data.
@@ -54,8 +54,7 @@ Example Output
    64 bytes from 20.0.0.1: icmp_seq=3 ttl=62 time=4.92 ms
    64 bytes from 20.0.0.1: icmp_seq=4 ttl=62 time=4.67 ms
    ```
-
-Then we want to capture the traffic using edgeshark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces:
+2. Lets capture the traffic using EdgeShark to see the SRv6 encapsulated traffic egressing **xrd01**  We don't know which interface the traffic will be hashed through so we may need to capture on both G0/0/0/1 and G0/0/0/2 interfaces:
 
 ![XRD01 Capture 01 ](../topo_drawings/lab1-packet-walk-capture-xrd01-1.png)
 and 
