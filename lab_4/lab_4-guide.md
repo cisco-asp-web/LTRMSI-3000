@@ -144,7 +144,7 @@ In addition to normal Linux CLI, SONiC has its own CLI that operates from the Li
 ## SONiC Configuration Files
 Configuration state in SONiC is saved in two separate files. The first is the **/etc/sonic/config_db.json** file, which contains global configuration attributes such as hostname, interfaces, IP addresses, etc. The second is the FRR control plane configuration at **/etc/sonic/frr/bgpd.conf**.
 
-### config load, config reload, config save,
+### config load, config reload, & config save
 
 **config load**
 
