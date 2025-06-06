@@ -181,20 +181,18 @@ The plugin includes a simple demo that uses a *`gloo`* backend because it doesn'
 
 1. From a *topology-host* terminal session copy updated pytorch-srv6-plugin files to the Ubuntu *host* containers. 
    
-   *hopefully this step won't be necessary because we took care of it the night before the lab*
-
    ```
    cd ~/LTRMSI-3000/lab_5/pytorch-plugin/
    ./copy-files.sh
    ```
 
-It is most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload. 
+   It is most effective to run the plugin-demo from three separate terminal sessions on *topology-host*. This will show us how the plugin operates and programs SRv6 routes on each host running the distributed workload.
 
-In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. But where the demo lacks in training functionality it makes up for in pings! 
+   In the spirit of transparency, the demo initializes PyTorch and the SRv6 functionality, however, it doesn't train anything. But where the demo lacks in training functionality it makes up for in pings! 
 
 2. Open three terminal sessions on *topology-host*
 
-![terminal sessions](../topo_drawings/lab5-terminal-sessions.png)
+   ![terminal sessions](../topo_drawings/lab5-terminal-sessions.png)
 
 3. In the first terminal session initialize the test run on *host00*
    ```
