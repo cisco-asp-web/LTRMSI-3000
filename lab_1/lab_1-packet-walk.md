@@ -64,6 +64,7 @@ and
 
 
 By filtering only on ICMP packets, we should be able to see the traffic that is interesting to us.
+Launch Edgesharek and add in *icmp* into the filter bar.
 
 ![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-capture-wireshark.png)
 
