@@ -13,7 +13,7 @@ In Lab 5 we will explore this use case with our SONiC nodes and their attached U
   - [Lab Objectives](#lab-objectives)
   - [Host-Based SRv6 for Intelligent Fabric Load Balancing](#host-based-srv6-for-intelligent-fabric-load-balancing)
     - [SRv6 Linux Kernel Routes](#srv6-linux-kernel-routes)
-  - [Jalapeno and Modeling Networks as Graphs](#jalapeno-and-modeling-networks-as-graphs)
+  - [Jalapeno and Modeling Networks as Graphss](#jalapeno-and-modeling-networks-as-graphss)
   - [SRv6 PyTorch Plugin](#srv6-pytorch-plugin)
   - [End of lab 5](#end-of-lab-5)
 
@@ -138,9 +138,12 @@ segment-routing
    **Example packet capture at Spine01**
 
      The example packet capture below is taken from *spine01* eth1. As you can see the outer IPv6 destination address has been shifted-and-forwarded by *leaf00*. We don't need to worry about the Linux SRH because when it arrives at *leaf02* that node will see its local uDT6 entry *fc00:0:1202:fe06* and will decapsulate the entire outer header and do a lookup on the inner IPv6 destination address. *Leaf02* will then forward the inner packet to *host02*.
+     <br><br>
+     ![host00-ping](../topo_drawings/lab5-spine01-edgeshark.png)
+     <br><br>
      <img src="../topo_drawings/lab5-wireshark-linux-srh-spine01.png" width="1200">
 
-## Jalapeno and Modeling Networks as Graphs
+## Jalapeno and Modeling Networks as Graphss
 
 Using the [Lab 5 scripts and data](./scripts/sonic-network/) we've created a model of our SONiC fabric topology with relevant SRv6 data in Jalapeno's Arango Graph Database. This makes the fabric topology graph available to *`PyTorch`* (or other SDN applications) via Jalapeno's API. 
 
