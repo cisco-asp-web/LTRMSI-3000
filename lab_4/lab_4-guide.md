@@ -469,28 +469,28 @@ If your *vtysh* session is on *leaf00* keep it open. If not, ssh to *leaf00* usi
     ```
 
     Expected output:
-    ```
+    ```diff
     leaf00# show bgp ipv6 uni 2001:db8:1003::/64
     BGP routing table entry for 2001:db8:1003::/64, version 27
-    Paths: (4 available, best #1, table default)
+    +Paths: (4 available, best #1, table default)
       Advertised to non peer-group peers:
       Ethernet0 Ethernet4 Ethernet8 Ethernet12
-      65000 65203
+    + 65000 65203
         fe80::20a3:c7ff:fe5e:5c58 from Ethernet0 (10.0.0.0)
         (fe80::20a3:c7ff:fe5e:5c58) (prefer-global)
           Origin IGP, valid, external, multipath, best (Older Path)
           Last update: Sun Jun  1 03:17:37 2025
-      65001 65203
+    + 65001 65203
         fe80::20dc:72ff:fe50:c026 from Ethernet4 (10.0.0.1)
         (fe80::20dc:72ff:fe50:c026) (prefer-global)
           Origin IGP, valid, external, multipath
           Last update: Sun Jun  1 03:17:38 2025
-      65002 65203
+    + 65002 65203
         fe80::20c8:3aff:fed9:1a10 from Ethernet8 (10.0.0.2)
         (fe80::20c8:3aff:fed9:1a10) (prefer-global)
           Origin IGP, valid, external, multipath
           Last update: Sun Jun  1 03:17:38 2025
-      65003 65203
+    + 65003 65203
         fe80::20f6:30ff:fe5c:9180 from Ethernet12 (10.0.0.3)
         (fe80::20f6:30ff:fe5c:9180) (prefer-global)
           Origin IGP, valid, external, multipath
