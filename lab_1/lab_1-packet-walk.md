@@ -25,6 +25,10 @@ The student upon completion of the Lab 1 packet walk should have achieved the fo
 
 ## Packet Walk Results for traffic from Amsterdam to Rome over SRv6
 
+See the below lab topology that has additional route details added for this mini-lab.
+![L3VPN Topology](/topo_drawings/lab2-l3vpn-carrots.png)
+
+
 ### Generate IPv4 Traffic and Capture on XRD01
 The expected results of a packet capture on **xrd01** is to see ICMP IPv4 traffic sourced from **Amsterdam (10.101.1.2)** to a loopback interface on **Rome (20.0.0.1)** use SRv6 encapsulation across the network.
 
@@ -97,9 +101,9 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
 
 
 
-### SRv6 Encapsulation and BGP
+### Understanding SRv6 Encapsulation and BGP on XRD01
 
-In the above **xrd01** recieves IPv4 packets from Amsterdam destined to Rome. We will walk through the process of determining that SRv6 encapsulation is required and lookup process.
+We have just verified earlier that we have IPv4 reachability from **Amsterdam** to **x
 
 1. From **xrd01** we can see a lookup of the IPv4 DA address in the bgpv4 global routing table and the SRv6 SID associated with the route 20.0.0.0/24.
    ```
