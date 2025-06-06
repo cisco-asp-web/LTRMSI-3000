@@ -95,7 +95,7 @@
         var: srv6_sid_result.stdout
 
 - name: Customize MOTD on specific SONiC node
-  hosts: xrd07-sonic
+  hosts: spine00
   become: true
   tasks:
     - name: Set custom MOTD
@@ -109,6 +109,6 @@
            ╚═════╝╚═╝╚══════╝ ╚═════╝ ╚═════╝               ╚══════╝╚═╝  ╚═╝  ╚═══╝   ╚═════╝               ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝ ╚═════╝
 
           Welcome to the SRv6 Lab! 🚀
-          Give this SID to your instructor: fc00:congrats:on:th3:csco:b00k | Node ID: xrd07 | Behavior: End.DX6
+          Giv/show this SID to your instructor: fc00:congrats:on:th3:csco:b00k | Node ID: spine00 | "Hope you have fun !"
         dest: /etc/motd
         mode: '0644'
