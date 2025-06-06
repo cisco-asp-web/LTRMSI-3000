@@ -81,7 +81,7 @@ Before we get into PyTorch and automation, let's manually add a Linux route with
    ![Linux SRv6 Route](../topo_drawings/lab5-host00-host02-static-route.png)
 
 
-4. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
+3. Connect to SONiC *`leaf02`*, invoke FRR vtysh and 'show run' to see the SRv6 local SID entries:
   ```
   ssh admin@clab-sonic-leaf02
   ```
