@@ -538,14 +538,14 @@ The containerlab topology file included a number of *`exec`* commands to be run 
 
     Expected output:
     ```
-    cisco@topology-host:$ docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
+    cisco@topology-host:~$ docker exec -it clab-sonic-host00 ip addr show dev eth1 | grep inet
     inet 200.0.100.2/24 scope global eth1
     inet6 2001:db8:1000::2/64 scope global 
-    inet6 fe80::a8c1:abff:feb4:ba48/64 scope link
+    inet6 fe80::a8c1:abff:fe7c:fbbd/64 scope link 
 
-    cisco@topology-host:$ docker exec -it clab-sonic-host00 ip -6 route
+    cisco@topology-host:~$ docker exec -it clab-sonic-host00 ip -6 route
     2001:db8:1000::/64 dev eth1 proto kernel metric 256 pref medium
-    2001:db8:1003::/64 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium   <--- v6 test route to ubuntu-host24
+    2001:db8::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
     fc00::/32 via 2001:db8:1000::1 dev eth1 metric 1024 pref medium
     fe80::/64 dev eth1 proto kernel metric 256 pref medium
     fe80::/64 dev eth2 proto kernel metric 256 pref medium
