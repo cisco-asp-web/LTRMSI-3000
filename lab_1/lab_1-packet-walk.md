@@ -26,7 +26,7 @@ The student upon completion of the Lab 1 packet walk should have achieved the fo
 ## Packet Walk Results for traffic from Amsterdam to Rome over SRv6
 
 See the below lab topology that has additional route details added for this mini-lab.
-![L3VPN Topology](/topo_drawings/lab2-l3vpn-carrots.png)
+![L3VPN Topology](/topo_drawings/lab1-optional-lab-topology.png)
 
 
 ### Generate IPv4 Traffic and Capture on XRD01
