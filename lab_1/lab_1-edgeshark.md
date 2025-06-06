@@ -1,6 +1,6 @@
 
 
-# Lab 1: SRv6 Control plane analysis with edge shark [5 Min]
+# Lab 1: SRv6 Control plane analysis with EdgeShark [5 Min]
 
 ### Description: 
 This is a supplemental lab guide designed to help you visualize traffic using EdgeShark. This tool, embedded in the Containerlab Visual Studio Code extension, allows us to intercept and analyze IS-IS and BGP SRv6 control plane traffic.
