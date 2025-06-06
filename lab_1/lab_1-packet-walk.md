@@ -69,7 +69,7 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
    - IPv4 Source is: 10.101.1.2 Which is the IP Address configured on the Amsterdam Eth1 interface.
    - IPv4 Destination is: 20.0.0.1, which is the IP Address configured on the Rome container as a loopback inteface.
 
-![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
+     ![XRD01 Edgeshark ](../topo_drawings/lab1-packet-walk-wireshark-full-capture.png)
   
 4. **OPTIONAL** If you prefer to inspect the traffic using the cli you can connect to the topology host and type the following commands:
    ```
@@ -86,8 +86,7 @@ See results below and notice both the ICMP echo and ICMP echo reply packets with
    01:54:41.421606 IP6 fc00:0:7777::1 > fc00:0:1111:e005::: IP 20.0.0.1 > 10.101.2.1: ICMP echo reply, id 4, seq 11, length 64
    ```
 
-
-To see the encapsulated traffic further in the network, feel free to capture traffic using the visual code extension as previously shown. Or you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
+   To see the encapsulated traffic further in the network, feel free to capture traffic using the visual code extension as previously shown. Or you can tcpdump links on **xrd02**, **xrd05**, etc. Examples:
    ```
    sudo ip netns exec clab-clus25-xrd02 tcpdump -lni Gi0-0-0-1
    sudo ip netns exec clab-clus25-xrd05 tcpdump -lni Gi0-0-0-1
