@@ -16,7 +16,7 @@ In lab 4 we'll deploy a CLOS topology of SONiC nodes, we'll explore the SONiC/Li
   - [SONiC: A Very Quick Tour](#sonic-a-very-quick-tour)
     - [SONiC Docker Containers](#sonic-docker-containers)
   - [SONiC Configuration Files](#sonic-configuration-files)
-    - [config load, config reload, config save,](#config-load-config-reload-config-save)
+    - [config load, config reload, \& config save](#config-load-config-reload--config-save)
     - [Configure leaf00 from SONiC CLI](#configure-leaf00-from-sonic-cli)
   - [Fabric Config Automation with Ansible](#fabric-config-automation-with-ansible)
     - [Verify SONiC BGP peering](#verify-sonic-bgp-peering)
@@ -566,6 +566,8 @@ The containerlab topology file included a number of *`exec`* commands to be run 
     Wireshark is launching and traffic is automatically intercepted.
 
     ![edgeshark-host00](../topo_drawings/lab4-wireshark.png)
+
+    Oh and before proceeding to lab5, I would try to login into spine00 ... just in case ....
 
 ## End of lab 4
 Please proceed to [Lab 5: Host Based SRv6](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
