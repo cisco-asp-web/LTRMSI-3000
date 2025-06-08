@@ -484,6 +484,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
              SID[0]: fc00:0:2222::/48
                      Format: f3216
                      LBL:32 LNL:16 FL:0 AL:80
+                     Description: "You just found the first SRv6 🐰🥚, show it to us !"
              SID[1]: fc00:0:3333::/48
                      Format: f3216
                      LBL:32 LNL:16 FL:0 AL:80
