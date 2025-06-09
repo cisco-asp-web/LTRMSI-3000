@@ -66,8 +66,14 @@ At the heart of Jalapeno is the Arango Graph Database, which is used to model ne
    ssh -oHostKeyAlgorithms=+ssh-rsa cisco@198.18.128.101
    ```
 
+   Then cd into the lab_5/jalapeno directory and do a *git pull*
    ```
    cd ~/LTRMSI-3000/lab_5/jalapeno/xrd-network/
+   git pull
+   ```
+
+   Then run the *add-meta-data.py* script
+   ```
    python3 add_meta_data.py 
    ```
 
