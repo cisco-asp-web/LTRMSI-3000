@@ -1,5 +1,9 @@
 # Welcome to LTMSI-3000: Modern AI networks: IOS-XR, SRv6, Cilium, and SONiC
 
+## Lab Credentials:
+
+Before starting the lab, please connect to the lab using using this  [LINK](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/LTRMSI-3000-credentials-test.csv)
+
 ## Introduction: 
 
 In this immersive hands-on lab we will explore how to build SRv6 WAN networks utilizing L3VPNs, next-generation AI fabric load balancing using SRv6, and Kubernetes-native SRv6 with Cilium. This lab session walks participants through a series of progressive tutorials and labs covering:
