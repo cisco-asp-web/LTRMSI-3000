@@ -2,7 +2,7 @@
 
 ## Lab Credentials:
 
-Before starting the lab, please connect to the lab using using this  [LINK](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/LTRMSI-3000-credentials-test.csv)
+Before starting the lab, please connect to the lab using these [credentials.](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/LTRMSI-3000-credentials.csv)
 
 ## Introduction: 
 
