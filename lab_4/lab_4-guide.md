@@ -567,8 +567,7 @@ The containerlab topology file included a number of *`exec`* commands to be run 
 
     ![edgeshark-host00](../topo_drawings/lab4-wireshark.png)
 
-    Oh and before proceeding to lab5, I would try to login into spine00 ... just in case ....
-
+    
 ## End of lab 4
 Please proceed to [Lab 5: Host Based SRv6](https://github.com/cisco-asp-web/LTRMSI-3000/blob/main/lab_5/lab_5-guide.md)
 
