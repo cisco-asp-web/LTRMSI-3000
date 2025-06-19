@@ -8,16 +8,16 @@ spec:
     matchLabels:
       kubernetes.io/hostname: berlin
   bgpInstances:
-  - name: "asn65000"
-    localASN: 65000
+  - name: "asn397332"
+    localASN: 397332
     peers:
     - name: "xrd05-rr"
-      peerASN: 65000
+      peerASN: 397332
       peerAddress: fc00:0:5555::1
       peerConfigRef:
         name: "cilium-peer"
     - name: "xrd06-rr"
-      peerASN: 65000
+      peerASN: 397332
       peerAddress: fc00:0:6666::1
       peerConfigRef:
         name: "cilium-peer"

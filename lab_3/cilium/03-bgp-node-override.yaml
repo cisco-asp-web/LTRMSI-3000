@@ -5,7 +5,7 @@ metadata:
   name: berlin
 spec:
   bgpInstances:
-    - name: "asn65000"
+    - name: "asn397332"
       srv6Responder: true
       peers:
         - name: "xrd05-rr"
