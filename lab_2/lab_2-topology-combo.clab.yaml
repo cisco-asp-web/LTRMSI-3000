@@ -1,0 +1,234 @@
+# Containerlab topology file for Cisco Live US 2025 Lab 1
+
+name: clus25
+
+mgmt:
+  network: mgt-network
+  ipv4-subnet: 172.20.6.0/24
+  
+topology:
+  nodes:
+    xrd01:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd01.cfg
+      mgmt-ipv4: 172.20.6.65
+      
+    xrd02:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd02.cfg
+      mgmt-ipv4: 172.20.6.66
+
+    xrd03:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd03.cfg
+      mgmt-ipv4: 172.20.6.67
+
+    xrd04:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd04.cfg
+      mgmt-ipv4: 172.20.6.68
+
+    xrd05:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd05.cfg
+      mgmt-ipv4: 172.20.6.69
+
+    xrd06:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd06.cfg
+      mgmt-ipv4: 172.20.6.70
+
+    xrd07:
+      kind: cisco_xrd
+      image: cisco-xrd-control-plane:24.4.1
+      startup-config: xrd-config/xrd07.cfg
+      mgmt-ipv4: 172.20.6.71
+
+    amsterdam-host00:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      mgmt-ipv4: 172.20.6.72
+      exec:
+        - sh /usr/local/bin/network-config.sh
+
+    rome-host00:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      mgmt-ipv4: 172.20.6.73
+      exec:
+        - sh /usr/local/bin/network-config.sh
+
+    rome-host01:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      mgmt-ipv4: 172.20.6.74
+      exec:
+        - sh /usr/local/bin/network-config.sh
+
+    paris-net:
+      kind: bridge
+
+## sonic nodes in 
+    leaf00:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.128
+
+    leaf01:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.129
+
+    leaf02:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.130
+
+    leaf03:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.131
+
+    spine00:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.192
+
+    spine01:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.193
+
+    spine02:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.194
+
+    spine03:
+      kind: linux
+      image: vrnetlab/sonic_sonic-vs:vpp20250422
+      mgmt-ipv4: 172.20.6.195
+
+    dc-host00:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      mgmt-ipv4: 172.20.6.224
+      exec:
+        - ip addr add 200.0.100.2/24 dev eth1
+        - ip addr add 2001:db8:1000:0::2/64 dev eth1
+        - ip -6 route add fc00:0::/32 via 2001:db8:1000:0::1 dev eth1
+        - ip -6 route add 2001:db8::/32 via 2001:db8:1000:0::1 dev eth1
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    dc-host01:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      # image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.225
+      exec:
+        - ip addr add 200.1.100.2/24 dev eth1
+        - ip addr add 2001:db8:1001:0::2/64 dev eth1
+        - ip -6 route add fc00:0::/32 via 2001:db8:1001:0::1 dev eth1
+        - ip -6 route add 2001:db8::/32 via 2001:db8:1001:0::1 dev eth1
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    dc-host02:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      # image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.226
+      exec:
+        - ip addr add 200.2.100.2/24 dev eth1
+        - ip addr add 2001:db8:1002:0::2/64 dev eth1
+        - ip -6 route add fc00:0::/32 via 2001:db8:1002:0::1 dev eth1
+        - ip -6 route add 2001:db8::/32 via 2001:db8:1002:0::1 dev eth1
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    dc-host03:
+      kind: linux
+      image: pytorch-srv6-demo:latest
+      # image: ubuntu-trex:1.4
+      mgmt-ipv4: 172.20.6.227
+      exec:
+        - ip addr add 200.3.100.2/24 dev eth1
+        - ip addr add 2001:db8:1003:0::2/64 dev eth1
+        - ip -6 route add fc00:0::/32 via 2001:db8:1003:0::1 dev eth1
+        - ip -6 route add 2001:db8::/32 via 2001:db8:1003:0::1 dev eth1
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+  links:
+
+    # Links between XR Routers
+    - endpoints: ["xrd01:Gi0-0-0-0", "amsterdam-host00:eth1"]
+    - endpoints: ["xrd01:Gi0-0-0-1", "xrd02:Gi0-0-0-0"]      
+    - endpoints: ["xrd01:Gi0-0-0-2", "xrd05:Gi0-0-0-0"]
+    - endpoints: ["xrd01:Gi0-0-0-3", "amsterdam-host00:eth2"]
+    - endpoints: ["xrd02:Gi0-0-0-1", "xrd03:Gi0-0-0-0"]
+    - endpoints: ["xrd02:Gi0-0-0-2", "xrd06:Gi0-0-0-1"]
+    - endpoints: ["xrd05:Gi0-0-0-1", "xrd04:Gi0-0-0-2"]
+    - endpoints: ["xrd05:Gi0-0-0-2", "xrd06:Gi0-0-0-2"]
+    - endpoints: ["xrd03:Gi0-0-0-1", "xrd04:Gi0-0-0-0"]
+    - endpoints: ["xrd04:Gi0-0-0-1", "xrd07:Gi0-0-0-1"]
+    - endpoints: ["xrd06:Gi0-0-0-0", "xrd07:Gi0-0-0-2"]
+    - endpoints: ["xrd06:Gi0-0-0-3", "paris-net:xrd06-Gi0-0-0-3"]
+    - endpoints: ["xrd07:Gi0-0-0-0", "rome-host00:eth1"]
+    - endpoints: ["xrd07:Gi0-0-0-3", "rome-host00:eth2"]
+    - endpoints: ["xrd07:Gi0-0-0-4", "rome-host01:eth1"]
+    - endpoints: ["xrd07:Gi0-0-0-5", "rome-host01:eth2"]
+
+    # DCI Links between XR Routers and DC fabric
+    - endpoints: ["xrd02:Gi0-0-0-3", "spine00:eth5"]
+    - endpoints: ["xrd02:Gi0-0-0-4", "spine01:eth5"]
+    - endpoints: ["xrd02:Gi0-0-0-5", "spine02:eth5"]
+    - endpoints: ["xrd02:Gi0-0-0-6", "spine03:eth5"]
+
+    - endpoints: ["xrd03:Gi0-0-0-3", "spine00:eth6"]
+    - endpoints: ["xrd03:Gi0-0-0-4", "spine01:eth6"]
+    - endpoints: ["xrd03:Gi0-0-0-5", "spine02:eth6"]
+    - endpoints: ["xrd03:Gi0-0-0-6", "spine03:eth6"]
+
+    # DC fabric links
+    - endpoints: ["leaf00:eth1", "spine00:eth1"]
+    - endpoints: ["leaf00:eth2", "spine01:eth1"]
+    - endpoints: ["leaf00:eth3", "spine02:eth1"]
+    - endpoints: ["leaf00:eth4", "spine03:eth1"]
+
+    - endpoints: ["leaf01:eth1", "spine00:eth2"]
+    - endpoints: ["leaf01:eth2", "spine01:eth2"]
+    - endpoints: ["leaf01:eth3", "spine02:eth2"]
+    - endpoints: ["leaf01:eth4", "spine03:eth2"]
+
+    - endpoints: ["leaf02:eth1", "spine00:eth3"]
+    - endpoints: ["leaf02:eth2", "spine01:eth3"]
+    - endpoints: ["leaf02:eth3", "spine02:eth3"]
+    - endpoints: ["leaf02:eth4", "spine03:eth3"]
+
+    - endpoints: ["leaf03:eth1", "spine00:eth4"]
+    - endpoints: ["leaf03:eth2", "spine01:eth4"]
+    - endpoints: ["leaf03:eth3", "spine02:eth4"]
+    - endpoints: ["leaf03:eth4", "spine03:eth4"]
+
+    - endpoints: ["leaf00:eth5", "dc-host00:eth1"]
+    - endpoints: ["leaf00:eth6", "dc-host00:eth2"] 
+
+    - endpoints: ["leaf01:eth5", "dc-host01:eth1"]
+    - endpoints: ["leaf01:eth6", "dc-host01:eth2"]
+
+    - endpoints: ["leaf02:eth5", "dc-host02:eth1"]  
+    - endpoints: ["leaf02:eth6", "dc-host02:eth2"]
+
+    - endpoints: ["leaf03:eth5", "dc-host03:eth1"]
+    - endpoints: ["leaf03:eth6", "dc-host03:eth2"]
+
+
+
