@@ -16,7 +16,7 @@ router isis 100
   !
  !
 !
-router bgp 65000
+router bgp 397332
  address-family ipv4 unicast
   segment-routing srv6
   locator MyLocator
@@ -64,7 +64,7 @@ router isis 100
   !
  !
 !
-router bgp 65000
+router bgp 397332
  address-family ipv4 unicast
   segment-routing srv6
   locator MyLocator

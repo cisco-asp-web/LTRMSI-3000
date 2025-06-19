@@ -313,7 +313,7 @@ You may have noticed in the FRR config or show command output that SONiC support
 Config example from leaf00:
 
    ```
-   neighbor Ethernet0 interface remote-as 65000
+   neighbor Ethernet0 interface remote-as 397332
    neighbor Ethernet4 interface remote-as 65001
    neighbor Ethernet8 interface remote-as 65002
    neighbor Ethernet12 interface remote-as 65003

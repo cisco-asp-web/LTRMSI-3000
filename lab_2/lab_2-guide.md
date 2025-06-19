@@ -96,7 +96,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     **xrd07**
     ```yaml
     conf t
-    router bgp 65000
+    router bgp 397332
       neighbor-group xrd-ipv6-peer
         address-family vpnv4 unicast
         next-hop-self
@@ -115,7 +115,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     **xrd07**  
     ```yaml
     conf t
-    router bgp 65000
+    router bgp 397332
       vrf carrots
         rd auto
         address-family ipv4 unicast
@@ -140,7 +140,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
     ```yaml
     conf t
 
-    router bgp 65000
+    router bgp 397332
     neighbor-group xrd-ipv6-peer
       address-family vpnv4 unicast
       next-hop-self
@@ -172,7 +172,7 @@ We'll start with **xrd07** as it will need a pair of static routes for reachabil
 
     ```yaml
     conf t
-    router bgp 65000
+    router bgp 397332
     neighbor-group xrd-ipv6-peer
       address-family vpnv4 unicast
       route-reflector-client
@@ -326,7 +326,7 @@ The ingress PE, **xrd01**, will then be configured with SRv6 segment-lists and S
      pass
    end-policy
 
-   router bgp 65000
+   router bgp 397332
    neighbor-group xrd-ipv6-peer
      address-family vpnv4 unicast
      route-policy set-color out

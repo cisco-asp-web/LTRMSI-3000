@@ -11,7 +11,7 @@
 ```
 conf t
 
-router bgp 65000
+router bgp 397332
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
    next-hop-self
@@ -93,7 +93,7 @@ commit
 ```
 conf t
 
-router bgp 65000
+router bgp 397332
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
    route-reflector-client
@@ -111,7 +111,7 @@ commit
 ```
 conf t
 
-router bgp 65000
+router bgp 397332
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
    route-reflector-client
@@ -141,7 +141,7 @@ router static
   !
  !
 !
-router bgp 65000
+router bgp 397332
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
    next-hop-self
@@ -151,7 +151,7 @@ router bgp 65000
   !
  !
 !
-router bgp 65000
+router bgp 397332
  vrf carrots
   rd auto
   address-family ipv4 unicast
@@ -196,7 +196,7 @@ route-policy set-color
   pass
 end-policy
 !
-router bgp 65000
+router bgp 397332
  neighbor-group xrd-ipv6-peer
   address-family vpnv4 unicast
    route-policy set-color out

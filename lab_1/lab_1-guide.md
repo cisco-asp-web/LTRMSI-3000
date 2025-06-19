@@ -428,7 +428,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
 3. Enable SRv6 for BGP 
     ```
-    router bgp 65000
+    router bgp 397332
     address-family ipv4 unicast
       segment-routing srv6
       locator MyLocator
@@ -467,7 +467,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
      locator MyLocator
      !
     !
-    router bgp 65000
+    router bgp 397332
      address-family ipv4 unicast
      segment-routing srv6
      locator MyLocator
