@@ -67,7 +67,7 @@ topology:
     rome-host01:
       kind: linux
       image: pytorch-srv6-demo:latest
-      mgmt-ipv4: 172.20.6.73
+      mgmt-ipv4: 172.20.6.74
       exec:
         - sh /usr/local/bin/network-config.sh
 
