@@ -79,41 +79,65 @@ topology:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.128
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     leaf01:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.129
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     leaf02:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.130
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     leaf03:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.131
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     spine00:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.192
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     spine01:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.193
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     spine02:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.194
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     spine03:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.195
+      env:
+        USERNAME: cisco
+        PASSWORD: cisco123
 
     dc-host00:
       kind: linux
