@@ -14,7 +14,7 @@
     
     "LOOPBACK_INTERFACE": {
         "Loopback0": {},
-        "Loopback0|10.0.0.0/32": {},
+        "Loopback0|10.0.0.100/32": {},
         "Loopback0|fc00:0:1000::1/128": {}
     },
 
