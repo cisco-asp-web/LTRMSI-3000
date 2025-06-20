@@ -22,8 +22,8 @@ def parse_args():
     """
     parser = argparse.ArgumentParser(description='Create collections and upload data to ArangoDB')
     parser.add_argument('-d', '--data', nargs='+', 
-                       choices=['fabric-node', 'fabric-graph', 'hosts', 'all'],
-                       help='Specify which data to upload: fabric-node, fabric-graph, hosts, or all')
+                       choices=['fabric-node', 'fabric-graph', 'hosts', 'ipv6-graph', 'all'],
+                       help='Specify which data to upload: fabric-node, fabric-graph, hosts, ipv6-graph, or all')
     return parser.parse_args()
 
 def upload_fabric_nodes(db, file_path):
@@ -134,6 +134,42 @@ def upload_fabric_graphs(db, file_path):
     except Exception as e:
         print(f"Error uploading fabric edge data: {str(e)}")
 
+def upload_ipv6_graphs(db, file_path):
+    """
+    Create ipv6_graph collection and upload data from demo-ipv6-graph.json
+    Args:
+        db: ArangoDB database connection
+        file_path: Path to the demo-ipv6-graph.json file
+    """
+    try:
+        # Read the data from JSON file
+        with open(file_path, 'r') as f:
+            ipv6_edge_data = json.load(f)
+        
+        # Create collection if it doesn't exist
+        if not db.has_collection('ipv6_graph'):
+            db.create_collection('ipv6_graph', edge=True)
+            print("Created ipv6_graph collection")
+        
+        collection = db.collection('ipv6_graph')
+        
+        # AQL query to insert/update data
+        aql = """
+        FOR edge in @edges
+            UPSERT { _key: edge._key }
+            INSERT edge
+            REPLACE edge
+            IN ipv6_graph
+            RETURN NEW
+        """
+        
+        # Execute AQL query
+        db.aql.execute(aql, bind_vars={'edges': ipv6_edge_data})
+        print(f"Successfully inserted/updated {len(ipv6_edge_data)} IPv6 graph edge records")
+        
+    except Exception as e:
+        print(f"Error uploading IPv6 graph edge data: {str(e)}")
+
 
 if __name__ == "__main__":
     args = parse_args()
@@ -146,6 +182,8 @@ if __name__ == "__main__":
         upload_hosts(db, "hosts.json")
         print("\nUploading fabric edge data...")
         upload_fabric_graphs(db, "fabric-graph.json")
+        print("\nUploading IPv6 graph edge data...")
+        upload_ipv6_graphs(db, "demo-ipv6-graph.json")
 
     else:
         # Run only specified functions
@@ -158,3 +196,6 @@ if __name__ == "__main__":
         if 'fabric-graph' in args.data:
             print("\nUploading fabric edge data...")
             upload_fabric_graphs(db, "fabric-graph.json")
+        if 'ipv6-graph' in args.data:
+            print("\nUploading IPv6 graph edge data...")
+            upload_ipv6_graphs(db, "demo-ipv6-graph.json")
