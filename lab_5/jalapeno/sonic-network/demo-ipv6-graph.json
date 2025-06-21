@@ -145,42 +145,42 @@
     },
     {
         "_key": "host00_leaf00",
-        "_from": "hosts/host00",
+        "_from": "hosts/dc-host00",
         "_to": "fabric_node/10.0.0.200_leaf00"
     },
     {
         "_key": "host01_leaf01",
-        "_from": "hosts/host01",
+        "_from": "hosts/dc-host01",
         "_to": "fabric_node/10.0.0.201_leaf01"
     },
     {
         "_key": "host02_leaf02",
-        "_from": "hosts/host02",
+        "_from": "hosts/dc-host02",
         "_to": "fabric_node/10.0.0.202_leaf02"
     },
     {
         "_key": "host03_leaf03",
-        "_from": "hosts/host03",
+        "_from": "hosts/dc-host03",
         "_to": "fabric_node/10.0.0.203_leaf03"
     },
     {
         "_key": "leaf00_host00",
         "_from": "fabric_node/10.0.0.200_leaf00",
-        "_to": "hosts/host00"
+        "_to": "hosts/dc-host00"
     },
     {
         "_key": "leaf01_host01",
         "_from": "fabric_node/10.0.0.201_leaf01",
-        "_to": "hosts/host01"
+        "_to": "hosts/dc-host01"
     },
     {
         "_key": "leaf02_host02",
         "_from": "fabric_node/10.0.0.202_leaf02",
-        "_to": "hosts/host02"
+        "_to": "hosts/dc-host02"
     },
     {
         "_key": "leaf03_host03",
         "_from": "fabric_node/10.0.0.203_leaf03",
-        "_to": "hosts/host03"
+        "_to": "hosts/dc-host03"
     }
 ]

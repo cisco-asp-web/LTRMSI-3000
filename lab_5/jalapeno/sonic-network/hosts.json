@@ -1,7 +1,7 @@
 [
     {
-        "_key": "host00",
-        "name": "host00",
+        "_key": "dc-host00",
+        "name": "dc-host00",
         "ipv6_address": "2001:db8:1000:0::2",
         "prefix": "2001:db8:1000:0::",
         "prefix_len": 64,
@@ -10,8 +10,8 @@
         "tier": "dc-endpoint"
     },
     {
-        "_key": "host01",
-        "name": "host01",
+        "_key": "dc-host01",
+        "name": "dc-host01",
         "ipv6_address": "2001:db8:1001:0::2",
         "prefix": "2001:db8:1001:0::",
         "prefix_len": 64,
@@ -20,8 +20,8 @@
         "tier": "dc-endpoint"
     },
     {
-        "_key": "host02",
-        "name": "host02",
+        "_key": "dc-host02",
+        "name": "dc-host02",
         "ipv6_address": "2001:db8:1002:0::2",
         "prefix": "2001:db8:1002:0::",
         "prefix_len": 64,
@@ -30,8 +30,8 @@
         "tier": "dc-endpoint"
     },
     {
-        "_key": "host03",
-        "name": "host03",
+        "_key": "dc-host03",
+        "name": "dc-host03",
         "ipv6_address": "2001:db8:1003:0::2",
         "prefix": "2001:db8:1003:0::",
         "prefix_len": 64,
