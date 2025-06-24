@@ -129,7 +129,7 @@ topology:
       mgmt-ipv4: 172.20.6.195
 
 
-    dc-host00:
+    host00:
       kind: linux
       image: pytorch-srv6-demo:latest
       mgmt-ipv4: 172.20.6.224
@@ -141,7 +141,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    dc-host01:
+    host01:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -154,7 +154,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    dc-host02:
+    host02:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -167,7 +167,7 @@ topology:
         - sysctl -w net.ipv4.ip_forward=1
         - sysctl -w net.ipv6.conf.all.forwarding=1
 
-    dc-host03:
+    host03:
       kind: linux
       image: pytorch-srv6-demo:latest
       # image: ubuntu-trex:1.4
@@ -236,17 +236,17 @@ topology:
     - endpoints: ["leaf03:eth3", "spine02:eth4"]
     - endpoints: ["leaf03:eth4", "spine03:eth4"]
 
-    - endpoints: ["leaf00:eth5", "dc-host00:eth1"]
-    - endpoints: ["leaf00:eth6", "dc-host00:eth2"] 
+    - endpoints: ["leaf00:eth5", "host00:eth1"]
+    - endpoints: ["leaf00:eth6", "host00:eth2"] 
 
-    - endpoints: ["leaf01:eth5", "dc-host01:eth1"]
-    - endpoints: ["leaf01:eth6", "dc-host01:eth2"]
+    - endpoints: ["leaf01:eth5", "host01:eth1"]
+    - endpoints: ["leaf01:eth6", "host01:eth2"]
 
-    - endpoints: ["leaf02:eth5", "dc-host02:eth1"]  
-    - endpoints: ["leaf02:eth6", "dc-host02:eth2"]
+    - endpoints: ["leaf02:eth5", "host02:eth1"]  
+    - endpoints: ["leaf02:eth6", "host02:eth2"]
 
-    - endpoints: ["leaf03:eth5", "dc-host03:eth1"]
-    - endpoints: ["leaf03:eth6", "dc-host03:eth2"]
+    - endpoints: ["leaf03:eth5", "host03:eth1"]
+    - endpoints: ["leaf03:eth6", "host03:eth2"]
 
 
 
