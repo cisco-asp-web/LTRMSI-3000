@@ -10,43 +10,43 @@ topology:
   nodes:
     xrd01:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd01.cfg
       mgmt-ipv4: 172.20.6.65
       
     xrd02:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd02.cfg
       mgmt-ipv4: 172.20.6.66
 
     xrd03:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd03.cfg
       mgmt-ipv4: 172.20.6.67
 
     xrd04:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd04.cfg
       mgmt-ipv4: 172.20.6.68
 
     xrd05:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd05.cfg
       mgmt-ipv4: 172.20.6.69
 
     xrd06:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd06.cfg
       mgmt-ipv4: 172.20.6.70
 
     xrd07:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:24.4.1
+      image: cisco-xrd-control-plane:25.1.1
       startup-config: xrd-config/xrd07.cfg
       mgmt-ipv4: 172.20.6.71
 
@@ -71,7 +71,20 @@ topology:
       exec:
         - sh /usr/local/bin/network-config.sh
 
-    paris-net:
+    scrubber:
+      kind: linux
+      image: ubuntu-srctl:1.0
+      mgmt-ipv4: 172.20.6.75
+      exec:
+        - ip addr add 10.4.4.2/24 dev eth1
+        - ip addr add 2001:db8:4:4:0::2/64 dev eth1
+        - ip addr add fc00:0:d400::2/64 dev eth2
+        - ip route add 1.1.1.0/24 via 10.10.10.1 dev eth1
+        - ip -6 route add fc00:0::/32 via fc00:0:d400::1 dev eth2
+        - sysctl -w net.ipv4.ip_forward=1
+        - sysctl -w net.ipv6.conf.all.forwarding=1
+
+    berlin-net:
       kind: bridge
 
 ## sonic nodes in 
@@ -114,6 +127,7 @@ topology:
       kind: linux
       image: vrnetlab/sonic_sonic-vs:vpp20250422
       mgmt-ipv4: 172.20.6.195
+
 
     dc-host00:
       kind: linux
@@ -175,27 +189,31 @@ topology:
     - endpoints: ["xrd01:Gi0-0-0-3", "amsterdam-host00:eth2"]
     - endpoints: ["xrd02:Gi0-0-0-1", "xrd03:Gi0-0-0-0"]
     - endpoints: ["xrd02:Gi0-0-0-2", "xrd06:Gi0-0-0-1"]
+    - endpoints: ["xrd02:Gi0-0-0-3", "berlin-net:xrd02-Gi0-0-0-3"]
+
     - endpoints: ["xrd05:Gi0-0-0-1", "xrd04:Gi0-0-0-2"]
     - endpoints: ["xrd05:Gi0-0-0-2", "xrd06:Gi0-0-0-2"]
     - endpoints: ["xrd03:Gi0-0-0-1", "xrd04:Gi0-0-0-0"]
     - endpoints: ["xrd04:Gi0-0-0-1", "xrd07:Gi0-0-0-1"]
+    - endpoints: ["xrd04:Gi0-0-0-2", "scrubber:eth1"]
+    - endpoints: ["xrd04:Gi0-0-0-3", "scrubber:eth2"]
+
     - endpoints: ["xrd06:Gi0-0-0-0", "xrd07:Gi0-0-0-2"]
-    - endpoints: ["xrd06:Gi0-0-0-3", "paris-net:xrd06-Gi0-0-0-3"]
     - endpoints: ["xrd07:Gi0-0-0-0", "rome-host00:eth1"]
     - endpoints: ["xrd07:Gi0-0-0-3", "rome-host00:eth2"]
     - endpoints: ["xrd07:Gi0-0-0-4", "rome-host01:eth1"]
     - endpoints: ["xrd07:Gi0-0-0-5", "rome-host01:eth2"]
 
     # DCI Links between XR Routers and DC fabric
-    - endpoints: ["xrd02:Gi0-0-0-3", "spine00:eth5"]
-    - endpoints: ["xrd02:Gi0-0-0-4", "spine01:eth5"]
-    - endpoints: ["xrd02:Gi0-0-0-5", "spine02:eth5"]
-    - endpoints: ["xrd02:Gi0-0-0-6", "spine03:eth5"]
+    - endpoints: ["xrd05:Gi0-0-0-3", "spine00:eth5"]
+    - endpoints: ["xrd05:Gi0-0-0-4", "spine01:eth5"]
+    - endpoints: ["xrd05:Gi0-0-0-5", "spine02:eth5"]
+    - endpoints: ["xrd05:Gi0-0-0-6", "spine03:eth5"]
 
-    - endpoints: ["xrd03:Gi0-0-0-3", "spine00:eth6"]
-    - endpoints: ["xrd03:Gi0-0-0-4", "spine01:eth6"]
-    - endpoints: ["xrd03:Gi0-0-0-5", "spine02:eth6"]
-    - endpoints: ["xrd03:Gi0-0-0-6", "spine03:eth6"]
+    - endpoints: ["xrd06:Gi0-0-0-3", "spine00:eth6"]
+    - endpoints: ["xrd06:Gi0-0-0-4", "spine01:eth6"]
+    - endpoints: ["xrd06:Gi0-0-0-5", "spine02:eth6"]
+    - endpoints: ["xrd06:Gi0-0-0-6", "spine03:eth6"]
 
     # DC fabric links
     - endpoints: ["leaf00:eth1", "spine00:eth1"]
