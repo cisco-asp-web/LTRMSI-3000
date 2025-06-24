@@ -195,8 +195,8 @@ topology:
     - endpoints: ["xrd05:Gi0-0-0-2", "xrd06:Gi0-0-0-2"]
     - endpoints: ["xrd03:Gi0-0-0-1", "xrd04:Gi0-0-0-0"]
     - endpoints: ["xrd04:Gi0-0-0-1", "xrd07:Gi0-0-0-1"]
-    - endpoints: ["xrd04:Gi0-0-0-2", "scrubber:eth1"]
-    - endpoints: ["xrd04:Gi0-0-0-3", "scrubber:eth2"]
+    - endpoints: ["xrd04:Gi0-0-0-3", "scrubber:eth1"]
+    - endpoints: ["xrd04:Gi0-0-0-4", "scrubber:eth2"]
 
     - endpoints: ["xrd06:Gi0-0-0-0", "xrd07:Gi0-0-0-2"]
     - endpoints: ["xrd07:Gi0-0-0-0", "rome-host00:eth1"]
