@@ -143,6 +143,153 @@
         "percent_util_in": 0.4,
         "load": 0
     },
+
+    {
+        "_key": "10.0.0.100_65000_10.0.0.200_leaf00",
+        "_to": "bgp_node/10.0.0.100_65000",
+        "_from": "fabric_node/10.0.0.200_leaf00",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.100_65000_10.0.0.201_leaf01",
+        "_to": "bgp_node/10.0.0.100_65000",
+        "_from": "fabric_node/10.0.0.201_leaf01",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.100_65000_10.0.0.202_leaf02",
+        "_to": "bgp_node/10.0.0.100_65000",
+        "_from": "fabric_node/10.0.0.202_leaf02",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.100_65000_10.0.0.203_leaf03",
+        "_to": "bgp_node/10.0.0.100_65000",
+        "_from": "fabric_node/10.0.0.203_leaf03",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.101_65001_10.0.0.200_leaf00",
+        "_to": "bgp_node/10.0.0.101_65001",
+        "_from": "fabric_node/10.0.0.200_leaf00",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.101_65001_10.0.0.201_leaf01",
+        "_to": "bgp_node/10.0.0.101_65001",
+        "_from": "fabric_node/10.0.0.201_leaf01",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.101_65001_10.0.0.202_leaf02",
+        "_to": "bgp_node/10.0.0.101_65001",
+        "_from": "fabric_node/10.0.0.202_leaf02",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.101_65001_10.0.0.203_leaf03",
+        "_to": "bgp_node/10.0.0.101_65001",
+        "_from": "fabric_node/10.0.0.203_leaf03",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.102_65002_10.0.0.200_leaf00",
+        "_to": "bgp_node/10.0.0.102_65002",
+        "_from": "fabric_node/10.0.0.200_leaf00",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.102_65002_10.0.0.201_leaf01",
+        "_to": "bgp_node/10.0.0.102_65002",
+        "_from": "fabric_node/10.0.0.201_leaf01",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.102_65002_10.0.0.202_leaf02",
+        "_to": "bgp_node/10.0.0.102_65002",
+        "_from": "fabric_node/10.0.0.202_leaf02",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.102_65002_10.0.0.203_leaf03",
+        "_to": "bgp_node/10.0.0.102_65002",
+        "_from": "fabric_node/10.0.0.203_leaf03",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.103_65003_10.0.0.200_leaf00",
+        "_to": "bgp_node/10.0.0.103_65003",
+        "_from": "fabric_node/10.0.0.200_leaf00",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.103_65003_10.0.0.201_leaf01",
+        "_to": "bgp_node/10.0.0.103_65003",
+        "_from": "fabric_node/10.0.0.201_leaf01",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.103_65003_10.0.0.202_leaf02",
+        "_to": "bgp_node/10.0.0.103_65003",
+        "_from": "fabric_node/10.0.0.202_leaf02",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+    {
+        "_key": "10.0.0.103_65003_10.0.0.203_leaf03",
+        "_to": "bgp_node/10.0.0.103_65003",
+        "_from": "fabric_node/10.0.0.203_leaf03",
+        "latency": 1,
+        "percent_util_out": 0.4,
+        "percent_util_in": 0.4,
+        "load": 0
+    },
+
+
     {
         "_key": "host00_leaf00",
         "_from": "hosts/host00",

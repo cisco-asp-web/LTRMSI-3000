@@ -13,6 +13,11 @@ docker exec -it clab-clus25-host02 rm test_dist.py
 docker exec -it clab-clus25-host03 rm network_programmer.py
 docker exec -it clab-clus25-host03 rm test_dist.py
 
+docker exec -it clab-clus25-amsterdam-host00 rm network_programmer.py
+docker exec -it clab-clus25-amsterdam-host00 rm test_dist.py
+
+docker exec -it clab-clus25-rome-host00 rm network_programmer.py
+docker exec -it clab-clus25-rome-host00 rm test_dist.py
 
 ## Copy updated files
 docker cp demo/.env clab-clus25-host00:/app/
