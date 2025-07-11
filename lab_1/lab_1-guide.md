@@ -527,7 +527,7 @@ SRv6 uSID locator and source address information for nodes in the lab:
 
 2. Validate the SRv6 prefix-SID configuration. As example for **xrd01** look for *SID value: fc00:0000:1111::*
     ```
-    show isis segment-routing srv6 locators detail 
+    show isis segment-routing srv6 locator detail 
     ```
 
     ```
