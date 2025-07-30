@@ -10,31 +10,31 @@ topology:
   nodes:
     xrd01:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:25.1.1
+      image: cisco-xrd-control-plane:24.4.1
       startup-config: xrd-config/xrd01.cfg
       mgmt-ipv4: 172.20.6.65
       
     xrd02:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:25.1.1
+      image: cisco-xrd-control-plane:24.4.1
       startup-config: xrd-config/xrd02.cfg
       mgmt-ipv4: 172.20.6.66
 
     xrd03:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:25.1.1
+      image: cisco-xrd-control-plane:24.4.1
       startup-config: xrd-config/xrd03.cfg
       mgmt-ipv4: 172.20.6.67
 
     xrd04:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:25.1.1
+      image: cisco-xrd-control-plane:24.4.1
       startup-config: xrd-config/xrd04.cfg
       mgmt-ipv4: 172.20.6.68
 
     xrd05:
       kind: cisco_xrd
-      image: cisco-xrd-control-plane:25.1.1
+      image: cisco-xrd-control-plane:24.4.1
       startup-config: xrd-config/xrd05.cfg
       mgmt-ipv4: 172.20.6.69
 
