@@ -1,0 +1,31 @@
+---
+apiVersion: isovalent.com/v1alpha1
+kind: IsovalentBGPClusterConfig
+metadata:
+  name: cilium-bgp
+spec:
+  nodeSelector:
+    matchLabels:
+      bgpcluster: cleu26
+  bgpInstances:
+  - name: "asn397332"
+    localASN: 397332
+    peers:
+    - name: "xrd05-rr"
+      peerASN: 397332
+      peerAddress: fc00:0:5555::1
+      peerConfigRef:
+        name: "cilium-peer"
+    - name: "xrd06-rr"
+      peerASN: 397332
+      peerAddress: fc00:0:6666::1
+      peerConfigRef:
+        name: "cilium-peer"
+    vrfs:
+    - vrfRef: "carrots"
+      rd: "9:9"
+      importRTs:
+        - "9:9"
+      exportRTs:
+        - "9:9"
+      configRef: carrots-config

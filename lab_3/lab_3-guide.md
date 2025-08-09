@@ -19,6 +19,7 @@ https://cilium.io/labs/
   - [Verify pre-installed Kubernetes and Cilium are running](#verify-pre-installed-kubernetes-and-cilium-are-running)
   - [Setup Cilium BGP Peering](#setup-cilium-bgp-peering)
     - [Cilium BGP CRD](#cilium-bgp-crd)
+    - [Label K8s nodes](#label-k8s-nodes)
     - [Establish the Cilium BGP global and peer configurations](#establish-the-cilium-bgp-global-and-peer-configurations)
     - [Verify Cilium BGP peering](#verify-cilium-bgp-peering)
     - [Cilium BGP prefix advertisement](#cilium-bgp-prefix-advertisement)
@@ -129,6 +130,21 @@ On the **Berlin VM** change to the lab_3/cilium directory and check out the cont
    * [06-srv6-locator-pool.yaml](cilium/06-srv6-locator-pool.yaml) - Cilium SRv6 SID manager and Locator pool configuration
    * [07-vrf-carrots.yaml](cilium/07-vrf-carrots.yaml) - Cilium VRF 'carrots' configuration and pods
 
+
+### Label K8s nodes
+
+```
+kubectl label node berlin bgpcluster=cleu26
+kubectl label node warsaw bgpcluster=cleu26
+```
+
+output:
+```
+cisco@berlin:~/LTRMSI-3000/lab_3/cilium$ kubectl label node berlin bgpcluster=cleu26
+kubectl label node warsaw bgpcluster=cleu26
+node/berlin labeled
+node/warsaw labeled
+```
 
 Here is a portion of our Cilium BGP configuration in CRD form and with notes:
 
