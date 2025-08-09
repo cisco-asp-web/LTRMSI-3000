@@ -12,3 +12,18 @@ spec:
           localAddress: fc00:0:8888::2
         - name: "xrd06-rr"
           localAddress: fc00:0:8888::2
+
+---
+apiVersion: isovalent.com/v1alpha1
+kind: IsovalentBGPNodeConfigOverride
+metadata:
+  name: warsaw
+spec:
+  bgpInstances:
+    - name: "asn397332"
+      srv6Responder: true
+      peers:
+        - name: "xrd05-rr"
+          localAddress: fc00:0:9999::2
+        - name: "xrd06-rr"
+          localAddress: fc00:0:9999::2
