@@ -193,12 +193,14 @@ topology:
     - endpoints: ["xrd02:Gi0-0-0-1", "xrd03:Gi0-0-0-0"]
     - endpoints: ["xrd02:Gi0-0-0-2", "xrd06:Gi0-0-0-1"]
     - endpoints: ["xrd02:Gi0-0-0-3", "berlin-net:xrd02-Gi0-0-0-3"]
+    - endpoints: ["xrd02:Gi0-0-0-4", "warsaw-net2:xrd02-Gi0-0-0-4"]
 
     - endpoints: ["xrd05:Gi0-0-0-1", "xrd04:Gi0-0-0-2"]
     - endpoints: ["xrd05:Gi0-0-0-2", "xrd06:Gi0-0-0-2"]
     
     - endpoints: ["xrd03:Gi0-0-0-1", "xrd04:Gi0-0-0-0"]
     - endpoints: ["xrd03:Gi0-0-0-2", "warsaw-net:xrd03-Gi0-0-0-2"]
+    - endpoints: ["xrd03:Gi0-0-0-3", "berlin-net2:xrd03-Gi0-0-0-3"]
 
     - endpoints: ["xrd04:Gi0-0-0-1", "xrd07:Gi0-0-0-1"]
     - endpoints: ["xrd04:Gi0-0-0-3", "scrubber:eth1"]
