@@ -9,8 +9,8 @@ network:
 
     ens4:
       addresses:
-      - 198.18.4.2/24
-      - fc00:0:8888::2/64
+      - 10.1.2.1/31
+      - 2001:1:1:1::1/127
       routes:
         - to: 0.0.0.0/0
           via: 198.18.4.3
@@ -24,4 +24,13 @@ network:
         - 8.8.8.8
         search:
         - demo.dcloud.cisco.com
+    ens5:
+      addresses:
+      - 198.18.5.1/24
+      - fc00:0:9999::1/64
+      routes:
+        - to: 0.0.0.0/0
+          via: 198.18.5.2
+        - to: 198.18.4.0/24
+          via: 198.18.5.2
   version: 2
