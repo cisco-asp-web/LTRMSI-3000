@@ -87,7 +87,13 @@ topology:
     berlin-net:
       kind: bridge
 
+    berlin-net2:
+      kind: bridge
+
     warsaw-net:
+      kind: bridge
+
+    warsaw-net2:
       kind: bridge
 
 ## sonic nodes in 
