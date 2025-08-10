@@ -1,0 +1,5 @@
+<network>
+  <name>warsaw-net2</name>
+  <forward mode="bridge"/>
+  <bridge name="warsaw-net2"/>
+</network>

@@ -45,7 +45,7 @@
       <target dev='vda' bus='virtio'/>
     </disk>
     <interface type='network'>
-      <mac address='52:54:a4:b4:c4:d4'/>
+      <mac address='52:54:a3:b3:c3:d3'/>
       <source network='default' bridge='virbr0'/>
       <target dev='vnet0'/>
       <model type='virtio'/>
@@ -53,7 +53,7 @@
       <address type='pci' domain='0x0000' bus='0x00' slot='0x03' function='0x0'/>
     </interface>
     <interface type='network'>
-      <mac address="52:54:e4:f4:a4:b4"/>   
+      <mac address="52:54:e3:f3:a3:b3"/>   
       <source network='warsaw1' bridge='warsaw1'/>
       <target dev='vnet1'/>
       <model type='virtio'/>

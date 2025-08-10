@@ -12,8 +12,8 @@ ip link add name warsaw-net type bridge
 ip link set dev warsaw-net up
 
 # Add the IP address to the bridge for Berlin VMs default route
-ip addr add 198.18.4.3/24 dev berlin-net
-ip addr add 198.18.5.3/24 dev warsaw-net
+ip addr add 10.1.2.3/24 dev berlin-net
+ip addr add 10.1.2.11/24 dev warsaw-net
 
 # Add the iptables rule to SNAT Berlin and Warsaw outbound traffic to the Internet
 sudo iptables -t nat -A POSTROUTING -o ens160 -j MASQUERADE
