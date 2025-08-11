@@ -1,4 +1,4 @@
-# berlin netplan
+# warsaw netplan
 
 network:
   ethernets:
@@ -12,7 +12,7 @@ network:
       - 2001:db8:1:2::10/125
       routes:
         - to: 0.0.0.0/0
-          via: 10.1.2.11
+          via: 10.102.1.11
           metric: 100
         - to: 10.102.1.0/24
           via: 10.102.1.9
