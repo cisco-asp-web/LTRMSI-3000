@@ -1,0 +1,6 @@
+apiVersion: kubeadm.k8s.io/v1beta4
+kind: ClusterConfiguration
+controlPlaneEndpoint: "10.102.1.2:6443" 
+networking:
+  podSubnet: "10.200.0.0/16" 
+  serviceSubnet: "10.96.0.0/12" 
