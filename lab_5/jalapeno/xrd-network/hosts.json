@@ -7,7 +7,12 @@
         "prefix_len": 64,
         "interface": "eth0",
         "dataplane": "vpp",
+        "model_type": "llama-3-70b",
+        "gpu_util": 0.3,
+        "time_to_first_token": 2,
+        "cost_per_million_token": 4.00,
         "tier": "dc-endpoint"
+        
     },
     {
         "_key": "berlin-k8s",
@@ -17,6 +22,10 @@
         "prefix_len": 64,
         "interface": "ens192",
         "dataplane": "linux",
+        "model_type": "mistral-7b",
+        "gpu_util": 0.7,
+        "time_to_first_token": 4,
+        "cost_per_million_token": 2.00,
         "tier": "dc-endpoint"
     },
     {
