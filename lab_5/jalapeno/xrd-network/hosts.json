@@ -8,9 +8,9 @@
         "interface": "eth0",
         "dataplane": "vpp",
         "model_type": "llama-3-70b",
-        "gpu_util": 0.3,
+        "gpu_utilization": 0.3,
         "time_to_first_token": 2,
-        "cost_per_million_token": 4.00,
+        "cost_per_million_tokens": 4.00,
         "tier": "dc-endpoint"
         
     },
@@ -23,9 +23,9 @@
         "interface": "ens192",
         "dataplane": "linux",
         "model_type": "mistral-7b",
-        "gpu_util": 0.7,
+        "gpu_utilization": 0.7,
         "time_to_first_token": 4,
-        "cost_per_million_token": 2.00,
+        "cost_per_million_tokens": 2.00,
         "tier": "dc-endpoint"
     },
     {
