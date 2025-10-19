@@ -57,7 +57,7 @@ topology:
 
     host00:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       mgmt-ipv4: 172.20.6.224
       exec:
         - ip addr add 200.0.100.2/24 dev eth1
@@ -69,7 +69,7 @@ topology:
 
     host01:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.225
       exec:
@@ -82,7 +82,7 @@ topology:
 
     host02:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.226
       exec:
@@ -95,7 +95,7 @@ topology:
 
     host03:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.227
       exec:
