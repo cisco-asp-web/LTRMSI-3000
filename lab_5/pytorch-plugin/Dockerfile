@@ -17,7 +17,7 @@ COPY requirements.txt /app/
 WORKDIR /app
 
 # Install Python packages from requirements.txt
-RUN pip3 install -r requirements.txt
+RUN pip3 install --break-system-packages -r requirements.txt
 
 # Copy plugin files
 COPY dist_setup.py /app/
