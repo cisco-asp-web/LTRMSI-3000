@@ -1,3 +1,5 @@
+# docker build -t pytorch-srv6-demo24 .
+
 FROM ubuntu:24.04
 
 # Install required packages
