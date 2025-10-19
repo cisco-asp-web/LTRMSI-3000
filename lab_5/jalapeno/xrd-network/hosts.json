@@ -7,7 +7,14 @@
         "prefix_len": 64,
         "interface": "eth0",
         "dataplane": "vpp",
+        "language_model": "llama-3-70b",
+        "gpu_model": "GB300",
+        "gpu_utilization": 0.3,
+        "cpu_utilization": 0.6,
+        "time_to_first_token": 2,
+        "cost_per_million_tokens": 4.00,
         "tier": "dc-endpoint"
+        
     },
     {
         "_key": "berlin-k8s",
@@ -17,6 +24,12 @@
         "prefix_len": 64,
         "interface": "ens192",
         "dataplane": "linux",
+        "language_model": "mistral-7b",
+        "gpu_model": "MI355X",
+        "gpu_utilization": 0.7,
+        "cpu_utilization": 0.3,
+        "time_to_first_token": 4,
+        "cost_per_million_tokens": 2.00,
         "tier": "dc-endpoint"
     },
     {
