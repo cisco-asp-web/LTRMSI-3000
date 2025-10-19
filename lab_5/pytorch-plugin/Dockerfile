@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     net-tools \
     libcap2-bin \
-    netcat \
+    netcat-traditional \
     iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
