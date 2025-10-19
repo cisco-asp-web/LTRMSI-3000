@@ -19,13 +19,13 @@
         "Ethernet0": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet1": {
+        "Ethernet4": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet2": {
+        "Ethernet8": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet3": {
+        "Ethernet12": {
             "ipv6_use_link_local_only": "enable"
         }
     }
