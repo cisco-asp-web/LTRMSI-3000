@@ -2,9 +2,6 @@
     "DEVICE_METADATA": {
         "localhost": {
             "mac": "02:42:ac:14:06:43",
-            "switch_type": "switch",
-            "buffer_model": "traditional",
-            "hwsku": "Force10-S6000",
             "hostname": "spine03",
             "type": "SpineRouter",
             "bgp_asn": "65003",
@@ -22,27 +19,14 @@
         "Ethernet0": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet4": {
+        "Ethernet1": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet8": {
+        "Ethernet2": {
             "ipv6_use_link_local_only": "enable"
         },
-        "Ethernet12": {
+        "Ethernet3": {
             "ipv6_use_link_local_only": "enable"
-        }
-    },
-    
-    "TELEMETRY": {
-        "certs": {
-          "ca_crt": "/etc/sonic/telemetry/dsmsroot.cer",
-          "server_crt": "/etc/sonic/telemetry/streamingtelemetryserver.cer",
-          "server_key": "/etc/sonic/telemetry/streamingtelemetryserver.key"
-        },
-        "gnmi": {
-          "client_auth": "true",
-          "log_level": "2",
-          "port": "50051"
         }
     }
 }
