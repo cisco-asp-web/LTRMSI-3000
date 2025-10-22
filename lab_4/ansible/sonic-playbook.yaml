@@ -37,64 +37,64 @@
       command: "sudo config save -y"
       ignore_errors: yes
 
-    - name: add sr0 loopback interface
-      command: "sudo ip link add sr0 type dummy"
-      ignore_errors: yes
+#     - name: add sr0 loopback interface
+#       command: "sudo ip link add sr0 type dummy"
+#       ignore_errors: yes
 
-    - name: activate sr0 loopback interface
-      command: "sudo ip link set sr0 up"
-      ignore_errors: yes
+#     - name: activate sr0 loopback interface
+#       command: "sudo ip link set sr0 up"
+#       ignore_errors: yes
 
-    - name: vrf sysctl
-      command: "sudo sysctl -w net.vrf.strict_mode=1"
-      ignore_errors: yes
+#     - name: vrf sysctl
+#       command: "sudo sysctl -w net.vrf.strict_mode=1"
+#       ignore_errors: yes
 
-    - name: Delete default sonic-vs BGP config
-      ansible.builtin.command: >
-        vtysh -c "configure terminal"
-        -c "no router bgp 65100"
-        -c "exit"
-      ignore_errors: yes
+#     - name: Delete default sonic-vs BGP config
+#       ansible.builtin.command: >
+#         vtysh -c "configure terminal"
+#         -c "no router bgp 65100"
+#         -c "exit"
+#       ignore_errors: yes
 
-- name: Load frr config
-  hosts: sonic
-  become: true
-  tasks:
+# - name: Load frr config
+#   hosts: sonic
+#   become: true
+#   tasks:
 
-    - name: Create a backup of the existing frr config file
-      command: mv /etc/sonic/frr/bgpd.conf /etc/sonic/frr/bgpd.conf.bak
-      args:
-        creates: /etc/sonic/frr/bgpd.conf.bak
-      ignore_errors: yes
-      register: backup_result
+#     - name: Create a backup of the existing frr config file
+#       command: mv /etc/sonic/frr/bgpd.conf /etc/sonic/frr/bgpd.conf.bak
+#       args:
+#         creates: /etc/sonic/frr/bgpd.conf.bak
+#       ignore_errors: yes
+#       register: backup_result
 
-    - name: Copy frr config files
-      copy:
-        src: "../sonic-config/{{ inventory_hostname }}/frr.conf"
-        dest: "/etc/sonic/frr/bgpd.conf"
-        mode: 0644
+#     - name: Copy frr config files
+#       copy:
+#         src: "../sonic-config/{{ inventory_hostname }}/frr.conf"
+#         dest: "/etc/sonic/frr/bgpd.conf"
+#         mode: 0644
 
-    - name: Load the FRR config through vtysh
-      command: vtysh -f /etc/sonic/frr/bgpd.conf
-      ignore_errors: yes
-      register: frr_load_result
+#     - name: Load the FRR config through vtysh
+#       command: vtysh -f /etc/sonic/frr/bgpd.conf
+#       ignore_errors: yes
+#       register: frr_load_result
 
-    - name: sonic config load just to make sure
-      command: "sudo config load -y"
-      ignore_errors: yes
+#     - name: sonic config load just to make sure
+#       command: "sudo config load -y"
+#       ignore_errors: yes
 
-- name: validate SONiC local srv6 SIDs
-  hosts: sonic
-  become: true
-  tasks:
+# - name: validate SONiC local srv6 SIDs
+#   hosts: sonic
+#   become: true
+#   tasks:
 
-    - name: check srv6 SIDs
-      shell: "ip -6 route show | grep -e seg6 -e fe00"
-      register: srv6_sid_result
+#     - name: check srv6 SIDs
+#       shell: "ip -6 route show | grep -e seg6 -e fe00"
+#       register: srv6_sid_result
 
-    - name: print srv6 SIDs
-      debug:
-        var: srv6_sid_result.stdout
+#     - name: print srv6 SIDs
+#       debug:
+#         var: srv6_sid_result.stdout
 
 #- name: Customize MOTD on specific SONiC node
 #  hosts: spine00
