@@ -59,7 +59,8 @@ topology:
 
     rome:
       kind: linux
-      image: cl-rome:latest
+      #image: cl-rome:latest
+      image: ubuntu-srctl:1.0
       mgmt-ipv4: 10.254.254.109
       exec:
         - sh /usr/local/bin/network-config.sh
