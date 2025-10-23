@@ -12,6 +12,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.128
 
     leaf01:
@@ -19,6 +21,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.129
 
     leaf02:
@@ -26,6 +30,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.130
 
     leaf03:
@@ -33,6 +39,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.131
 
     spine00:
@@ -40,6 +48,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.192
 
     spine01:
@@ -47,6 +57,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.193
 
     spine02:
@@ -54,6 +66,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4
       mgmt-ipv4: 172.20.6.194
 
     spine03:
@@ -61,6 +75,8 @@ topology:
       #image: vrnetlab/sonic_sonic-vs:202505
       #image: vrnetlab/sonic_sonic-vs:vpp20250422
       image: vrnetlab/sonic_sonic-vs:vpp20251021
+      env:
+        VR_QEMU_CPU: 4  
       mgmt-ipv4: 172.20.6.195
 
     host00:
