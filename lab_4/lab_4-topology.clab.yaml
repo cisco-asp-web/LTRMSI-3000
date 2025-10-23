@@ -56,12 +56,12 @@ topology:
       image: vrnetlab/sonic_sonic-vs:vpp20251021
       mgmt-ipv4: 172.20.6.194
 
-    spine03:
-      kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
-      #image: vrnetlab/sonic_sonic-vs:vpp20250422
-      image: vrnetlab/sonic_sonic-vs:vpp20251021 
-      mgmt-ipv4: 172.20.6.195
+    # spine03:
+    #   kind: linux
+    #   #image: vrnetlab/sonic_sonic-vs:202505
+    #   #image: vrnetlab/sonic_sonic-vs:vpp20250422
+    #   image: vrnetlab/sonic_sonic-vs:vpp20251021 
+    #   mgmt-ipv4: 172.20.6.195
 
     host00:
       kind: linux
@@ -119,22 +119,22 @@ topology:
     - endpoints: ["leaf00:eth1", "spine00:eth1"]
     - endpoints: ["leaf00:eth2", "spine01:eth1"]
     - endpoints: ["leaf00:eth3", "spine02:eth1"]
-    - endpoints: ["leaf00:eth4", "spine03:eth1"]
+    #- endpoints: ["leaf00:eth4", "spine03:eth1"]
 
     - endpoints: ["leaf01:eth1", "spine00:eth2"]
     - endpoints: ["leaf01:eth2", "spine01:eth2"]
     - endpoints: ["leaf01:eth3", "spine02:eth2"]
-    - endpoints: ["leaf01:eth4", "spine03:eth2"]
+    #- endpoints: ["leaf01:eth4", "spine03:eth2"]
 
     - endpoints: ["leaf02:eth1", "spine00:eth3"]
     - endpoints: ["leaf02:eth2", "spine01:eth3"]
     - endpoints: ["leaf02:eth3", "spine02:eth3"]
-    - endpoints: ["leaf02:eth4", "spine03:eth3"]
+    #- endpoints: ["leaf02:eth4", "spine03:eth3"]
 
     - endpoints: ["leaf03:eth1", "spine00:eth4"]
     - endpoints: ["leaf03:eth2", "spine01:eth4"]
     - endpoints: ["leaf03:eth3", "spine02:eth4"]
-    - endpoints: ["leaf03:eth4", "spine03:eth4"]
+    #- endpoints: ["leaf03:eth4", "spine03:eth4"]
 
     - endpoints: ["leaf00:eth5", "host00:eth1"]
     - endpoints: ["leaf00:eth6", "host00:eth2"] 
