@@ -52,7 +52,8 @@ topology:
 
     amsterdam:
       kind: linux
-      image: cl-amsterdam:latest
+      #image: cl-amsterdam:latest
+      image: alpine:srv6
       mgmt-ipv4: 10.254.254.108
       exec:
         - sh /usr/local/bin/network-config.sh
