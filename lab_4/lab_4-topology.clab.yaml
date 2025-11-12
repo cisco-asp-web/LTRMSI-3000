@@ -9,55 +9,63 @@ topology:
 
     leaf00:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.128
 
     leaf01:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.129
 
     leaf02:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.130
 
     leaf03:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.131
 
     spine00:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.192
 
     spine01:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.193
 
     spine02:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024
       mgmt-ipv4: 172.20.6.194
 
     spine03:
       kind: linux
-      #image: vrnetlab/sonic_sonic-vs:202505
       image: vrnetlab/sonic_sonic-vs:vpp20250422
+      #image: vrnetlab/sonic_sonic-vs:vpp20251021
+      #image: sonic-vpp:20251024 
       mgmt-ipv4: 172.20.6.195
 
     host00:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       mgmt-ipv4: 172.20.6.224
       exec:
         - ip addr add 200.0.100.2/24 dev eth1
@@ -69,7 +77,7 @@ topology:
 
     host01:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.225
       exec:
@@ -82,7 +90,7 @@ topology:
 
     host02:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.226
       exec:
@@ -95,7 +103,7 @@ topology:
 
     host03:
       kind: linux
-      image: pytorch-srv6-demo:latest
+      image: pytorch-srv6-demo24:latest
       # image: ubuntu-trex:1.4
       mgmt-ipv4: 172.20.6.227
       exec:
