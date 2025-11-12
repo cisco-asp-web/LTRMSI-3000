@@ -48,7 +48,7 @@ topology:
       mgmt-ipv4: 172.20.6.195
 
     bv00:
-      kind: linux
+      kind: generic_vm
       image: vrnetlab/canonical_ubuntu:jammy
       mgmt-ipv4: 172.20.6.224
       exec:
@@ -72,7 +72,7 @@ topology:
     #     - sysctl -w net.ipv6.conf.all.forwarding=1
 
     bv01:
-      kind: linux
+      kind: generic_vm
       image: vrnetlab/canonical_ubuntu:jammy
       mgmt-ipv4: 172.20.6.225
       exec:
@@ -97,7 +97,7 @@ topology:
     #     - sysctl -w net.ipv6.conf.all.forwarding=1
 
     bv02:
-      kind: linux
+      kind: generic_vm
       image: vrnetlab/canonical_ubuntu:jammy
       mgmt-ipv4: 172.20.6.226
       exec:
@@ -122,7 +122,7 @@ topology:
     #     - sysctl -w net.ipv6.conf.all.forwarding=1
 
     bv03:
-      kind: linux
+      kind: generic_vm
       image: vrnetlab/canonical_ubuntu:jammy
       mgmt-ipv4: 172.20.6.227
       exec:
