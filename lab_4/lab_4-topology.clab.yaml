@@ -146,6 +146,15 @@ topology:
     #     - sysctl -w net.ipv4.ip_forward=1
     #     - sysctl -w net.ipv6.conf.all.forwarding=1
 
+    berlin-net0:
+      kind: bridge
+    berlin-net1:
+      kind: bridge
+    berlin-net2:
+      kind: bridge
+    berlin-net3:
+      kind: bridge
+
   links:
 
     - endpoints: ["leaf00:eth1", "spine00:eth1"]
